@@ -1,0 +1,6 @@
+version: '3.8'
+
+services:
+  dev:
+    volumes:
+      - ~:/root/home-host # needed to copy .aws and bin folder from your home if enabled and they exists

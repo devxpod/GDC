@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  dev:
+    environment:
+      - SSH_AUTH_SOCK=/var/run/ssh-agent.sock
+    volumes:
+      - ${SSH_AUTH_SOCK}:/var/run/ssh-agent.sock # attach ssh agent socket inside container

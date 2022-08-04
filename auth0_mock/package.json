@@ -1,0 +1,21 @@
+{
+  "name": "auth0-docker-mocker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "yarn install && node ./index.js",
+    "cleanup": "rm -rf node_modules keys.json"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.5",
+    "node-jose": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node-jose": "^1.1.10"
+  }
+}

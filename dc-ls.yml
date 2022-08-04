@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  localstack:
+    image: "localstack/localstack:${LS_VERSION-latest}"
+    #image: "localstack/localstack:latest"
+    networks:
+      devnet:
+    ports:
+      - "8001:8080"            # only required for Pro
+      - "53:53"                # only required for Pro
+      - "53:53/udp"            # only required for Pro
+      - "443:443"              # only required for Pro
+      - "4510-4560:4510-4560"  # only required for Pro
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      # - SERVICES=s3,secretsmanager,apigateway,lambda,iam,dynamodb,stepfunctions,route53,cloudfront,sts
+      - DEBUG=${DEBUG-}
+      - PERSISTENCE=1
+      - PORT_WEB_UI=${PORT_WEB_UI-}
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}
+      # Tell Localstack to put Lambda containers on the same shared network
+      - LAMBDA_DOCKER_NETWORK=${DEVNET_NAME-devnet}
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY-}
+      - MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME-localstack}
+      - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-host.docker.internal}
+      # - USE_SSL=false
+      # - DNS_ADDRESS=127.0.0.11
+      # - HOSTNAME=localstack
+      # - HOSTNAME_EXTERNAL=localstack
+      # - DNS_RESOLVE_IP=169.254.170.3
+      # - DOCKER_BRIDGE_IP=169.254.170.1
+      # - LOCALSTACK_HOSTNAME=host.docker.internal
+      # - CLOUDFRONT_STATIC_PORTS=1
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+
+networks:
+  devnet:
+    name: ${DEVNET_NAME-devnet}
+    external: true

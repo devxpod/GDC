@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  dev:
+    networks:
+      devnet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - ROOT_PW # sets root password in container
+        - PULUMI_VERSION # install this version of pulumi
+        - PHP_VERSION # 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1
+        - USE_DOT_NET # install ubuntu:latest dotnet core packages
+        - GOLANG_VERSION # install this golang version. blank for none. latest is 1.18
+        - PYTHON_VERSION # install this python version
+        - USE_AWS # install latest aws cli, ssm plugin, and ecr helper
+        - NODE_VERSION # install this version of node. blank for none
+        - USE_BITWARDEN # enable bitwarden workflow helpers. will enable NODE_VERSION=18 if not set
+        - USE_JAVA # install ubuntu:latest openjdk packages
+        - EXTRA_PACKAGES # any extra Ubuntu packages you want installed into the base container
+    environment:
+      - COMPOSE_PROJECT_NAME
+      - HOST_PROJECT_PATH # helps with volume mounts if you run containers from within dev container
+      - HOST_OS=${OS:-} # used to remap paths in windows format to linux format
+      - USE_HOST_HOME # mount home directory from host
+      - USE_HOME_BIN # copy bin folder from host home directory if it exists and USE_HOST_HOME=yes to container home directory
+      - USE_PRECOMMIT # use pre-commit hooks in git to format and lint files
+      - EDITOR # sets default editor in container. usually set to same as VISUAL
+      - VISUAL # sets default editor in container. usually set to same as EDITOR
+      - USE_COLOR_PROMPT # enable colored bash prompt
+      - SSH_SERVER_PORT # host port you want forwarded to ssh server in container
+      - SSH_KEYSCAN_HOSTS # copy ssh keys from these hosts to prevent unknown key prompts
+      - USE_AUTH0 # starts up auth0 mock container. Use AUTH0_HOST_PORT to change default of 3001
+      - LOCALSTACK_VOLUME_DIR # needed by LS v1.x. no effect when LS is not being used
+      - USE_LOCALSTACK # does not install or start localstack. Only sets up some helpers
+      - LS_VERSION # starts up localstack with specified version >= 1.x.x.
+      - LS_MAIN_CONTAINER_NAME # used by localstack
+      - LOCALSTACK_API_KEY # required if you want to use localstack pro
+      - PERSIST_BITWARDEN_SESSION # persist unlocked vault creds between container sessions
+      - USE_AWS_HOME # copy .aws folder from host home if exists and USE_HOST_HOME=yes
+      - AWS_PROFILE # required if you want to use AWS
+      - AWS_IDENTITY_ACCOUNT # used by AWS assume-role.sh script
+      - GIT_EMAIL # required for GIT if you don't have a .gitconfig in your home directory
+      - GIT_NAME # required for GIT if you don't have a .gitconfig in your home directory
+      - HOSTNAME_EXTERNAL # used by localstack
+      - YARN_CACHE_FOLDER=/usr/local/share/.cache/yarn # cache yarn installs
+      - PIP_CACHE_DIR=/usr/local/share/.cache/pip # cache pip installs
+      - npm_config_cache=/usr/local/share/.cache/npm # case npm installs
+      - DEV_CONTAINER=0.99 # used to detect if running inside dev container
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
+      - ${HOST_PROJECT_PATH-.}:/workspace #:cached
+      - bash_history:/root/bash_history # keep bash history between container builds
+      - persisted:/root/persisted # put things you want to persist between container rebuilds here
+      - shared:/root/shared # persisted and shared between stacks / containers
+      - package_cache:/usr/local/share/.cache # persist npm, yarn and pip cache for faster rebuilds
+      - pulumi:/root/.pulumi # persist pulumi plugin install
+      - cache:/root/.cache # persist caches in ~/.cache folder
+      - home_config:/root/.config # persist data for various apps such as bitwarden
+
+volumes:
+  bash_history: # persist bash history
+  persisted: # put things you want to persist between container rebuilds here
+  pulumi:
+    name: pulumi # persist pulumi plugin install across all stacks
+  cache: # .cache folder in home dir
+  package_cache: # persist npm, yarn and pip cache, this volume is persisted and shared between all stacks
+    name: pkg_cache
+  shared: # this volume is persisted and shared between all stacks
+    name: shared
+  home_config: # this volume is persisted and shared between all stacks
+    name: home_config
+
+networks:
+  devnet:
+    name: ${DEVNET_NAME-devnet} # used to communicate between containers and local stack
+    external: true
+

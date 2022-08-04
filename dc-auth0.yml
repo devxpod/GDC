@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  auth0_mock:
+    build:
+      context: ./auth0_mock
+      dockerfile: Dockerfile
+    networks:
+      devnet:
+    ports:
+      - "${AUTH0_HOST_PORT-3001}:3001"
+    command: npm run start
+    environment:
+      NODE_ENV: test
+      DEBUG: nodejs-docker-express:*
+      AUTH0_URL: "http://host.docker.internal:${AUTH0_HOST_PORT-3001}"
+      AUTH0_AUDIENCE:
+
+networks:
+  devnet:
+    name: ${DEVNET_NAME-devnet}
+    external: true

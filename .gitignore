@@ -1,0 +1,15 @@
+**/dist/
+**/node_modules/
+**/.idea/
+**/.vscode
+**/venv/
+**/.parcel-cache/
+**/__pycache__/
+**/*.js.map
+**/tmp
+**/temp
+*.env
+**/DEADJOE
+
+.DS_Store
+/.env-gdc-local
