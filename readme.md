@@ -112,10 +112,10 @@ These options control what packages / functionality are built into the container
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
 * AWS_PROFILE=<not set> # only needed if USE_AWS=yes.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
-* COMPOSE_EX=<path to a compose.yaml> - add specified yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
-* DEVNET_NAME=<name of dev network> - defaults to **devnet**
-* DEVNET_SUBNET=<cidr notation subnet> - defaults to **169.254.170.0/24**
-* DEVNET_GATEWAY=<gatway ip inside DEVNET_SUBNET> - defaults to **169.254.170.1**
+* COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
+* DEVNET_NAME=devnet - name of dev network
+* DEVNET_SUBNET=169.254.170.0/24 - cidr notation subnet
+* DEVNET_GATEWAY=169.254.170.1 - gateway ip inside DEVNET_SUBNET
 * DEV_CONTAINER - should be auto set to current dev container version. You can use this to detect if you are running in a dev container.
 * CLEAN - stops and removes existing stack and does docker system prune before starting new dev container.
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
