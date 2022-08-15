@@ -76,7 +76,7 @@ Using your browser log into your Bitwarden vault and create a secure note named 
 ```bash
 alias [company]_aws_otp="bw get totp '[company]_aws_ident' | tr -d '\n'";
 alias [company]_aws_assume="AWS_IDENTITY_ACCOUNT=[AWS_IDENTITY_ACCOUNT] source assume-role.sh [YOUR_AWS_SSO_ACCOUNT] [YOUR-identity]";
-alias [company]_aws_assume_role="comp_aws_assume arn:aws:iam::[TARGET_ACCOUNT_NUM]:role/[ROLE_NAME] \`comp_aws_otp\`";  
+alias [company]_aws_assume_role="comp_aws_assume arn:aws:iam::[TARGET_ACCOUNT_NUM]:role/[ROLE_NAME] \`[company]_aws_otp\`";  
 
 alias [company]_aws_jump="AWS_REGION=[TARGET_AWS_REGION] ssm-ssh.sh [EC2_INSTANCE_ID]";  
 alias [company]_aws_scp="AWS_REGION=[TARGET_AWS_REGION] ssm-scp.sh [EC2_INSTANCE_ID] [TARGET_AWS_REGION_AZ]";  
