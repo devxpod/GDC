@@ -146,11 +146,11 @@ If this succeeds you should see “all aws aliases loaded” after a few moments
 
 Now type [company]_aws_assume_role and hit enter. In a few moments you should see that your credentials will expire in 12 hours.
 
-**_Note: Sometimes the aws_assume_role will fail with message about invalid MFA token, just retry a few times waiting 5 
+**_Note: Sometimes the [company]_aws_assume_role will fail with message about invalid MFA token, just retry a few times waiting 5 
 or so seconds between each try. 
 I think this is due to some kind of clock skew issue for the MFA token generation._**
 
-**_Note: The role being assumed must be set to have a 12-hour expiration otherwise the assume role script will fail_**
+**_Note: The role being assumed must be set to have a 12-hour expiration otherwise the assume role script will fail._**
 
 After you have assumed the role you can now execute other SSM / AWS commands or use any of your other aliases or aws cli
 commands.
