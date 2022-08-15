@@ -86,6 +86,7 @@ echo "[company] aliases loaded";
 ```
 Replace the following values in the template above with:
 * [company] - abbreviated company name. example: myco
+* [company2] - abbreviated 2nd company name. example: myco2 
 * [AWS_IDENTITY_ACCOUNT] - the aws account number of the identity account for [company].
 * [YOUR-identity] - Your AWS identity for example: AWS_PROFILE=paul.robello-myco-ident
 * [YOUR_AWS_SSO_ACCOUNT] - Your AWS single sign on account for example: paul.robello
@@ -98,23 +99,39 @@ Replace the following values in the template above with:
 
 
 **_Note: For the script eval to work all lines must end with a semicolon._**
-The first 3 aliases are required to access any aws resources. The last 3 aliases are simply helpers for common tasks such 
-as:
+The first 3 aliases are required to access any aws resources. The last 3 aliases are simply helpers for common tasks 
+such as:
 * accessing a jump host in a VPC
 * copying files to / from a jump host in a VPC
 * forwarding a local port to a RDS in a VPC.
 
 The above script block is soft wrapping some lines, when you enter them ensure they are on a single line.
 
+### Additional companies (optional)
+Create a secure note named **[company2]_aws_bash_rc** with the following content:
+```bash
+alias [company2]_aws_otp="bw get totp '[company2]_aws_ident' | tr -d '\n'";
+alias [company2]_aws_assume="AWS_IDENTITY_ACCOUNT=[AWS_IDENTITY_ACCOUNT] source assume-role.sh [YOUR_AWS_SSO_ACCOUNT] [YOUR-identity]";
+alias [company2]_aws_assume_role="comp_aws_assume arn:aws:iam::[TARGET_ACCOUNT_NUM]:role/[ROLE_NAME] \`[company2]_aws_otp\`";  
+
+alias [company2]_aws_jump="AWS_REGION=[TARGET_AWS_REGION] ssm-ssh.sh [EC2_INSTANCE_ID]";  
+alias [company2]_aws_scp="AWS_REGION=[TARGET_AWS_REGION] ssm-scp.sh [EC2_INSTANCE_ID] [TARGET_AWS_REGION_AZ]";  
+alias [company2]_aws_rds_pf="AWS_REGION=[TARGET_AWS_REGION] ssm-jump-tunnel.sh [EC2_INSTANCE_ID] [TARGET_AWS_REGION_AZ] 5432 [RDS_DNS_NAME] 5432";
+
+echo "[company2] aliases loaded";
+```
+
+### Alias entrypoint
 Now create a secure note named **aws_bash_rc** with the following content:
 ```bash
 eval `bw get item [company]_aws_bash_rc | jq -r '.notes'`;
- 
+eval `bw get item [company2]_aws_bash_rc | jq -r '.notes'`; 
 echo "all aws aliases loaded";
 ```
+**_Omit company2 line if you are only using one company._**
 
 This creates the entrypoint for your shell to load in all your aliases. You can easily create an alias note for each 
-company / org then eval them all from your [company]_aws_bash_rc.
+company / org then eval them all from the notes you create.
 
 ### Alias Descriptions:
 #### Core
