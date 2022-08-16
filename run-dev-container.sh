@@ -5,12 +5,6 @@ export MSYS_NO_PATHCONV=1
 # this folder is the docker root for building the container
 SCRIPT_DIR="$(cd -- "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]:-$0}")")" &> /dev/null && pwd 2> /dev/null)"
 
-# this will get mounted under /workspace in container
-if [ "$USE_WORKSPACE" = "yes" ]; then
-  HOST_PROJECT_PATH=$(pwd)
-else
-  HOST_PROJECT_PATH=''
-fi
 
 if [ -r "$SCRIPT_DIR/.env-gdc" ]; then
   echo "Loading container .env-gdc environment file"
@@ -20,6 +14,13 @@ fi
 if [ -r "$SCRIPT_DIR/.env-gdc-local" ]; then
   echo "Loading container .env-gdc-local environment file"
   source "$SCRIPT_DIR/.env-gdc-local"
+fi
+
+# this will get mounted under /workspace in container
+if [ "$USE_WORKSPACE" = "yes" ]; then
+  HOST_PROJECT_PATH=$(pwd)
+else
+  HOST_PROJECT_PATH=''
 fi
 
 if [ -r ".env-gdc" ]; then
@@ -107,14 +108,14 @@ COMPOSE_FILES="-f docker-compose.yml"
 
 # enable mounting of current folder to /workspace in container
 if [ "$USE_WORKSPACE" = "yes" ]; then
-  echo "Adding compose layer workspace mount  host-workspace-dir.yml"
-  COMPOSE_FILES="$COMPOSE_FILES -f host-workspace-dir.yml"
+  echo "Adding compose layer workspace mount  dc-host-workspace-dir.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-host-workspace-dir.yml"
 fi
 
 # enable mounting and copying data from host users home dir
 if [ "$USE_HOST_HOME" = "yes" ]; then
-  echo "Adding compose layer host-home-dir.yml"
-  COMPOSE_FILES="$COMPOSE_FILES -f host-home-dir.yml"
+  echo "Adding compose layer dc-host-home-dir.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-host-home-dir.yml"
 fi
 
 # this will forward port and start ssh server
