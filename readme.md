@@ -103,7 +103,7 @@ These options control what packages / functionality are built into the container
 * LS_MAIN_CONTAINER_NAME=localstack - used by localstack to name main container.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
-* USE_AUTH0=no - starts an auth0 mock authentication server.
+* USE_AUTH0=no - starts an auth0 mock authentication server. [Auth0 Mock docs](./docs/auth0/readme.md).
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0=yes.
 * USE_COLOR_PROMPT=yes - enables colorized bash prompt in container.
 * SSH_KEYSCAN_HOSTS=gitlab.com github.com bitbucket.org - copies SSH keys from list of hosts to known-hosts file.
