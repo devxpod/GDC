@@ -84,6 +84,7 @@ These options control what packages / functionality are built into the container
 `USE_` vars are **yes / no** values for toggling related options.
 
 * ROOT_PW=ContainersRule - sets root password in container.
+* USE_WORKSPACE=yes - mounts folder from host into /workspace folder in container. Setting this option to "no" is useful if you only want to use tools inside the container and not interact with a project.    
 * USE_HOST_HOME=yes - mounts users home directory into container under /root/host-home. Required by some other options.
 * USE_HOME_BIN=no - copy bin folder from host home directory if it exists. Enables USE_HOST_HOME.
 * PULUMI_VERSION=3.37.2 - a version must be specified for Pulumi to be installed.

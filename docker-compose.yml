@@ -50,7 +50,6 @@ services:
       - DEV_CONTAINER=0.99 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
-      - ${HOST_PROJECT_PATH-.}:/workspace #:cached
       - bash_history:/root/bash_history # keep bash history between container builds
       - persisted:/root/persisted # put things you want to persist between container rebuilds here
       - shared:/root/shared # persisted and shared between stacks / containers

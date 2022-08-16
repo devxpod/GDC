@@ -6,7 +6,11 @@ export MSYS_NO_PATHCONV=1
 SCRIPT_DIR="$(cd -- "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]:-$0}")")" &> /dev/null && pwd 2> /dev/null)"
 
 # this will get mounted under /workspace in container
-HOST_PROJECT_PATH=$(pwd)
+if [ "$USE_WORKSPACE" = "yes" ]; then
+  HOST_PROJECT_PATH=$(pwd)
+else
+  HOST_PROJECT_PATH=''
+fi
 
 if [ -r "$SCRIPT_DIR/.env-gdc" ]; then
   echo "Loading container .env-gdc environment file"
@@ -34,7 +38,10 @@ if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
   echo "usage: $0 STACK_NAME [PORT_FWD1] [PORT_FWD2]"
   echo "current folder will be mounted in container on /workspace."
   echo "Env vars are set in the following order with last to set winning"
-  echo "Shell env, $SCRIPT_DIR/.env-gdc, $SCRIPT_DIR/.env-gdc-local, $HOST_PROJECT_PATH/.env-gdc, $HOST_PROJECT_PATH/.env-gdc-local"
+  echo "Shell env, $SCRIPT_DIR/.env-gdc, $SCRIPT_DIR/.env-gdc-local"
+  if [ "$USE_WORKSPACE" = "yes" ]; then
+    echo "$HOST_PROJECT_PATH/.env-gdc, $HOST_PROJECT_PATH/.env-gdc-local"
+  fi
   echo "STACK_NAME required, is used to name the stack in case you want to run more than one."
   echo "PORT_FWD1 optional, is in compose port forward format. Example 80:8080. If not provided will fall back to environment variable."
   echo "PORT_FWD2 optional, is in compose port forward format. Example 2000-2020. If not provided will fall back to environment variable."
@@ -80,7 +87,9 @@ export PORT_FWD1
 export PORT_FWD2
 export DEVNET_NAME
 
-echo "HOST_PROJECT_PATH = $HOST_PROJECT_PATH"
+if [ "$USE_WORKSPACE" = "yes" ]; then
+  echo "HOST_PROJECT_PATH = $HOST_PROJECT_PATH"
+fi
 echo "COMPOSE_PROJECT_NAME = $COMPOSE_PROJECT_NAME"
 if [ -n "$PORT_FWD1" ]; then
   echo "PORT_FWD1 = $PORT_FWD1"
@@ -95,6 +104,12 @@ if [ -z "$USE_HOST_HOME" ]; then
 fi
 
 COMPOSE_FILES="-f docker-compose.yml"
+
+# enable mounting of current folder to /workspace in container
+if [ "$USE_WORKSPACE" = "yes" ]; then
+  echo "Adding compose layer workspace mount  host-workspace-dir.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f host-workspace-dir.yml"
+fi
 
 # enable mounting and copying data from host users home dir
 if [ "$USE_HOST_HOME" = "yes" ]; then
