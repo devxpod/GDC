@@ -120,9 +120,10 @@ These options control what packages / functionality are built into the container
 * DEVNET_SUBNET=169.254.170.0/24 - cidr notation subnet
 * DEVNET_GATEWAY=169.254.170.1 - gateway ip inside DEVNET_SUBNET
 * DEV_CONTAINER - should be auto set to current dev container version. You can use this to detect if you are running in a dev container.
-* CLEAN - stops and removes existing stack and does docker system prune before starting new dev container.
+* CLEAN=<not set> - stops and removes existing stack and does docker system prune before starting new dev container.
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
+* GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if other containers are launched such as localstack or auth0 mock.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host.

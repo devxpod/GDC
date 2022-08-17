@@ -50,6 +50,7 @@ services:
       - YARN_CACHE_FOLDER=/usr/local/share/.cache/yarn # cache yarn installs
       - PIP_CACHE_DIR=/usr/local/share/.cache/pip # cache pip installs
       - npm_config_cache=/usr/local/share/.cache/npm # case npm installs
+      - GDC_ENTRYPOINT # run this command and exit
       - DEV_CONTAINER=1.00 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
