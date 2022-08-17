@@ -58,21 +58,6 @@ if [ -z "$DEVNET_NAME" ]; then
   exit 1
 fi
 
-# setup docker devnet network if needed
-if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then
-  if [ -z "$DEVNET_SUBNET" ]; then
-    echo "Env variable DEVNET_SUBNET is not set !"
-    exit 1
-  fi
-  if [ -z "$DEVNET_GATEWAY" ]; then
-    echo "Env variable DEVNET_GATEWAY is not set !"
-    exit 1
-  fi
-  echo "Network $DEVNET_NAME not found. creating... as $DEVNET_SUBNET $DEVNET_GATEWAY"
-  docker network create --attachable -d bridge --subnet "$DEVNET_SUBNET" --gateway "$DEVNET_GATEWAY" "$DEVNET_NAME"
-else
-  echo "Network $DEVNET_NAME found"
-fi
 
 if [ -n "$2" ]; then
   PORT_FWD1="$2"
@@ -164,9 +149,8 @@ fi
 if [ "$USE_AUTH0_HOST" = "yes" ]; then
   echo "Adding compose layer dc-auth0-host.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0-host.yml"
-fi
 # this will start auth0 mock server in container only
-if [ "$USE_AUTH0" = "yes" ]; then
+elif [ "$USE_AUTH0" = "yes" ]; then
   echo "Adding compose layer dc-auth0.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0.yml"
 fi
@@ -196,4 +180,22 @@ if [ "$CLEAN" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
   docker system prune -f
 fi
+
+
+# setup docker devnet network if needed
+if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then
+  if [ -z "$DEVNET_SUBNET" ]; then
+    echo "Env variable DEVNET_SUBNET is not set !"
+    exit 1
+  fi
+  if [ -z "$DEVNET_GATEWAY" ]; then
+    echo "Env variable DEVNET_GATEWAY is not set !"
+    exit 1
+  fi
+  echo "Network $DEVNET_NAME not found. creating... as $DEVNET_SUBNET $DEVNET_GATEWAY"
+  docker network create --attachable -d bridge --subnet "$DEVNET_SUBNET" --gateway "$DEVNET_GATEWAY" "$DEVNET_NAME"
+else
+  echo "Network $DEVNET_NAME found"
+fi
+
 docker-compose $COMPOSE_FILES up --build --force-recreate
