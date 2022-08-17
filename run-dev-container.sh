@@ -138,16 +138,20 @@ fi
 if [ -n "$LS_VERSION" ]; then
   echo "Adding compose layer dc-ls.yml"
   export USE_LOCALSTACK=yes
-  COMPOSE_FILES="$COMPOSE_FILES -f dc-ls.yml"
+  if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host.yml"
+  else
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-ls.yml"
+  fi
 fi
 
 # mount host ls volume dir in container
-if [ "$USE_LOCALSTACK" != "no" ]; then
+if [ "$USE_LOCALSTACK" = "yes" ]; then
   echo "Adding compose layer ls-volume.yml"
   if [ "$OS" = "Windows_NT" ]; then
-    export LOCALSTACK_VOLUME_DIR="/c/tmp/ls_volume"
+    export LOCALSTACK_VOLUME_DIR="/c/tmp/ls_volume_$COMPOSE_PROJECT_NAME"
   else
-    export LOCALSTACK_VOLUME_DIR="/tmp/ls_volume"
+    export LOCALSTACK_VOLUME_DIR="/tmp/ls_volume_$COMPOSE_PROJECT_NAME"
   fi
   echo "LOCALSTACK_VOLUME_DIR = $LOCALSTACK_VOLUME_DIR"
   if [ ! -r "$LOCALSTACK_VOLUME_DIR" ]; then
@@ -156,7 +160,12 @@ if [ "$USE_LOCALSTACK" != "no" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f ls-volume.yml"
 fi
 
-# this will start auth0 mock server
+# this will start auth0 mock server with host port forward
+if [ "$USE_AUTH0_HOST" = "yes" ]; then
+  echo "Adding compose layer dc-auth0-host.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0-host.yml"
+fi
+# this will start auth0 mock server in container only
 if [ "$USE_AUTH0" = "yes" ]; then
   echo "Adding compose layer dc-auth0.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0.yml"

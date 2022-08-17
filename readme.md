@@ -100,11 +100,13 @@ These options control what packages / functionality are built into the container
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * LOCALSTACK_VOLUME_DIR=/c/tmp/ls_volume or /tmp/ls_volume - on windows / mac respectively.
-* LS_MAIN_CONTAINER_NAME=localstack - used by localstack to name main container.
+* LS_MAIN_CONTAINER_NAME=localstack - used by localstack to name main container. Can also be accessed via this name inside containers.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
+* USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set. 
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
-* USE_AUTH0=no - starts an auth0 mock authentication server. [Auth0 Mock docs](./docs/auth0/readme.md).
-* AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0=yes.
+* USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
+* USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward. [Auth0 Mock docs](./docs/auth0/readme.md).* 
+* AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.  [Auth0 Mock docs](./docs/auth0/readme.md).*
 * USE_COLOR_PROMPT=yes - enables colorized bash prompt in container.
 * SSH_KEYSCAN_HOSTS=gitlab.com github.com bitbucket.org - copies SSH keys from list of hosts to known-hosts file.
 * SSH_SERVER_PORT=<not set> - if set will start sshd and forward this port from host to sshd in container.

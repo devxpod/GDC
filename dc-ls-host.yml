@@ -6,6 +6,14 @@ services:
     #image: "localstack/localstack:latest"
     networks:
       devnet:
+    ports:
+      - "8001:8080"            # only required for Pro
+      - "53:53"                # only required for Pro
+      - "53:53/udp"            # only required for Pro
+      - "443:443"              # only required for Pro
+      - "4510-4560:4510-4560"  # only required for Pro
+      - "4566:4566"
+      - "4571:4571"
     environment:
       # - SERVICES=s3,secretsmanager,apigateway,lambda,iam,dynamodb,stepfunctions,route53,cloudfront,sts
       - DEBUG=${DEBUG-}
@@ -18,6 +26,7 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY-}
       - MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME-localstack}
+      - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-host.docker.internal}
       # - USE_SSL=false
       # - DNS_ADDRESS=127.0.0.11
       # - HOSTNAME=localstack

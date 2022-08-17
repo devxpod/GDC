@@ -222,8 +222,13 @@ if [ "$USE_AWS" = "yes" ]; then
 fi
 
 if [ "$USE_LOCALSTACK" = "yes" ]; then
-  alias awsl="aws --endpoint-url http://host.docker.internal:4566/"
-  export LOCALSTACK_HOST=host.docker.internal:4566/
+  if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
+    alias awsl="aws --endpoint-url http://host.docker.internal:4566/"
+    export LOCALSTACK_HOST=host.docker.internal:4566/
+  else
+    alias awsl="aws --endpoint-url http://localstack:4566/"
+    export LOCALSTACK_HOST=localstack:4566/
+  fi
 fi
 
 if [ -n "$PULUMI_VERSION" ]; then

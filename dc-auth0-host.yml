@@ -7,11 +7,13 @@ services:
       dockerfile: Dockerfile
     networks:
       devnet:
+    ports:
+      - "${AUTH0_HOST_PORT-3001}:3001"
     command: npm run start
     environment:
       NODE_ENV: test
       DEBUG: nodejs-docker-express:*
-      AUTH0_URL: "http://auth_moock:3001"
+      AUTH0_URL: "http://host.docker.internal:${AUTH0_HOST_PORT-3001}"
       AUTH0_AUDIENCE:
 
 networks:

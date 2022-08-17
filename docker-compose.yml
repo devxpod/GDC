@@ -31,12 +31,15 @@ services:
       - USE_COLOR_PROMPT # enable colored bash prompt
       - SSH_SERVER_PORT # host port you want forwarded to ssh server in container
       - SSH_KEYSCAN_HOSTS # copy ssh keys from these hosts to prevent unknown key prompts
-      - USE_AUTH0 # starts up auth0 mock container. Use AUTH0_HOST_PORT to change default of 3001
+      - USE_AUTH0 # starts up auth0 mock container in container only mode.
+      - USE_AUTH0_HOST # starts up auth0 mock container and forwards port from host. Use AUTH0_HOST_PORT to change default of 3001
+      - AUTH0_HOST_PORT # defaults to 3001 if not specified. only used with USE_AUTH0_HOST
       - LOCALSTACK_VOLUME_DIR # needed by LS v1.x. no effect when LS is not being used
       - USE_LOCALSTACK # does not install or start localstack. Only sets up some helpers
       - LS_VERSION # starts up localstack with specified version >= 1.x.x.
       - LS_MAIN_CONTAINER_NAME # used by localstack
       - LOCALSTACK_API_KEY # required if you want to use localstack pro
+      - USE_LOCALSTACK_HOST
       - PERSIST_BITWARDEN_SESSION # persist unlocked vault creds between container sessions
       - USE_AWS_HOME # copy .aws folder from host home if exists and USE_HOST_HOME=yes
       - AWS_PROFILE # required if you want to use AWS
