@@ -9,7 +9,7 @@ RUN apt-get update -y && apt-get -y upgrade
 RUN apt-get install -fy --fix-missing locales apt-transport-https \
     software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff bash-completion \
     inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat socat ca-certificates gnupg2 git \
-    postgresql-client mysql-client libncurses5
+    postgresql-client mysql-client
 
 # install dev
 RUN apt-get install -fy --fix-missing build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
@@ -17,7 +17,7 @@ RUN apt-get install -fy --fix-missing build-essential make libffi-dev libreadlin
 
 # install editors and any extra packages user has requested
 ARG EXTRA_PACKAGES
-RUN apt-get install -fy --fix-missing joe nano vim $EXTRA_PACKAGES
+RUN apt-get install -fy --fix-missing libncurses5 joe nano vim $EXTRA_PACKAGES
 
 # update default editor
 RUN update-alternatives --install /usr/bin/editor editor /usr/bin/vim 80 && \
