@@ -113,7 +113,6 @@ These options control what packages / functionality are built into the container
 * PORT_FWD1=<not set> - if sets forwards this port or range from host to container.
 * PORT_FWD2=<not set> - if sets forwards this port or range from host to container.
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
-* AWS_PROFILE=<not set> # only needed if USE_AWS=yes.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
 * DEVNET_NAME=devnet - name of dev network
@@ -219,7 +218,7 @@ export AWS_REGION=JUMP_HOST_REGION;export AWS_PROFILE=AWS_PROFILE_NAME;ssm-ssh.s
 ```
 ### Sample using real values
 ```bash
-export AWS_REGION=us-west-2;export AWS_PROFILE=paul-identity;ssm-ssh.sh i-07b4c8c1cd6815fb8
+export AWS_REGION=us-west-2;export AWS_PROFILE=paul-identity;ssm-ssh.sh i-04b4c8a1ddc845fb8
 ```
 
 ### Forward port from dev container to AWS service after assuming role
@@ -230,7 +229,7 @@ export AWS_REGION=JUMP_HOST_REGION;ssm-jump-tunnel.sh JUMP_HOST_INSTANCE_ID JUMP
 
 ### Sample using real values
 ```bash
-export AWS_REGION=us-west-2;ssm-jump-tunnel.sh i-07b4c8c1cd6815fb8 us-west-2a 6432 rds-fos-cluster-dev.cluster-co6rukj5foic.us-west-2.rds.amazonaws.com 5432
+export AWS_REGION=us-west-2;ssm-jump-tunnel.sh i-04b4c8a1ddc845fb8 us-west-2a 6432 rds-cluster-dev.cluster-ao65ukd5fsic.us-west-2.rds.amazonaws.com 5432
 ```
 If you want to use a tool on your host to connect to the tunnel opened in your dev container then you must forward the port to the host when creating the dev container.  
 Example if you want to use pg_admin on your host to connect to an RDS in AWS, you would create the container with something like

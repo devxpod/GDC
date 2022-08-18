@@ -42,7 +42,6 @@ services:
       - USE_LOCALSTACK_HOST
       - PERSIST_BITWARDEN_SESSION # persist unlocked vault creds between container sessions
       - USE_AWS_HOME # copy .aws folder from host home if exists and USE_HOST_HOME=yes
-      - AWS_PROFILE # required if you want to use AWS
       - AWS_IDENTITY_ACCOUNT # used by AWS assume-role.sh script
       - GIT_EMAIL # required for GIT if you don't have a .gitconfig in your home directory
       - GIT_NAME # required for GIT if you don't have a .gitconfig in your home directory
