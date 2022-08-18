@@ -40,6 +40,7 @@ RUN /bin/bash -c 'if [ -n "${PYTHON_VERSION}" ] ; then \
     eval "$(pyenv virtualenv-init -)" && \
     pyenv install -v $PYTHON_VERSION && \
     pyenv global $PYTHON_VERSION && \
+    python -m pip install --upgrade pip && \
     pip install virtualenv pre-commit && \
     pip install -r /root/requirements.txt; \
 fi; \
