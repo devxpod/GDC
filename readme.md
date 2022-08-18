@@ -317,3 +317,7 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 * load_aliases - loads the secure note with name aws-ident into your environment.
 * bw_reload - syncs vault with cloud and calls load_aliases.
 * aws-otp - if aws and bitwarden are enabled this will get and display your aws MFA token.
+
+
+## Debugging
+[Debugging](./docs/debugging/readme.md) - Info on ways to debug scripts in inside the container from IDE running on host. 
