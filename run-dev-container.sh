@@ -32,6 +32,13 @@ if [ -r ".env-gdc-local" ]; then
   source ".env-gdc-local"
 fi
 
+
+if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
+  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=host.docker.internal}
+else
+  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=$LS_MAIN_CONTAINER_NAME}
+fi
+
 # if we cant change to this folder bail
 cd "$SCRIPT_DIR" || exit 1
 
