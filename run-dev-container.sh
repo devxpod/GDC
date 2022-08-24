@@ -5,6 +5,7 @@ export MSYS_NO_PATHCONV=1
 # this folder is the docker root for building the container
 SCRIPT_DIR="$(cd -- "$(dirname -- "$(readlink -f "${BASH_SOURCE[0]:-$0}")")" &> /dev/null && pwd 2> /dev/null)"
 
+export GDC_DIR=$SCRIPT_DIR
 
 if [ -r "$SCRIPT_DIR/.env-gdc" ]; then
   echo "Loading container .env-gdc environment file"
@@ -204,5 +205,7 @@ if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")"
 else
   echo "Network $DEVNET_NAME found"
 fi
+
+export GDC_COMPOSE_FILES=$COMPOSE_FILES
 
 docker-compose $COMPOSE_FILES up --build --force-recreate

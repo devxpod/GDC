@@ -123,6 +123,8 @@ These options control what packages / functionality are built into the container
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
 * GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if other containers are launched such as localstack or auth0 mock.
+* GDC_DIR - contains host location of GDC folder
+* GDC_COMPOSE_FILES - contains list of all compose files in use to run GDC
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host.
@@ -144,6 +146,7 @@ export ENV_VAR_NAME=ENV_VAR_VALUE
 * **/root/bash_history** - is a persisted volume for bash history between containers of same stack.
 * **/root/shared** - is a persisted volume that is shared between all dev containers regardless of stack.
 * **/root/home-host** - when USE_HOST_HOME=yes folder is mounted from users home directory on host.
+* **/root/gdc-host** - GDC root folder is mounted from host. 
 * **/root/.pulumi** - folder is a persisted volume shared between all dev containers.
 * **/root/.cache** - folder is a persisted volume shared between all dev containers.
 * **/root/.config** - folder is a persisted volume shared between all dev containers.
