@@ -52,7 +52,7 @@ services:
       - GDC_ENTRYPOINT # run this command and exit
       - GDC_DIR # contains host location of GDC folder
       - GDC_COMPOSE_FILES # contains list of all compose files in use by GDC
-      - DEV_CONTAINER=1.00 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.01 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
