@@ -152,6 +152,7 @@ export ENV_VAR_NAME=ENV_VAR_VALUE
 * **/root/.config** - folder is a persisted volume shared between all dev containers.
 * **/root/bin-extra/aws** - folder contains aws related helper scripts. Only added to path if USE_AWS=yes is set.
 * **/root/bin-extra/docker** - folder contains docker related helper files and is added to path.
+* **/root/bin-extra/ls** - folder localstack helper files and is added to path.
 * **/root/bin** - when USE_HOST_HOME=yes and USE_HOME_BIN=yes folder is copied from /root/home-host/bin if it exists.
 * **/root/.aws** - when USE_AWS_HOME=yes folder is copied from /root/home-host/.aws if it exists, otherwise it will be symlinked to /root/shared/.aws volume if it exists.
 * **/usr/local/share/.cache** - used to persist cache for npm, yarn, and pip
@@ -311,6 +312,10 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 ## Local stack
 ### Aliases
 * awsl - invokes aws cli with endpoint set to localstack
+### Commands
+* start-ls.sh - starts localstack container
+* stop-ls.sh - stops localstack container
+
 
 ## Bitwarden
 [Bitwarden Setup](./docs/bitwarden/readme.md) - **Optional** paid high efficiency workflow. 

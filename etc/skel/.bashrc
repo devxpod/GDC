@@ -252,7 +252,7 @@ if [ -r ~/venv/bin/activate ]; then
   echo "python version $(python --version)"
 fi
 
-export PATH="$PATH:/root/gdc-host"
+export PATH="$PATH:/root/bin-extra/ls"
 
 if [ -r ~/persisted/bash_rc_ext.sh ]; then
   . "$HOME/persisted/bash_rc_ext.sh"
