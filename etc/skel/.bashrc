@@ -253,6 +253,7 @@ if [ -r ~/venv/bin/activate ]; then
 fi
 
 export PATH="$PATH:/root/bin-extra/ls"
+export PATH="$PATH:/root/bin-extra/auth0"
 
 if [ -r ~/persisted/bash_rc_ext.sh ]; then
   . "$HOME/persisted/bash_rc_ext.sh"
