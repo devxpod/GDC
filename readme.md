@@ -105,8 +105,10 @@ These options control what packages / functionality are built into the container
 * USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set. 
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
-* USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward. [Auth0 Mock docs](./docs/auth0/readme.md).* 
-* AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.  [Auth0 Mock docs](./docs/auth0/readme.md).*
+* USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
+* AUTH0_CONTAINER_NAME=auth0_mock - set name of auth0 container so more than one can be used in parallel.
+* AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.
+* AUTH0_LOCAL_USERS_FILE=<not set> - used to specify location in container for auth0 to mount user override file.
 * USE_COLOR_PROMPT=yes - enables colorized bash prompt in container.
 * SSH_KEYSCAN_HOSTS=gitlab.com github.com bitbucket.org - copies SSH keys from list of hosts to known-hosts file.
 * SSH_SERVER_PORT=<not set> - if set will start sshd and forward this port from host to sshd in container.
@@ -127,7 +129,7 @@ These options control what packages / functionality are built into the container
 * GDC_COMPOSE_FILES - contains list of all compose files in use to run GDC
 
 # Extra environment vars available in dev container
-* HOST_PROJECT_PATH - Absolute path to mounted workspace on host.
+* HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
 
 # Environment files
 The above environment variable values are the default unless overridden by environment variables setup in your environment or on the command line.   
@@ -152,7 +154,8 @@ export ENV_VAR_NAME=ENV_VAR_VALUE
 * **/root/.config** - folder is a persisted volume shared between all dev containers.
 * **/root/bin-extra/aws** - folder contains aws related helper scripts. Only added to path if USE_AWS=yes is set.
 * **/root/bin-extra/docker** - folder contains docker related helper files and is added to path.
-* **/root/bin-extra/ls** - folder localstack helper files and is added to path.
+* **/root/bin-extra/ls** - folder for localstack helper files and is added to path.
+* **/root/bin-extra/auth0** - folder for auth0 helper files and is added to path. 
 * **/root/bin** - when USE_HOST_HOME=yes and USE_HOME_BIN=yes folder is copied from /root/home-host/bin if it exists.
 * **/root/.aws** - when USE_AWS_HOME=yes folder is copied from /root/home-host/.aws if it exists, otherwise it will be symlinked to /root/shared/.aws volume if it exists.
 * **/usr/local/share/.cache** - used to persist cache for npm, yarn, and pip
@@ -313,8 +316,14 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 ### Aliases
 * awsl - invokes aws cli with endpoint set to localstack
 ### Commands
-* start-ls.sh - starts localstack container
-* stop-ls.sh - stops localstack container
+* start-ls.sh [-h|host|internal] - starts localstack container in specified mode. If not specified will attempt to autodetect.
+* stop-ls.sh [-h|host|internal] - starts localstack container in specified mode. If not specified will attempt to autodetect.
+
+## Auth0
+### Commands
+* start-auth0.sh [-h|host|internal] - starts auth0 mock container in specified mode. If not specified will attempt to autodetect.
+* stop-auth0.sh [-h|host|internal] - stops auth0 mock container. If not specified will attempt to autodetect.
+
 
 
 ## Bitwarden
