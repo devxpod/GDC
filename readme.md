@@ -109,6 +109,7 @@ These options control what packages / functionality are built into the container
 * AUTH0_CONTAINER_NAME=auth0_mock - set name of auth0 container so more than one can be used in parallel.
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.
 * AUTH0_LOCAL_USERS_FILE=<not set> - used to specify location in container for auth0 to mount user override file.
+* AUTH0_AUDIENCE=portal - used to override auth0 audience default of app.
 * USE_COLOR_PROMPT=yes - enables colorized bash prompt in container.
 * SSH_KEYSCAN_HOSTS=gitlab.com github.com bitbucket.org - copies SSH keys from list of hosts to known-hosts file.
 * SSH_SERVER_PORT=<not set> - if set will start sshd and forward this port from host to sshd in container.

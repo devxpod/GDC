@@ -33,7 +33,6 @@ if [ -r ".env-gdc-local" ]; then
   source ".env-gdc-local"
 fi
 
-
 if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
   export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=host.docker.internal}
 else
@@ -65,7 +64,6 @@ if [ -z "$DEVNET_NAME" ]; then
   echo "Env variable DEVNET_NAME is not set !"
   exit 1
 fi
-
 
 if [ -n "$2" ]; then
   PORT_FWD1="$2"
@@ -163,6 +161,14 @@ elif [ "$USE_AUTH0" = "yes" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0.yml"
 fi
 
+if [ "$USE_AUTH0_HOST" = "yes" ] || [ "$USE_AUTH0" = "yes" ]; then
+  # add custom auth0 users file
+  if [ -n "$AUTH0_LOCAL_USERS_FILE" ]; then
+    echo "Adding compose layer dc-auth0-local-users.yml"
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0-local-users.yml"
+  fi
+fi
+
 # forwards ssh agent socket to container
 if [[ -z "$NO_SSH_AGENT" && -r "$SSH_AUTH_SOCK" ]]; then
   if [[ $OSTYPE =~ darwin* && -r "$SSH_AUTH_SOCK" ]]; then # MAC
@@ -188,7 +194,6 @@ if [ "$CLEAN" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
   docker system prune -f
 fi
-
 
 # setup docker devnet network if needed
 if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then

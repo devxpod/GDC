@@ -1,0 +1,6 @@
+version: '3.8'
+
+services:
+  auth0_mock:
+    volumes:
+      - ${HOST_PROJECT_PATH-.}/${AUTH0_LOCAL_USERS_FILE}:/usr/local/app/users-local.json

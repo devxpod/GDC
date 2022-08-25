@@ -35,6 +35,8 @@ services:
       - USE_AUTH0_HOST # starts up auth0 mock container and forwards port from host. Use AUTH0_HOST_PORT to change default of 3001
       - AUTH0_HOST_PORT # defaults to 3001 if not specified. only used with USE_AUTH0_HOST
       - AUTH0_CONTAINER_NAME # set name of auth0 container so more than one can be used in parallel
+      - AUTH0_LOCAL_USERS_FILE # used to specify location in container for auth0 to mount user override file
+      - AUTH0_AUDIENCE # used to override auth0 audience default of app
       - LOCALSTACK_VOLUME_DIR # needed by LS v1.x. no effect when LS is not being used
       - USE_LOCALSTACK # does not install or start localstack. Only sets up some helpers
       - LS_VERSION # starts up localstack with specified version >= 1.x.x.
