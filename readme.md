@@ -119,8 +119,8 @@ These options control what packages / functionality are built into the container
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
 * DEVNET_NAME=devnet - name of dev network
-* DEVNET_SUBNET=169.254.170.0/24 - cidr notation subnet
-* DEVNET_GATEWAY=169.254.170.1 - gateway ip inside DEVNET_SUBNET
+* DEVNET_SUBNET=<not set> - cidr notation subnet
+* DEVNET_GATEWAY=<not set> - gateway ip inside DEVNET_SUBNET
 * DEV_CONTAINER - should be auto set to current dev container version. You can use this to detect if you are running in a dev container.
 * CLEAN=<not set> - stops and removes existing stack and does docker system prune before starting new dev container.
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.

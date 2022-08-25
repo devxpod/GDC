@@ -192,21 +192,24 @@ fi
 # remove old stack and prune image files
 if [ "$CLEAN" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
+  docker network rm "$DEVNET_NAME"
   docker system prune -f
 fi
 
 # setup docker devnet network if needed
 if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then
-  if [ -z "$DEVNET_SUBNET" ]; then
-    echo "Env variable DEVNET_SUBNET is not set !"
-    exit 1
+  if [ -n "$DEVNET_SUBNET" ]; then
+    DEVNET_SUBNET="--subnet $DEVNET_SUBNET"
+  else
+    DEVNET_SUBNET=""
   fi
-  if [ -z "$DEVNET_GATEWAY" ]; then
-    echo "Env variable DEVNET_GATEWAY is not set !"
-    exit 1
+  if [ -n "$DEVNET_GATEWAY" ]; then
+    DEVNET_GATEWAY="--gateway $DEVNET_GATEWAY"
+  else
+    DEVNET_GATEWAY=""
   fi
-  echo "Network $DEVNET_NAME not found. creating... as $DEVNET_SUBNET $DEVNET_GATEWAY"
-  docker network create --attachable -d bridge --subnet "$DEVNET_SUBNET" --gateway "$DEVNET_GATEWAY" "$DEVNET_NAME"
+  echo "Network $DEVNET_NAME not found. creating... $DEVNET_SUBNET $DEVNET_GATEWAY"
+  docker network create --attachable -d bridge $DEVNET_SUBNET $DEVNET_GATEWAY "$DEVNET_NAME"
 else
   echo "Network $DEVNET_NAME found"
 fi
