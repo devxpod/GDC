@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   auth0_mock:
+    container_name: "${AUTH0_CONTAINER_NAME-auth0_mock}"
     build:
       context: ./auth0_mock
       dockerfile: Dockerfile
