@@ -25,12 +25,22 @@ fi
 
 export LS_VERSION=${LS_VERSION:='latest'}
 
-IS_HOST_LS=$(echo "$GDC_COMPOSE_FILES" | grep -sc '\-f dc-ls-host.yml')
-
-
-
-if [ "$IS_HOST_LS" = "0" ]; then
-  docker-compose -f dc-ls-host.yml up -d --build --force-recreate
-else
-  docker-compose -f dc-ls.yml up -d --build --force-recreate
+IS_HOST=$(echo "$GDC_COMPOSE_FILES" | grep -sc '\-f dc-ls-host.yml')
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Usage $0 [host|internal]"
+  echo "if no parameters are passed, then GDC launch env variables are used to automatically determine mode."
+  exit 0
+elif [ "$1" = "host" ]; then
+  IS_HOST="1"
+elif [ "$1" = "internal" ]; then
+  IS_HOST="0"
 fi
+
+if [ "$IS_HOST" = "0" ]; then
+  echo "Using container mode"
+  docker-compose -f dc-ls.yml up -d --build --force-recreate
+else
+  echo "Using host mode"
+  docker-compose -f dc-ls-host.yml up -d --build --force-recreate
+fi
+sleep 5
