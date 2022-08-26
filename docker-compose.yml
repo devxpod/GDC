@@ -58,7 +58,7 @@ services:
       - DEVNET_NAME # name of dev network GDC is attached to
       - DEVNET_SUBNET # only populated if manually specified
       - DEVNET_GATEWAY # only populated if manually specified
-      - DEV_CONTAINER=1.03 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.0.4 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
