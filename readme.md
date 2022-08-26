@@ -154,6 +154,7 @@ export ENV_VAR_NAME=ENV_VAR_VALUE
 * **/root/.pulumi** - folder is a persisted volume shared between all dev containers.
 * **/root/.cache** - folder is a persisted volume shared between all dev containers.
 * **/root/.config** - folder is a persisted volume shared between all dev containers.
+* **/root/bin-extra** -- folder contains helper scripts for GDC.
 * **/root/bin-extra/aws** - folder contains aws related helper scripts. Only added to path if USE_AWS=yes is set.
 * **/root/bin-extra/docker** - folder contains docker related helper files and is added to path.
 * **/root/bin-extra/ls** - folder for localstack helper files and is added to path.
@@ -287,6 +288,9 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 
 
 # Helper scripts and aliases
+### GDC
+* check-gdc-update.sh - checks GDC repo for updated version
+
 ## Docker
 * docker-logs.sh NAME - NAME can be a full or partial container name to tail the logs of
 * docker-shell.sh NAME SHELL - NAME can be a full or partial container name to execute SHELL inside. If SHELL is not specified then bash will be assumed.
