@@ -83,6 +83,7 @@ Running with no arguments or `-h` as first arguments will display help.
 These options control what packages / functionality are built into the container.  
 `USE_` vars are **yes / no** values for toggling related options.
 
+* PROJECT_NAME=<set to 1st command line parameter when run-dev-container.sh is invoked> - used to suffix DEVNET_NAME and LOCALSTACK_VOLUME_DIR
 * ROOT_PW=ContainersRule - sets root password in container.
 * CHECK_UPDATES=yes - check for GDC updates on each login.
 * USE_WORKSPACE=yes - mounts folder from host into /workspace folder in container. Setting this option to "no" is useful if you only want to use tools inside the container and not interact with a project.    
@@ -119,11 +120,12 @@ These options control what packages / functionality are built into the container
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
-* DEVNET_NAME=devnet - name of dev network
+* DEVNET_NAME=<auto set to devnet_PROJECT_NAME> - name of gdc dev network that all containers will be attached to.
 * DEVNET_SUBNET=<not set> - cidr notation subnet
 * DEVNET_GATEWAY=<not set> - gateway ip inside DEVNET_SUBNET
 * DEV_CONTAINER - should be auto set to current dev container version. You can use this to detect if you are running in a dev container.
-* CLEAN=<not set> - stops and removes existing stack and does docker system prune before starting new dev container.
+* CLEAN=<not set> - stops and removes existing stack and devnet, then does docker system prune before starting new dev container.
+* CLEAN_ONLY=<not set> - stops and removes existing stack and devnet, then does docker system prune and exits.
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
 * GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if other containers are launched such as localstack or auth0 mock.

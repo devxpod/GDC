@@ -59,7 +59,9 @@ fi
 
 # this is the stack name for compose
 COMPOSE_PROJECT_NAME="$1"
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME// /_}"
 
+export DEVNET_NAME=${DEVNET_NAME:="devnet_$COMPOSE_PROJECT_NAME"}
 if [ -z "$DEVNET_NAME" ]; then
   echo "Env variable DEVNET_NAME is not set !"
   exit 1
@@ -190,10 +192,13 @@ if [ -n "$COMPOSE_EX" ]; then
 fi
 
 # remove old stack and prune image files
-if [ "$CLEAN" = "yes" ]; then
+if [ "$CLEAN" = "yes" ] || [ "$CLEAN_ONLY" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
   docker network rm "$DEVNET_NAME"
   docker system prune -f
+  if [ "$CLEAN_ONLY" = "yes" ]; then
+    exit;
+  fi
 fi
 
 # setup docker devnet network if needed
@@ -217,3 +222,4 @@ fi
 export GDC_COMPOSE_FILES=$COMPOSE_FILES
 
 docker-compose $COMPOSE_FILES up --build --force-recreate
+docker network rm "$DEVNET_NAME"
