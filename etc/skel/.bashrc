@@ -87,7 +87,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -117,6 +117,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+###### GDC configs #######
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -164,6 +166,8 @@ if [ "$OS" = "Windows" ]; then
   HOST_PROJECT_PATH=$(echo "$HOST_PROJECT_PATH" | sed -E 's/^(\w):(.*)$/\/\1\2/' | tr '\\' /)
   export HOST_PROJECT_PATH
 fi
+
+export PATH="$PATH:/root/bin-extra"
 
 if [ "$USE_COLOR_PROMPT" = "yes" ]; then
   export PS1="$bldred\u$bldylw@$txtgrn\h($COMPOSE_PROJECT_NAME) $bldblu\w$txtrst"'`__git_ps1`'"$txtrst\n$ "
@@ -257,4 +261,8 @@ export PATH="$PATH:/root/bin-extra/auth0"
 
 if [ -r ~/persisted/bash_rc_ext.sh ]; then
   . "$HOME/persisted/bash_rc_ext.sh"
+fi
+
+if [ "$CHECK_UPDATES" = "yes" ]; then
+  /root/bin-extra/check-gdc-update.sh
 fi
