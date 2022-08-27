@@ -14,7 +14,8 @@ services:
       - "4566:4566"
       - "4571:4571"
     environment:
-      # - SERVICES=s3,secretsmanager,apigateway,lambda,iam,dynamodb,stepfunctions,route53,cloudfront,sts
+      - EXTRA_CORS_ALLOWED_ORIGINS=http://host.docker.internal:4566
+      - DISABLE_CORS_CHECKS=1
       - DEBUG=${DEBUG-}
       - PERSISTENCE=1
       - PORT_WEB_UI=${PORT_WEB_UI-}
