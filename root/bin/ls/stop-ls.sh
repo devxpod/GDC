@@ -37,10 +37,10 @@ elif [ "$1" = "internal" ]; then
 fi
 
 if [ "$IS_HOST" = "0" ]; then
-  echo "Using container mode"
+  echo "stop-ls.sh using container mode"
   docker-compose -f dc-ls.yml down
 else
-  echo "Using host mode"
+  echo "stop-ls.sh using host mode"
   docker-compose -f dc-ls-host.yml down
 fi
 sleep 4

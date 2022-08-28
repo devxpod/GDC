@@ -37,10 +37,10 @@ elif [ "$1" = "internal" ]; then
 fi
 
 if [ "$IS_HOST" = "0" ]; then
-  echo "Using container mode"
+  echo "start-ls.sh using container mode"
   docker-compose -f dc-ls.yml up -d --build --force-recreate
 else
-  echo "Using host mode"
+  echo "start-ls.sh using host mode"
   docker-compose -f dc-ls-host.yml up -d --build --force-recreate
 fi
 sleep 5

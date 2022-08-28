@@ -35,10 +35,10 @@ elif [ "$1" = "internal" ]; then
 fi
 
 if [ "$IS_HOST" = "0" ]; then
-  echo "Using container mode"
+  echo "start-auth0.sh using container mode"
   docker-compose -f dc-auth0.yml up -d --build --force-recreate
 else
-  echo "Using host mode"
+  echo "start-auth0.sh using host mode"
   docker-compose -f dc-auth0-host.yml up -d --build --force-recreate
 fi
 sleep 5

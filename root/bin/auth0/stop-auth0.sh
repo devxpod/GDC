@@ -35,10 +35,10 @@ elif [ "$1" = "internal" ]; then
 fi
 
 if [ "$IS_HOST" = "0" ]; then
-  echo "Using container mode"
+  echo "stop-auth0.sh using container mode"
   docker-compose -f dc-auth0.yml down
 else
-  echo "Using host mode"
+  echo "stop-auth0.sh using host mode"
   docker-compose -f dc-auth0-host.yml down
 fi
 sleep 2
