@@ -102,13 +102,13 @@ These options control what packages / functionality are built into the container
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * LOCALSTACK_VOLUME_DIR=/c/tmp/ls_volume or /tmp/ls_volume - on windows / mac respectively.
-* LS_MAIN_CONTAINER_NAME=localstack - used by localstack to name main container. Can also be accessed via this name inside containers.
+* LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
 * USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set. 
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
-* AUTH0_CONTAINER_NAME=auth0_mock - set name of auth0 container so more than one can be used in parallel.
+* AUTH0_CONTAINER_NAME=auth0_mock_PROJECT_NAME - set name of auth0 container so more than one can be used in parallel.
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.
 * AUTH0_LOCAL_USERS_FILE=<not set> - used to specify location in container relative to /workspace for auth0 to mount users-local.json override file.
 * AUTH0_AUDIENCE=portal - used to override auth0 audience default of app.

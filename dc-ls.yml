@@ -3,7 +3,7 @@ version: '3.8'
 services:
   localstack:
     image: "localstack/localstack:${LS_VERSION-latest}"
-    #image: "localstack/localstack:latest"
+    container_name: "${LS_MAIN_CONTAINER_NAME-localstack}"
     networks:
       devnet:
     environment:

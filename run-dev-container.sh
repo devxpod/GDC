@@ -33,12 +33,6 @@ if [ -r ".env-gdc-local" ]; then
   source ".env-gdc-local"
 fi
 
-if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
-  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=host.docker.internal}
-else
-  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=$LS_MAIN_CONTAINER_NAME}
-fi
-
 # if we cant change to this folder bail
 cd "$SCRIPT_DIR" || exit 1
 
@@ -60,6 +54,14 @@ fi
 # this is the stack name for compose
 COMPOSE_PROJECT_NAME="$1"
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME// /_}"
+
+export LS_MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME:="localstack_$COMPOSE_PROJECT_NAME"} # used by localstack to name main container
+if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
+  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=host.docker.internal}
+else
+  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=$LS_MAIN_CONTAINER_NAME}
+fi
+
 
 export DEVNET_NAME=${DEVNET_NAME:="devnet_$COMPOSE_PROJECT_NAME"}
 if [ -z "$DEVNET_NAME" ]; then
@@ -164,6 +166,7 @@ elif [ "$USE_AUTH0" = "yes" ]; then
 fi
 
 if [ "$USE_AUTH0_HOST" = "yes" ] || [ "$USE_AUTH0" = "yes" ]; then
+  export AUTH0_CONTAINER_NAME=${AUTH0_CONTAINER_NAME:="auth0_mock_$COMPOSE_PROJECT_NAME"} # set name of auth0 container so more than one can be used in parallel
   # add custom auth0 users file
   if [ -n "$AUTH0_LOCAL_USERS_FILE" ]; then
     echo "Adding compose layer dc-auth0-local-users.yml"
