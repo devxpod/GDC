@@ -13,7 +13,7 @@ OUR_VERSION=$(grep '\- DEV_CONTAINER=' $GDC_ROOT/docker-compose.yml | cut -d= -f
 
 if [ "$REPO_VER" != "$OUR_VERSION" ]; then
   echo "Your GDC version $OUR_VERSION"
-  echo "GDC Update $REPO_VER available! Please exit GDC, pull then restart GDC..."
+  echo "GDC Update $REPO_VER available! Please exit GDC, pull then restart GDC with env var  CLEAN=yes"
 else
   echo "Your GDC version $OUR_VERSION is current."
 fi
