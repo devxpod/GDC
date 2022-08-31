@@ -129,6 +129,7 @@ These options control what packages / functionality are built into the container
 * CLEAN_ONLY=<not set> - stops and removes existing stack and devnet, then does docker system prune and exits.
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
+* DOCKER_OS_PLATFORM=<not set> can be used by docker commands to build containers for other arch's
 * GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if other containers are launched such as localstack or auth0 mock.
 * GDC_DIR - contains host location of GDC folder
 * GDC_COMPOSE_FILES - contains list of all compose files in use to run GDC

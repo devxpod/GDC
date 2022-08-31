@@ -22,6 +22,7 @@ services:
     environment:
       - COMPOSE_PROJECT_NAME
       - PROJECT_NAME=${COMPOSE_PROJECT_NAME}
+      - DOCKER_OS_PLATFORM # can be used to build containers for other arch's
       - HOST_PROJECT_PATH # helps with volume mounts if you run containers from within dev container
       - HOST_OS=${OS:-} # used to remap paths in windows format to linux format
       - USE_HOST_HOME # mount home directory from host
@@ -61,7 +62,7 @@ services:
       - DEVNET_SUBNET # only populated if manually specified
       - DEVNET_GATEWAY # only populated if manually specified
       - CHECK_UPDATES # check for GDC updates on each login
-      - DEV_CONTAINER=1.0.9 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.0.91 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
