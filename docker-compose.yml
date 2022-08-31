@@ -40,10 +40,11 @@ services:
       - AUTH0_AUDIENCE # used to override auth0 audience default of app
       - LOCALSTACK_VOLUME_DIR # needed by LS v1.x. no effect when LS is not being used
       - USE_LOCALSTACK # does not install or start localstack. Only sets up some helpers
+      - USE_LOCALSTACK_HOST # forwards localstack ports to host if LS_VERSION is set.
+      - LS_IMAGE # can override with custom image location. Still uses LS_VERSION to create final image location.
       - LS_VERSION # starts up localstack with specified version >= 1.x.x.
       - LS_MAIN_CONTAINER_NAME # used by localstack
       - LOCALSTACK_API_KEY # required if you want to use localstack pro
-      - USE_LOCALSTACK_HOST
       - PERSIST_BITWARDEN_SESSION # persist unlocked vault creds between container sessions
       - USE_AWS_HOME # copy .aws folder from host home if exists and USE_HOST_HOME=yes
       - AWS_IDENTITY_ACCOUNT # used by AWS assume-role.sh script
@@ -60,7 +61,7 @@ services:
       - DEVNET_SUBNET # only populated if manually specified
       - DEVNET_GATEWAY # only populated if manually specified
       - CHECK_UPDATES # check for GDC updates on each login
-      - DEV_CONTAINER=1.0.8 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.0.9 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

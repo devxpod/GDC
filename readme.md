@@ -103,6 +103,7 @@ These options control what packages / functionality are built into the container
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * LOCALSTACK_VOLUME_DIR=/c/tmp/ls_volume or /tmp/ls_volume - on windows / mac respectively.
 * LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
+* LS_IMAGE=localstack/localstack - can override with custom image location. Still uses LS_VERSION to create final image location.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
 * USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set. 
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
