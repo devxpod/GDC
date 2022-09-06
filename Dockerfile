@@ -7,7 +7,7 @@ ENV TZ=Etc/UTC
 RUN apt-get update -y && apt-get -y upgrade
 # install core
 RUN apt-get install -fy --fix-missing locales apt-transport-https \
-    software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff bash-completion \
+    software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff file bash-completion \
     inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat socat ca-certificates gnupg2 git \
     postgresql-client mysql-client
 
@@ -92,7 +92,7 @@ RUN  /bin/bash -c 'set -ex && \
        tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
     else \
        echo "docker assuming ARM" && \
-       wget -q https://download.docker.com/linux/static/stable/armhf/docker-20.10.9.tgz  -O docker.tgz && \
+       wget -q https://download.docker.com/linux/static/stable/aarch64/docker-20.10.9.tgz  -O docker.tgz && \
        tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
     fi'
 
@@ -102,10 +102,10 @@ RUN  /bin/bash -c 'set -ex && \
     PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
     if [ "$ARCH" == "x86_64" ]; then \
        echo "docker-compose x86_64" && \
-       curl -L "https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
+       curl -L "https://github.com/docker/compose/releases/download/v2.10.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
     else \
        echo "docker-compose assuming ARM" && \
-       curl -L "https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-aarch64" -o /usr/local/bin/docker-compose;\
+       curl -L "https://github.com/docker/compose/releases/download/v2.10.2/docker-compose-linux-aarch64" -o /usr/local/bin/docker-compose;\
     fi; \
     chmod +x /usr/local/bin/docker-compose;'
 
