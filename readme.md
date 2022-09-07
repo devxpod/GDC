@@ -121,6 +121,8 @@ These options control what packages / functionality are built into the container
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
+* DOCKER_VERSION=20.10.9 - install docker version inside container
+* DOCKER_COMPOSE_VERSION=2.10.2 - install docker-compose version inside container
 * DEVNET_NAME=<auto set to devnet_PROJECT_NAME> - name of gdc dev network that all containers will be attached to.
 * DEVNET_SUBNET=<not set> - cidr notation subnet
 * DEVNET_GATEWAY=<not set> - gateway ip inside DEVNET_SUBNET
