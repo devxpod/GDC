@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
 # update system
-RUN apt-get update -y && apt-get -y upgrade
+RUN apt-get update -y --fix-missing && apt-get -y --fix-missing upgrade
 # install core
 RUN apt-get install -fy --fix-missing locales apt-transport-https \
     software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff file bash-completion \
