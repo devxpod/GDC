@@ -62,7 +62,6 @@ else
   export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=$LS_MAIN_CONTAINER_NAME}
 fi
 
-
 export DEVNET_NAME=${DEVNET_NAME:="devnet_$COMPOSE_PROJECT_NAME"}
 if [ -z "$DEVNET_NAME" ]; then
   echo "Env variable DEVNET_NAME is not set !"
@@ -200,9 +199,18 @@ if [ "$CLEAN" = "yes" ] || [ "$CLEAN_ONLY" = "yes" ]; then
   docker network rm "$DEVNET_NAME"
   docker system prune -f
   if [ "$CLEAN_ONLY" = "yes" ]; then
-    exit;
+    exit
   fi
 fi
+
+if [ "$PULUMI_VERSION" = "latest" ]; then
+  if ! PULUMI_VERSION=$(curl --retry 3 --fail --silent -L "https://www.pulumi.com/latest-version"); then
+    echo "error: could not determine latest version of Pulumi, try specifying version X.Y.Z to install an explicit version"
+    exit 1
+  fi
+  echo "Latest pulumi version is $PULUMI_VERSION"
+fi
+
 
 # setup docker devnet network if needed
 if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then
@@ -221,6 +229,7 @@ if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")"
 else
   echo "Network $DEVNET_NAME found"
 fi
+
 
 export GDC_COMPOSE_FILES=$COMPOSE_FILES
 
