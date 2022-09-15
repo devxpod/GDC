@@ -105,7 +105,7 @@ These options control what packages / functionality are built into the container
 * LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
 * LS_IMAGE=localstack/localstack - can override with custom image location. Still uses LS_VERSION to create final image location.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
-* USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set. 
+* USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set.
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
@@ -353,3 +353,15 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 
 ## Debugging
 [Debugging](./docs/debugging/readme.md) - Info on ways to debug scripts in inside the container from IDE running on host. 
+
+
+## GDC Startup Troubleshooting
+If your GDC fails to start with an error similar to "failed to solve: executor failed running ..."
+
+This happens when cached layers dont match what the Docker file thinks is already in place.
+
+You can try one of the following environment variables to resolve the error.  
+Many times only CLEAN=yes is needed, however if the problem persist you can use CLEAN_ONLY=yes then start the GDC as you normally would.
+
+* CLEAN=yes - stops and removes existing stack and devnet, then does docker system prune before starting new dev container.
+* CLEAN_ONLY=yes - stops and removes existing stack and devnet, then does docker system prune and exits.
