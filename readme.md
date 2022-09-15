@@ -113,6 +113,8 @@ These options control what packages / functionality are built into the container
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.
 * AUTH0_LOCAL_USERS_FILE=<not set> - used to specify location in container relative to /workspace for auth0 to mount users-local.json override file.
 * AUTH0_AUDIENCE=portal - used to override auth0 audience default of app.
+* AUTH0_DEFAULT_USER=user1 - used to auto-populate login form.
+* AUTH0_DEFAULT_PASSWORD=user1 - used to auto-populate login form.
 * USE_COLOR_PROMPT=yes - enables colorized bash prompt in container.
 * SSH_KEYSCAN_HOSTS=gitlab.com github.com bitbucket.org - copies SSH keys from list of hosts to known-hosts file.
 * SSH_SERVER_PORT=<not set> - if set will start sshd and forward this port from host to sshd in container.
@@ -335,6 +337,7 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 ### Commands
 * start-auth0.sh [-h|host|internal] - starts auth0 mock container in specified mode. If not specified will attempt to autodetect.
 * stop-auth0.sh [-h|host|internal] - stops auth0 mock container. If not specified will attempt to autodetect.
+* get-auth-token.sh [username] - logs into auth0 mock and returns auth token. Builds URL with $AUTH0_CONTAINER_NAME and defaults to login of $AUTH0_DEFAULT_USER with pw of $PASSWORD unless username param is specified then that name will look up password in users-local.json or users.json file being used by Auth0 mock.
 
 
 

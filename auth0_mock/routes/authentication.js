@@ -50,8 +50,8 @@ router.get('/authorize', async (req, res) => {
     return res.writeHead(302, {Location: location}).end();
   }
   return res.render('../templates/login_page', {
-    username: 'user1',
-    password: 'user1',
+    username: process.env.AUTH0_DEFAULT_USER || 'user1',
+    password: process.env.AUTH0_DEFAULT_PASSWORD || 'user1',
     redirect: redirect_uri,
     state
   });
