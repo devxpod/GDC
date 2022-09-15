@@ -232,6 +232,7 @@ fi
 
 
 export GDC_COMPOSE_FILES=$COMPOSE_FILES
+echo "Using compose files $GDC_COMPOSE_FILES"
 
 docker-compose $COMPOSE_FILES up --build --force-recreate
 docker network rm "$DEVNET_NAME"
