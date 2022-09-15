@@ -66,6 +66,25 @@ if [ -n "$PULUMI_VERSION" ]; then
     pulumi plugin install resource mysql
 fi
 
+
+#if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
+#  if [ -z "$LS_MAIN_CONTAINER_NAME" ]; then
+#    echo "LS_MAIN_CONTAINER_NAME is not set! Ignoring USE_LOCALSTACK_DNS..."
+#  else
+#    LS_IP=$(host -4 "$LS_MAIN_CONTAINER_NAME" | cut -d' ' -f4)
+#    if [ -n "$LS_IP" ]; then
+#      echo "LOCALSTACK IP $LS_IP"
+#      echo "nameserver $LS_IP" > /tmp/resolv.conf
+#      cp /etc/resolv.conf /etc/resolv.conf.org
+#      cat /etc/resolv.conf >> /tmp/resolv.conf
+#      mv /tmp/resolv.conf /etc/resolv.conf
+#    else
+#      echo "LOCALSTACK IP COULD NOT BE FOUND! Ignoring USE_LOCALSTACK_DNS..."
+#    fi
+#  fi
+#fi
+
+
 mkdir -p ~/.ssh
 if [[ "$USE_HOST_HOME" = "yes" &&   -r ~/home-host/.ssh ]]; then
     cp -a ~/home-host/.ssh/* ~/.ssh
