@@ -33,12 +33,17 @@ elif [ "$1" = "host" ]; then
 elif [ "$1" = "internal" ]; then
   IS_HOST="0"
 fi
-
 if [ "$IS_HOST" = "0" ]; then
   echo "start-auth0.sh using container mode"
-  docker-compose -f dc-auth0.yml up -d --build --force-recreate
+  COMPOSE_FILES="-f dc-auth0.yml"
 else
   echo "start-auth0.sh using host mode"
-  docker-compose -f dc-auth0-host.yml up -d --build --force-recreate
+  COMPOSE_FILES="-f dc-auth0-host.yml"
 fi
+
+if [ "$AUTH0_LOCAL_USERS_FILE" ]; then
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0-local-users.yml"
+fi
+docker-compose $COMPOSE_FILES up -d --build --force-recreate
+
 sleep 5
