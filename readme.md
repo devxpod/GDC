@@ -12,8 +12,13 @@ Run the installer and accept all the defaults.
 The default is 2GB. Increase this to at least 4GB, we recommend half your system's memory up to 16GB.
 ![Docker Desktop Config](./docs/container_dev/images/ddesktop-memory.png "Docker Desktop Config")
 
+Ensure that "Use Docker Compose V2" is selected on the General tab. If this is not done your container names will not be correct.  
+If your not on windows your screen may look different however there will be a checkbox for Compose V2.
+![Docker Desktop Compose V2](./docs/container_dev/images/compose_v2.png "Docker Desktop Compose V2")
+
 If you're on Windows, and it's integrated with WSL2, your Docker Desktop Settings will look like this.
 ![Docker Desktop Windows Config](./docs/container_dev/images/ddesktop-wsl2.png "Docker Desktop Windows Config")
+
 
 
 # Setup
