@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-CONTAINER=$(docker ps | grep "$1" | cut -f1 -d' ' | head -n1)
+
+CONTAINER="$1"
+shift
+CONTAINER=$(docker ps | grep "$CONTAINER" | cut -f1 -d' ' | head -n1)
 
 if [ -z "$CONTAINER" ]; then
     echo "container not found"
