@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  localstack:
+    ports:
+      - "${LOCALSTACK_HOST_DNS_PORT}:53"                # only required for Pro
+      - "${LOCALSTACK_HOST_DNS_PORT}:53/udp"            # only required for Pro

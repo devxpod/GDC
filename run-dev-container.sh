@@ -130,11 +130,15 @@ fi
 
 # this will start localstack container
 if [ -n "$LS_VERSION" ]; then
-  echo "Adding compose layer dc-ls.yml"
   export USE_LOCALSTACK=yes
   if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
+    echo "Adding compose layer dc-ls-host.yml"
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host.yml"
+    if [ -n "$LOCALSTACK_HOST_DNS_PORT" ]; then
+      COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host-dns.yml"
+    fi
   else
+    echo "Adding compose layer dc-ls.yml"
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls.yml"
   fi
 fi
