@@ -38,9 +38,17 @@ fi
 
 if [ "$IS_HOST" = "0" ]; then
   echo "start-ls.sh using container mode"
-  docker-compose -f dc-ls.yml up -d --build --force-recreate
+  COMPOSE_FILES="-f dc-ls.yml"
 else
   echo "start-ls.sh using host mode"
-  docker-compose -f dc-ls-host.yml up -d --build --force-recreate
+  COMPOSE_FILES="-f dc-ls-host.yml"
 fi
+
+if [ -n "$LOCALSTACK_HOST_DNS_PORT" ]; then
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host-dns.yml"
+fi
+
+
+docker-compose $COMPOSE_FILES up -d --build --force-recreate
+
 sleep 5
