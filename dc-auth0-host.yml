@@ -14,7 +14,7 @@ services:
     environment:
       NODE_ENV: test
       DEBUG: nodejs-docker-express:*
-      AUTH0_URL: "http://host.docker.internal:${AUTH0_HOST_PORT-3001}"
+      AUTH0_URL:
       AUTH0_AUDIENCE:
       AUTH0_DEFAULT_USER:
       AUTH0_DEFAULT_PASSWORD:

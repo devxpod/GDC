@@ -115,8 +115,9 @@ These options control what packages / functionality are built into the container
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
-* AUTH0_CONTAINER_NAME=auth0_mock_PROJECT_NAME - set name of auth0 container so more than one can be used in parallel.
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.
+* AUTH0_CONTAINER_NAME=auth0_mock_PROJECT_NAME - set name of auth0 container so more than one can be used in parallel.
+* AUTH0_URL=<auto generated> - generated using a combination of USE_AUTH0,USE_AUTH0_HOST,AUTH0_HOST_PORT,AUTH0_CONTAINER_NAME.
 * AUTH0_LOCAL_USERS_FILE=<not set> - used to specify location in container relative to /workspace for auth0 to mount users-local.json override file.
 * AUTH0_AUDIENCE=portal - used to override auth0 audience default of app.
 * AUTH0_DEFAULT_USER=user1 - used to auto-populate login form.
