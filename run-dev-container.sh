@@ -33,6 +33,15 @@ if [ -r ".env-gdc-local" ]; then
   source ".env-gdc-local"
 fi
 
+CACHE_VOLUMES_REQUIRED="pulumi pkg_cache"
+SHARED_VOLUMES_REQUIRED="shared home_config"
+
+SHARED_VOLUMES="$SHARED_VOLUMES_REQUIRED $CACHE_VOLUMES_REQUIRED"
+if [ -n "$SHARED_VOLUMES_EXTRA" ]; then
+  SHARED_VOLUMES="$SHARED_VOLUMES $SHARED_VOLUMES_EXTRA"
+fi
+export SHARED_VOLUMES
+
 # if we cant change to this folder bail
 cd "$SCRIPT_DIR" || exit 1
 
@@ -203,6 +212,20 @@ fi
 if [ "$CLEAN" = "yes" ] || [ "$CLEAN_ONLY" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
   docker network rm "$DEVNET_NAME"
+
+  for v in $SHARED_VOLUMES_EXTRA; do
+    if [ "$(docker volume ls | grep -Ec "local\s+$v\$")" = "1" ]; then
+      echo "Removing shared extra volume $v"
+      docker volume rm "$v"
+    fi
+  done
+  for v in $CACHE_VOLUMES_REQUIRED; do
+    if [ "$(docker volume ls | grep -Ec "local\s+$v\$")" = "1" ]; then
+      echo "Removing shared cache volume $v"
+      docker volume rm "$v"
+    fi
+  done
+
   docker system prune -f
   if [ "$CLEAN_ONLY" = "yes" ]; then
     exit
@@ -216,7 +239,6 @@ if [ "$PULUMI_VERSION" = "latest" ]; then
   fi
   echo "Latest pulumi version is $PULUMI_VERSION"
 fi
-
 
 # setup docker devnet network if needed
 if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then
@@ -236,9 +258,16 @@ else
   echo "Network $DEVNET_NAME found"
 fi
 
+for v in $SHARED_VOLUMES; do
+  if [ "$(docker volume ls | grep -Ec "local\s+$v\$")" = "0" ]; then
+    echo "Creating shared volume $v"
+    docker volume create "$v"
+  fi
+done
 
 export GDC_COMPOSE_FILES=$COMPOSE_FILES
 echo "Using compose files $GDC_COMPOSE_FILES"
+echo "Using shared volumes $SHARED_VOLUMES"
 
 docker-compose $COMPOSE_FILES up --build --force-recreate
 docker network rm "$DEVNET_NAME"

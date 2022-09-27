@@ -64,11 +64,12 @@ services:
       - GDC_ENTRYPOINT # run this command and exit
       - GDC_DIR # contains host location of GDC folder
       - GDC_COMPOSE_FILES # contains list of all compose files in use by GDC
+      - SHARED_VOLUMES # list of volumes shared between all GDC's
       - DEVNET_NAME # name of dev network GDC is attached to
       - DEVNET_SUBNET # only populated if manually specified
       - DEVNET_GATEWAY # only populated if manually specified
       - CHECK_UPDATES # check for GDC updates on each login
-      - DEV_CONTAINER=1.1.4 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.1.5 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
@@ -83,15 +84,19 @@ services:
 volumes:
   bash_history: # persist bash history
   persisted: # put things you want to persist between container rebuilds here
+  cache: # .cache folder in home dir
   pulumi:
     name: pulumi # persist pulumi plugin install across all stacks
-  cache: # .cache folder in home dir
+    external: true
   package_cache: # persist npm, yarn and pip cache, this volume is persisted and shared between all stacks
     name: pkg_cache
+    external: true
   shared: # this volume is persisted and shared between all stacks
     name: shared
+    external: true
   home_config: # this volume is persisted and shared between all stacks
     name: home_config
+    external: true
 
 networks:
   devnet:

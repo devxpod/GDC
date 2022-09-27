@@ -130,20 +130,22 @@ These options control what packages / functionality are built into the container
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
-* DOCKER_VERSION=20.10.9 - install docker version inside container
-* DOCKER_COMPOSE_VERSION=2.10.2 - install docker-compose version inside container
+* DOCKER_VERSION=20.10.9 - install docker version inside container.
+* DOCKER_COMPOSE_VERSION=2.10.2 - install docker-compose version inside container.
 * DEVNET_NAME=<auto set to devnet_PROJECT_NAME> - name of gdc dev network that all containers will be attached to.
-* DEVNET_SUBNET=<not set> - cidr notation subnet
-* DEVNET_GATEWAY=<not set> - gateway ip inside DEVNET_SUBNET
-* DEV_CONTAINER - should be auto set to current dev container version. You can use this to detect if you are running in a dev container.
+* DEVNET_SUBNET=<not set> - cidr notation subnet.
+* DEVNET_GATEWAY=<not set> - gateway ip inside DEVNET_SUBNET.
+* DEV_CONTAINER=<auto set> - set to current dev container version. You can also use this to detect if you are running in a dev container.
 * CLEAN=<not set> - stops and removes existing stack and devnet, then does docker system prune before starting new dev container.
 * CLEAN_ONLY=<not set> - stops and removes existing stack and devnet, then does docker system prune and exits.
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
-* DOCKER_OS_PLATFORM=<not set> can be used by docker commands to build containers for other arch's
+* DOCKER_OS_PLATFORM=<not set> can be used by docker commands to build containers for other arch's.
 * GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if other containers are launched such as localstack or auth0 mock.
-* GDC_DIR - contains host location of GDC folder
-* GDC_COMPOSE_FILES - contains list of all compose files in use to run GDC
+* GDC_DIR=<auto set> - contains host location of GDC folder.
+* GDC_COMPOSE_FILES=<auto set> - contains list of all compose files in use to run GDC.
+* SHARED_VOLUMES=<auto set> - list of volumes shared between all GDC's.
+* SHARED_VOLUMES_EXTRA=<not set> - list separated by space of custom volumes you want shared between all GDC's.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
