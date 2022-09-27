@@ -307,6 +307,7 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 # Helper scripts and aliases
 ### GDC
 * check-gdc-update.sh - checks GDC repo for updated version
+* gdcex.sh - executes a command in another GDC related container. Supports tab completion for available container names.
 
 ## Docker
 * docker-logs.sh NAME - NAME can be a full or partial container name to tail the logs of

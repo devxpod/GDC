@@ -178,6 +178,7 @@ fi'
 COPY /etc/profile.d /etc/profile.d/
 COPY /etc/skel /etc/skel/
 COPY /etc/ssh /etc/ssh/
+COPY /etc/bash_completion.d /etc/bash_completion.d
 COPY init.sh /init.sh
 COPY /root/bin/ /root/bin-extra
 COPY postStartCommand.sh /
