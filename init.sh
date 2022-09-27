@@ -6,7 +6,21 @@ fi
 
 if [ -n "$GDC_ENTRYPOINT" ]; then
   $GDC_ENTRYPOINT
-else
+  EP_EC=$?
+  if [ $EP_EC -ne 0 ] ; then
+    echo "GDC_ENTRYPOINT returned non-zero exit code: $EP_EC"
+    /root/bin-extra/auth0/stop-auth0.sh 2>/dev/null
+    /root/bin-extra/ls/stop-ls.sh 2>/dev/null
+    exit $EP_EC
+  fi
+  if [ "$GDC_DAEMON_MODE" != "start" ]; then
+    /root/bin-extra/auth0/stop-auth0.sh 2>/dev/null
+    /root/bin-extra/ls/stop-ls.sh 2>/dev/null
+    exit 0
+  fi
+fi
+
+if [ -z "$GDC_DAEMON_MODE" ] || [ "$GDC_DAEMON_MODE" = "start" ]; then
   echo "=============================================================================================="
   echo "connect to container shell via docker:   docker exec -it $COMPOSE_PROJECT_NAME-dev-1 bash -l"
 

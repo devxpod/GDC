@@ -141,11 +141,12 @@ These options control what packages / functionality are built into the container
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
 * DOCKER_OS_PLATFORM=<not set> can be used by docker commands to build containers for other arch's.
-* GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if other containers are launched such as localstack or auth0 mock.
+* GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if GDC_DAEMON_MODE=start
 * GDC_DIR=<auto set> - contains host location of GDC folder.
 * GDC_COMPOSE_FILES=<auto set> - contains list of all compose files in use to run GDC.
 * SHARED_VOLUMES=<auto set> - list of volumes shared between all GDC's.
 * SHARED_VOLUMES_EXTRA=<not set> - list separated by space of custom volumes you want shared between all GDC's.
+* GDC_DAEMON_MODE=no - Start / stop GDC in background. options are no, start, stop.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.

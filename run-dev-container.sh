@@ -269,5 +269,16 @@ export GDC_COMPOSE_FILES=$COMPOSE_FILES
 echo "Using compose files $GDC_COMPOSE_FILES"
 echo "Using shared volumes $SHARED_VOLUMES"
 
-docker-compose $COMPOSE_FILES up --build --force-recreate
-docker network rm "$DEVNET_NAME"
+if [ "$GDC_DAEMON_MODE" = "start" ]; then
+  GDC_DAEMON_MODE="-d "
+elif [ "$GDC_DAEMON_MODE" = "stop" ]; then
+  docker-compose $COMPOSE_FILES down
+  docker network rm "$DEVNET_NAME" 2>/dev/null
+  exit
+else
+  GDC_DAEMON_MODE=""
+fi
+
+export GDC_ENTRYPOINT
+docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
+docker network rm "$DEVNET_NAME" 2>/dev/null
