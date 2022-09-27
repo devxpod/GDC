@@ -147,6 +147,7 @@ These options control what packages / functionality are built into the container
 * SHARED_VOLUMES=<auto set> - list of volumes shared between all GDC's.
 * SHARED_VOLUMES_EXTRA=<not set> - list separated by space of custom volumes you want shared between all GDC's.
 * GDC_DAEMON_MODE=no - Start / stop GDC in background. options are no, start, stop.
+* GDC_CONTAINER_NAME=<auto set> - name of GDC container running in docker.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.

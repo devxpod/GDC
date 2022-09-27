@@ -4,7 +4,7 @@ _get_containers()
         COMPREPLY=()
         cur="${COMP_WORDS[COMP_CWORD]}"
         prev="${COMP_WORDS[COMP_CWORD-1]}"
-        opts=$(docker network inspect "$DEVNET_NAME" | jq -r '.[0].Containers[].Name' | grep -v 'arn_aws' | grep -v $PROJECT_NAME"-dev-1" | sort)
+        opts=$(docker network inspect "$DEVNET_NAME" | jq -r '.[0].Containers[].Name' | grep -v 'arn_aws' | grep -v "$GDC_CONTAINER_NAME" | sort)
 
 #echo cur=$cur
 #echo prev=$prev

@@ -69,8 +69,9 @@ services:
       - DEVNET_SUBNET # only populated if manually specified
       - DEVNET_GATEWAY # only populated if manually specified
       - GDC_DAEMON_MODE # start / stop GDC in background
+      - GDC_CONTAINER_NAME # name of GDC container running in docker
       - CHECK_UPDATES # check for GDC updates on each login
-      - DEV_CONTAINER=1.1.7 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.1.8 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

@@ -278,7 +278,9 @@ elif [ "$GDC_DAEMON_MODE" = "stop" ]; then
 else
   GDC_DAEMON_MODE=""
 fi
-
+export GDC_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"-dev-1"
 export GDC_ENTRYPOINT
 docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
-docker network rm "$DEVNET_NAME" 2>/dev/null
+if [ "$GDC_DAEMON_MODE" != "start" ]; then
+  docker network rm "$DEVNET_NAME" 2>/dev/null
+fi
