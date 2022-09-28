@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd /workspace || echo "Cant cd to /workspace!!!!!"
+
 if [ -x /postStartCommand.sh ]; then
 . /postStartCommand.sh
 fi

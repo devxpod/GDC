@@ -167,8 +167,6 @@ if [ "$OS" = "Windows" ]; then
   export HOST_PROJECT_PATH
 fi
 
-export PATH="$PATH:/root/bin-extra"
-
 if [ "$USE_COLOR_PROMPT" = "yes" ]; then
   export PS1="$bldred\u$bldylw@$txtgrn\h($COMPOSE_PROJECT_NAME) $bldblu\w$txtrst"'`__git_ps1`'"$txtrst\n$ "
 else

@@ -215,7 +215,7 @@ ENV NODE_VERSION=$NODE_VERSION
 ENV USE_BITWARDEN=$USE_BITWARDEN
 ENV PULUMI_VERSION=$PULUMI_VERSION
 
-ENV PATH="$PATH:/root/bin:/root/bin-extra/docker"
+ENV PATH="$PATH:/root/bin:/root/bin-extra:/root/bin-extra/docker:/root/gdc-host"
 
 ENTRYPOINT /init.sh
 
