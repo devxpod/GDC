@@ -148,6 +148,8 @@ These options control what packages / functionality are built into the container
 * SHARED_VOLUMES_EXTRA=<not set> - list separated by space of custom volumes you want shared between all GDC's.
 * GDC_DAEMON_MODE=no - Start / stop GDC in background. options are no, start, stop.
 * GDC_CONTAINER_NAME=<auto set> - name of GDC container running in docker.
+* FORCE_PROJECT_PATH=<not set> - if this is specified then WORKSPACE will be mounted from this path instead of current working directory.
+* HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
@@ -181,6 +183,7 @@ export ENV_VAR_NAME=ENV_VAR_VALUE
 * **/root/bin** - when USE_HOST_HOME=yes and USE_HOME_BIN=yes folder is copied from /root/home-host/bin if it exists.
 * **/root/.aws** - when USE_AWS_HOME=yes folder is copied from /root/home-host/.aws if it exists, otherwise it will be symlinked to /root/shared/.aws volume if it exists.
 * **/usr/local/share/.cache** - used to persist cache for npm, yarn, and pip
+
 
 ## .bashrc hook
 When **.bashrc** is loaded if the following file is present it will be sourced `/root/persisted/bash_rc_ext.sh`.

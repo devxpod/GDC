@@ -24,6 +24,10 @@ else
   HOST_PROJECT_PATH=''
 fi
 
+if [ -n "$FORCE_PROJECT_PATH" ]; then
+  HOST_PROJECT_PATH="$FORCE_PROJECT_PATH"
+fi
+
 if [ -r ".env-gdc" ]; then
   echo "Loading project .env-gdc environment file"
   source ".env-gdc"
@@ -208,6 +212,11 @@ if [ -n "$COMPOSE_EX" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f $COMPOSE_EX"
 fi
 
+if [ -n "$HOST_CUSTOM_MOUNT" ]; then
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-host-custom-mount.yml"
+fi
+export HOST_CUSTOM_MOUNT
+
 # remove old stack and prune image files
 if [ "$CLEAN" = "yes" ] || [ "$CLEAN_ONLY" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
@@ -280,6 +289,7 @@ else
 fi
 export GDC_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"-dev-1"
 export GDC_ENTRYPOINT
+export CI_JOB_TOKEN
 docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
 RC=$?
 if [ "$GDC_DAEMON_MODE" != "start" ]; then

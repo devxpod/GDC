@@ -1,0 +1,6 @@
+version: '3.8'
+
+services:
+  dev:
+    volumes:
+      - ${HOST_CUSTOM_MOUNT}:/host_custom_mount
