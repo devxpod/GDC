@@ -85,8 +85,12 @@ if [ -z "$DEVNET_NAME" ]; then
 fi
 
 for a; do
-  if [[ "$a" =~ ^[0-9]+:[0-9]+ ]]; then
-    PORT_FWD1="$a"
+  if [[ "$a" =~ ^[0-9]+[:-][0-9]+ ]]; then
+    if [ -z "$PORT_FWD1" ]; then
+      PORT_FWD1="$a"
+    else
+      PORT_FWD2="$a"
+    fi
   elif [[ "$a" =~ ^start|stop|daemon ]]; then
     GDC_RUN_MODE="$a"
   else
@@ -96,11 +100,14 @@ done
 
 #echo "GDC_RUN_MODE=$GDC_RUN_MODE"
 #echo "PORT_FWD1=$PORT_FWD1"
+#echo "PORT_FWD2=$PORT_FWD2"
 #echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
+#exit
 
 export HOST_PROJECT_PATH
 export COMPOSE_PROJECT_NAME
 export PORT_FWD1
+export PORT_FWD2
 export GDC_ENTRYPOINT
 export DEVNET_NAME
 
