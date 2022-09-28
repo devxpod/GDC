@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # make sure windows git bash does not alter paths
 export MSYS_NO_PATHCONV=1
 # gets folder where this script actually lives, resolving symlinks if needed
@@ -50,7 +51,7 @@ export SHARED_VOLUMES
 cd "$SCRIPT_DIR" || exit 1
 
 if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
-  echo "usage: $0 STACK_NAME [PORT_FWD1] [PORT_FWD2]"
+  echo "usage: $0 STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]..."
   echo "current folder will be mounted in container on /workspace."
   echo "Env vars are set in the following order with last to set winning"
   echo "Shell env, $SCRIPT_DIR/.env-gdc, $SCRIPT_DIR/.env-gdc-local"
@@ -58,15 +59,17 @@ if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
     echo "$HOST_PROJECT_PATH/.env-gdc, $HOST_PROJECT_PATH/.env-gdc-local"
   fi
   echo "STACK_NAME required, is used to name the stack in case you want to run more than one."
-  echo "PORT_FWD1 optional, is in compose port forward format. Example 80:8080. If not provided will fall back to environment variable."
-  echo "PORT_FWD2 optional, is in compose port forward format. Example 2000-2020. If not provided will fall back to environment variable."
-  echo "Full example: $0 webdev 80:8080"
+  echo "GDC_RUN_MODE optional, valid values are start, stop, daemon. start is the default."
+  echo "PORT_FWD optional, is in compose port forward format. Example 80:8080."
+  echo "GDC_ENTRYPOINT optional, runs the command in the GDC then exits if GDC_RUN_MODE!=daemon."
+  echo "Full example: $0 webdev 80:8080 start"
   exit 0
 fi
 
 # this is the stack name for compose
 COMPOSE_PROJECT_NAME="$1"
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME// /_}"
+shift
 
 export LS_MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME:="localstack_$COMPOSE_PROJECT_NAME"} # used by localstack to name main container
 if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
@@ -81,18 +84,24 @@ if [ -z "$DEVNET_NAME" ]; then
   exit 1
 fi
 
-if [ -n "$2" ]; then
-  PORT_FWD1="$2"
-fi
+for a; do
+  if [[ "$a" =~ ^[0-9]+:[0-9]+ ]]; then
+    PORT_FWD1="$a"
+  elif [[ "$a" =~ ^start|stop|daemon ]]; then
+    GDC_RUN_MODE="$a"
+  else
+    GDC_ENTRYPOINT="$a"
+  fi
+done
 
-if [ -n "$3" ]; then
-  PORT_FWD2="$3"
-fi
+#echo "GDC_RUN_MODE=$GDC_RUN_MODE"
+#echo "PORT_FWD1=$PORT_FWD1"
+#echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 
 export HOST_PROJECT_PATH
 export COMPOSE_PROJECT_NAME
 export PORT_FWD1
-export PORT_FWD2
+export GDC_ENTRYPOINT
 export DEVNET_NAME
 
 if [ "$USE_WORKSPACE" = "yes" ]; then
@@ -220,17 +229,17 @@ export HOST_CUSTOM_MOUNT
 # remove old stack and prune image files
 if [ "$CLEAN" = "yes" ] || [ "$CLEAN_ONLY" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
-  docker network rm "$DEVNET_NAME"
+  docker network rm "$DEVNET_NAME" 2> /dev/null
 
   for v in $SHARED_VOLUMES_EXTRA; do
     if [ "$(docker volume ls | grep -Ec "local\s+$v\$")" = "1" ]; then
-      echo "Removing shared extra volume $v"
+      echo "Attempting to remove shared extra volume $v. This may fail if other containers are using it."
       docker volume rm "$v"
     fi
   done
   for v in $CACHE_VOLUMES_REQUIRED; do
     if [ "$(docker volume ls | grep -Ec "local\s+$v\$")" = "1" ]; then
-      echo "Removing shared cache volume $v"
+      echo "Attempting to remove shared cache volume $v. This may fail if other containers are using it."
       docker volume rm "$v"
     fi
   done
@@ -275,24 +284,31 @@ for v in $SHARED_VOLUMES; do
 done
 
 export GDC_COMPOSE_FILES=$COMPOSE_FILES
-echo "Using compose files $GDC_COMPOSE_FILES"
-echo "Using shared volumes $SHARED_VOLUMES"
+echo "GDC_COMPOSE_FILES $GDC_COMPOSE_FILES"
+echo "SHARED_VOLUMES $SHARED_VOLUMES"
+echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 
-if [ "$GDC_DAEMON_MODE" = "start" ]; then
+GDC_DAEMON_MODE=""
+if [ "$GDC_RUN_MODE" = "daemon" ]; then
   GDC_DAEMON_MODE="-d "
-elif [ "$GDC_DAEMON_MODE" = "stop" ]; then
+fi
+
+if [ "$GDC_RUN_MODE" = "stop" ]; then
   docker-compose $COMPOSE_FILES down
-  docker network rm "$DEVNET_NAME" 2>/dev/null
+  docker network rm "$DEVNET_NAME" 2> /dev/null
   exit
 else
-  GDC_DAEMON_MODE=""
+  GDC_RUN_MODE="start"
 fi
 export GDC_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"-dev-1"
 export GDC_ENTRYPOINT
 export CI_JOB_TOKEN
+
 docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
-RC=$?
-if [ "$GDC_DAEMON_MODE" != "start" ]; then
-  docker network rm "$DEVNET_NAME" 2>/dev/null
+RC=$? # capture the compose exit code so we can emit it after any cleanup
+
+if [ "$GDC_RUN_MODE" != "daemon" ]; then
+  docker network rm "$DEVNET_NAME" 2> /dev/null
 fi
+echo "Compose exit code: $RC"
 exit $RC

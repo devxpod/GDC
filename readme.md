@@ -78,11 +78,12 @@ run the script `run-dev-container.sh` in the root of this repository.
 
 Running with no arguments or `-h` as first arguments will display help.
 
-`run-dev-container.sh STACK_NAME PORT_FWD`
+`run-dev-container.sh STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]`
 * your current folder will be mounted in container on `/workspace`
-* STACK_NAME is used to name the stack in case you want to run more than one. If not provided `"dev"` is used.
-* PORT_FWD1 is in compose port forward format. Example `80:8080`. If not provided will fall back to env var.
-* PORT_FWD2 is in compose port forward format. Example `2000-2020`. If not provided will fall back to env var.
+* STACK_NAME required, is used to name the stack in case you want to run more than one.
+* GDC_RUN_MODE optional, valid values are start, stop, daemon. start is the default.
+* PORT_FWD optional, is in compose port forward format. Example 80:8080.
+* GDC_ENTRYPOINT optional, runs the command in the GDC then exits if GDC_RUN_MODE!=daemon.
 
 # Environment Options
 These options control what packages / functionality are built into the container.  
@@ -141,12 +142,12 @@ These options control what packages / functionality are built into the container
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
 * DOCKER_OS_PLATFORM=<not set> can be used by docker commands to build containers for other arch's.
-* GDC_ENTRYPOINT=<not set> - runs the specified command then exits. Note will not exit if GDC_DAEMON_MODE=start
+* GDC_ENTRYPOINT=<not set> - runs the command in the GDC then exits if GDC_RUN_MODE!=daemon.
 * GDC_DIR=<auto set> - contains host location of GDC folder.
 * GDC_COMPOSE_FILES=<auto set> - contains list of all compose files in use to run GDC.
 * SHARED_VOLUMES=<auto set> - list of volumes shared between all GDC's.
 * SHARED_VOLUMES_EXTRA=<not set> - list separated by space of custom volumes you want shared between all GDC's.
-* GDC_DAEMON_MODE=no - Start / stop GDC in background. options are no, start, stop.
+* GDC_RUN_MODE=start - valid options are start, stop, and daemon.
 * GDC_CONTAINER_NAME=<auto set> - name of GDC container running in docker.
 * FORCE_PROJECT_PATH=<not set> - if this is specified then WORKSPACE will be mounted from this path instead of current working directory.
 * HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.

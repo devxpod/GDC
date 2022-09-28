@@ -13,14 +13,14 @@ if [ -n "$GDC_ENTRYPOINT" ]; then
     /root/bin-extra/ls/stop-ls.sh 2>/dev/null
     exit $EP_EC
   fi
-  if [ "$GDC_DAEMON_MODE" != "start" ]; then
+  if [ "$GDC_RUN_MODE" != "daemon" ]; then
     /root/bin-extra/auth0/stop-auth0.sh 2>/dev/null
     /root/bin-extra/ls/stop-ls.sh 2>/dev/null
     exit 0
   fi
 fi
 
-if [ -z "$GDC_DAEMON_MODE" ] || [ "$GDC_DAEMON_MODE" = "start" ]; then
+if [ -z "$GDC_RUN_MODE" ] || [ "$GDC_RUN_MODE" = "daemon" ]; then
   echo "=============================================================================================="
   echo "connect to container shell via docker:   docker exec -it $COMPOSE_PROJECT_NAME-dev-1 bash -l"
 

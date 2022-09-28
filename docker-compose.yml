@@ -61,19 +61,19 @@ services:
       - YARN_CACHE_FOLDER=/usr/local/share/.cache/yarn # cache yarn installs
       - PIP_CACHE_DIR=/usr/local/share/.cache/pip # cache pip installs
       - npm_config_cache=/usr/local/share/.cache/npm # case npm installs
-      - GDC_ENTRYPOINT # run this command and exit
+      - GDC_ENTRYPOINT # run this command and exit unless GDC_RUN_MODE
       - GDC_DIR # contains host location of GDC folder
       - GDC_COMPOSE_FILES # contains list of all compose files in use by GDC
       - SHARED_VOLUMES # list of volumes shared between all GDC's
       - DEVNET_NAME # name of dev network GDC is attached to
       - DEVNET_SUBNET # only populated if manually specified
       - DEVNET_GATEWAY # only populated if manually specified
-      - GDC_DAEMON_MODE # start / stop GDC in background
+      - GDC_RUN_MODE # start, stop, daemon
       - GDC_CONTAINER_NAME # name of GDC container running in docker
       - CI_JOB_TOKEN # used for gitlab pipeline clones
       - HOST_CUSTOM_MOUNT # used to mount custom dir on host to /host_custom_mount in container
       - CHECK_UPDATES # check for GDC updates on each login
-      - DEV_CONTAINER=1.2.0 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.2.1 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
