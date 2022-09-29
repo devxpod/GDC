@@ -151,6 +151,7 @@ These options control what packages / functionality are built into the container
 * GDC_CONTAINER_NAME=<auto set> - name of GDC container running in docker.
 * FORCE_PROJECT_PATH=<not set> - if this is specified then WORKSPACE will be mounted from this path instead of current working directory.
 * HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.
+* HOST_HOME=<auto set> - set to user's home directory on host machine.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
@@ -311,15 +312,20 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 
 
 # Helper scripts and aliases
-### GDC
+## GDC
 * check-gdc-update.sh - checks GDC repo for updated version
 * gdcex.sh - executes a command in another GDC related container. Supports tab completion for available container names.
+* run-gdc.sh - executes another GDC while inside of a GDC. Note you should only launch a GDC from a folder under /workspace.
+
+### Aliases
+* ls_gdc_network - list all containers running on current GDC network.
 
 ## Docker
 * docker-logs.sh NAME - NAME can be a full or partial container name to tail the logs of
 * docker-shell.sh NAME SHELL - NAME can be a full or partial container name to execute SHELL inside. If SHELL is not specified then bash will be assumed.
 * docker-stop.sh NAME - NAME can be a full or partial container name to stop
 * docker-stats.sh - shows an auto refreshing list of container stats.
+
 
 ## AWS
 
