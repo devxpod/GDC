@@ -305,7 +305,9 @@ fi
 
 if [ "$GDC_RUN_MODE" = "stop" ]; then
   docker-compose $COMPOSE_FILES down
-  docker network rm "$DEVNET_NAME" 2> /dev/null
+  if [ "$NO_DEVNET_RM" != "yes" ]; then
+    docker network rm "$DEVNET_NAME" 2> /dev/null
+  fi
   exit
 else
   GDC_RUN_MODE="start"
@@ -313,12 +315,15 @@ fi
 export GDC_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"-dev-1"
 export GDC_ENTRYPOINT
 export CI_JOB_TOKEN
+export NO_DEVNET_RM
 
 docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
 RC=$? # capture the compose exit code so we can emit it after any cleanup
 
 if [ "$GDC_RUN_MODE" != "daemon" ]; then
-  docker network rm "$DEVNET_NAME" 2> /dev/null
+  if [ "$NO_DEVNET_RM" != "yes" ]; then
+    docker network rm "$DEVNET_NAME" 2> /dev/null
+  fi
 fi
 echo "Compose exit code: $RC"
 exit $RC

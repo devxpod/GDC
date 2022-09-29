@@ -152,6 +152,7 @@ These options control what packages / functionality are built into the container
 * FORCE_PROJECT_PATH=<not set> - if this is specified then WORKSPACE will be mounted from this path instead of current working directory.
 * HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.
 * HOST_HOME=<auto set> - set to user's home directory on host machine.
+* NO_DEVNET_RM=<not set> # if set to yes, GDC will not remove the DEVNET.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
