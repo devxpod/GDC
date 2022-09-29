@@ -72,8 +72,9 @@ services:
       - GDC_CONTAINER_NAME # name of GDC container running in docker
       - CI_JOB_TOKEN # used for gitlab pipeline clones
       - HOST_CUSTOM_MOUNT # used to mount custom dir on host to /host_custom_mount in container
+      - HOST_HOME # path to home directory of user on host
       - CHECK_UPDATES # check for GDC updates on each login
-      - DEV_CONTAINER=1.2.3 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.2.4 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
