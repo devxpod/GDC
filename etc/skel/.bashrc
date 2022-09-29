@@ -257,6 +257,8 @@ fi
 export PATH="$PATH:/root/bin-extra/ls"
 export PATH="$PATH:/root/bin-extra/auth0"
 
+alias ls_gdc_network="docker network inspect "$DEVNET_NAME" | jq -r '.[0].Containers[].Name'"
+
 if [ -r ~/persisted/bash_rc_ext.sh ]; then
   . "$HOME/persisted/bash_rc_ext.sh"
 fi
