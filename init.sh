@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-title_start='\[\e]0;'
-title_end='\a\]'
+source /etc/term_colors.sh
 
 TITLE="GDC: $COMPOSE_PROJECT_NAME"
 echo -n -e "$title_start$TITLE$title_end"
 
 
-cd /workspace || echo "Cant cd to /workspace!!!!!"
+cd /workspace || echo "$bldred Cant cd to /workspace!!!!! $txtrst"
 
 if [ -x /postStartCommand.sh ]; then
 . /postStartCommand.sh
@@ -19,7 +18,7 @@ if [ -n "$GDC_ENTRYPOINT" ]; then
   $GDC_ENTRYPOINT
   EP_EC=$?
   if [ $EP_EC -ne 0 ] ; then
-    echo "GDC_ENTRYPOINT returned non-zero exit code: $EP_EC"
+    echo "$bldred GDC_ENTRYPOINT returned non-zero exit code: $EP_EC  $txtrst"
     /root/bin-extra/auth0/stop-auth0.sh 2>/dev/null
     /root/bin-extra/ls/stop-ls.sh 2>/dev/null
     exit $EP_EC
@@ -32,16 +31,16 @@ if [ -n "$GDC_ENTRYPOINT" ]; then
 fi
 
 
-echo "=============================================================================================="
-echo "connect to container shell via docker:   docker exec -it $COMPOSE_PROJECT_NAME-dev-1 bash -l"
+echo -e "$bldwht""============================================================================================== $txtrst"
+echo -e "$bldgrn""connect to container shell via docker:   docker exec -it $COMPOSE_PROJECT_NAME-dev-1 bash -l $txtrst"
 
-echo "user: root   password default unless changed is: ContainersRule"
+echo -e "user:$bldwht root $txtrst  password default unless changed is:$bldwht ContainersRule $txtrst"
 if [ -n "$SSH_SERVER_PORT" ]; then
-    echo "connect to container via ssh:  ssh root@localhost -p $SSH_SERVER_PORT"
+    echo -e "connect to container via ssh:$bldwht  ssh root@localhost -p $SSH_SERVER_PORT $txtrst"
     echo "if you get a REMOTE HOST IDENTIFICATION HAS CHANGED error use the following command to fix before connecting."
     echo "ssh-keygen -R [localhost]:$SSH_SERVER_PORT"
 fi
-echo "=============================================================================================="
+echo -e "$bldwht""============================================================================================== $txtrst"
 echo "sleeping forever...."
 tail -f /dev/null 2>&1
 
