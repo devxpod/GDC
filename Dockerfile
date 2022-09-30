@@ -174,7 +174,7 @@ RUN  /bin/bash -c 'if [ -n "${PULUMI_VERSION}" ]; then \
     mv ~/.pulumi/bin/* /usr/local/bin; \
 fi'
 
-
+COPY /etc/term_colors.sh /etc/term_colors.sh
 COPY /etc/profile.d /etc/profile.d/
 COPY /etc/skel /etc/skel/
 COPY /etc/ssh /etc/ssh/
