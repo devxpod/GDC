@@ -32,15 +32,14 @@ if [ -n "$FORCE_PROJECT_PATH" ]; then
   HOST_PROJECT_PATH="$FORCE_PROJECT_PATH"
 fi
 
-if [ -r ".env-gdc" ]; then
+if [ -r "./.env-gdc" ]; then
   echo "Loading project .env-gdc environment file"
-  source ".env-gdc"
+  source ./.env-gdc
 fi
-if [ -r ".env-gdc-local" ]; then
+if [ -r "./.env-gdc-local" ]; then
   echo "Loading project .env-gdc-local environment file"
-  source ".env-gdc-local"
+  source ./.env-gdc-local
 fi
-
 CACHE_VOLUMES_REQUIRED="pulumi pkg_cache"
 SHARED_VOLUMES_REQUIRED="shared home_config"
 
