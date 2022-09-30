@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 
+title_start='\[\e]0;'
+title_end='\a\]'
+
+TITLE="GDC: $COMPOSE_PROJECT_NAME"
+echo -n -e "$title_start$TITLE$title_end"
+
+
 cd /workspace || echo "Cant cd to /workspace!!!!!"
 
 if [ -x /postStartCommand.sh ]; then
 . /postStartCommand.sh
 fi
+
+
 
 if [ -n "$GDC_ENTRYPOINT" ]; then
   $GDC_ENTRYPOINT
