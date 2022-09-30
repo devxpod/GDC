@@ -153,6 +153,7 @@ These options control what packages / functionality are built into the container
 * HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.
 * HOST_HOME=<auto set> - set to user's home directory on host machine.
 * NO_DEVNET_RM=<not set> # if set to yes, GDC will not remove the DEVNET.
+* GDC_PARENT=<auto set> - if GDC is launched from inside another GDC this will be set to name of parent.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
