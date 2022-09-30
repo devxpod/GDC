@@ -379,13 +379,20 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 [Debugging](./docs/debugging/readme.md) - Info on ways to debug scripts in inside the container from IDE running on host. 
 
 
-## GDC Startup Troubleshooting
+## Troubleshooting
+
+### GDC Startup
 If your GDC fails to start with an error similar to "failed to solve: executor failed running ..."
 
-This happens when cached layers dont match what the Docker file thinks is already in place.
+This happens when cached layers don't match what the Docker file thinks is already in place.
 
 You can try one of the following environment variables to resolve the error.  
 Many times only CLEAN=yes is needed, however if the problem persist you can use CLEAN_ONLY=yes then start the GDC as you normally would.
 
 * CLEAN=yes - stops and removes existing stack and devnet, then does docker system prune before starting new dev container.
 * CLEAN_ONLY=yes - stops and removes existing stack and devnet, then does docker system prune and exits.
+
+### Localstack won't let go of old state
+* Mac and Linux stop all GDCs and rm -rf /tmp/ls_volume*
+* Windows stop all GDCs and remove all /c/tmp/ls_volume* folders
+start GDC and run  *make reset*
