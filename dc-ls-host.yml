@@ -4,6 +4,8 @@ services:
   localstack:
     image: "${LS_IMAGE-localstack/localstack}:${LS_VERSION-latest}"
     container_name: "${LS_MAIN_CONTAINER_NAME-localstack}"
+    stdin_open: true
+    tty: true
     networks:
       devnet:
     ports:
