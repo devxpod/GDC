@@ -32,6 +32,9 @@ if [ -n "$FORCE_PROJECT_PATH" ]; then
   HOST_PROJECT_PATH="$FORCE_PROJECT_PATH"
 fi
 
+HOST_PROJECT_FOLDER_NAME="$(basename "$HOST_PROJECT_PATH")"
+export HOST_PROJECT_FOLDER_NAME
+
 if [ -r "./.env-gdc" ]; then
   echo "Loading project .env-gdc environment file"
   source ./.env-gdc
