@@ -79,11 +79,17 @@ run the script `run-dev-container.sh` in the root of this repository.
 Running with no arguments or `-h` as first arguments will display help.
 
 `run-dev-container.sh STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]`
-* your current folder will be mounted in container on `/workspace`
+* your current working directory will be mounted in container on `/workspace`
 * STACK_NAME required, is used to name the stack in case you want to run more than one.
-* GDC_RUN_MODE optional, valid values are start, stop, daemon. start is the default.
-* PORT_FWD optional, is in compose port forward format. Example 80:8080.
-* GDC_ENTRYPOINT optional, runs the command in the GDC then exits if GDC_RUN_MODE!=daemon.
+* GDC_RUN_MODE optional, valid values are start, stop, daemon, clean. **start** is the default.
+* * start will start the GDC environment.
+* * daemon will start a GDC environment in the background.
+* * stop will shut down a running GDC environment running in foreground or background.
+* * clean start GDC environment with CLEAN=yes flag.
+* PORT_FWD optional, is in compose port forward format. Example 80:8080 or 4000-4005. You can specify this param more than once.
+* GDC_ENTRYPOINT optional, runs a command in the GDC."
+* * the docker compose exit code will mirror the return code of the entrypoint command."
+* * if the entrypoint command returns a non-zero exit code even if GDC_RUN_MODE=daemon then compose will exit."
 
 # Environment Options
 These options control what packages / functionality are built into the container.  
@@ -126,8 +132,8 @@ These options control what packages / functionality are built into the container
 * USE_COLOR_PROMPT=yes - enables colorized bash prompt in container.
 * SSH_KEYSCAN_HOSTS=gitlab.com github.com bitbucket.org - copies SSH keys from list of hosts to known-hosts file.
 * SSH_SERVER_PORT=<not set> - if set will start sshd and forward this port from host to sshd in container.
-* PORT_FWD1=<not set> - if sets forwards this port or range from host to container.
-* PORT_FWD2=<not set> - if sets forwards this port or range from host to container.
+* PORT_FWD0 through PORT_FWD9=<not set> - allows up to 10 custom ports to forwards to specified in docker compose format.
+* CUSTOM_PORTS=<auto set> - list of custom ports forwards from host to container.
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.

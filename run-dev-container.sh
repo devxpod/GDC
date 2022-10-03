@@ -54,18 +54,28 @@ cd "$SCRIPT_DIR" || exit 1
 
 if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
   echo "usage: $0 STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]..."
-  echo "current folder will be mounted in container on /workspace."
+  echo "current working directory will be mounted in container on /workspace."
   echo "Env vars are set in the following order with last to set winning"
   echo "Shell env, $SCRIPT_DIR/.env-gdc, $SCRIPT_DIR/.env-gdc-local"
   if [ "$USE_WORKSPACE" = "yes" ]; then
     echo "$HOST_PROJECT_PATH/.env-gdc, $HOST_PROJECT_PATH/.env-gdc-local"
   fi
   echo "STACK_NAME required, is used to name the stack in case you want to run more than one."
-  echo "GDC_RUN_MODE optional, valid values are start, stop, daemon. start is the default."
-  echo "PORT_FWD optional, is in compose port forward format. Example 80:8080."
-  echo "GDC_ENTRYPOINT optional, runs the command in the GDC then exits if GDC_RUN_MODE!=daemon."
+  echo "GDC_RUN_MODE optional, valid values are start, stop, daemon, clean. start is the default."
+  echo "  start will start the GDC environment."
+  echo "  daemon will start a GDC environment in the background."
+  echo "  stop will shutdown a running GDC environment running in foreground or background."
+  echo "  clean start GDC environment with CLEAN=yes flag."
+  echo "PORT_FWD optional, is in compose port forward format. Example 80:8080 or 4000-4005. You can specify this param more than once."
+  echo "GDC_ENTRYPOINT optional, runs a command in the GDC."
+  echo "  the docker compose exit code will mirror the return code of the entrypoint command."
+  echo "  if the entrypoint command returns a non-zero exit code even if GDC_RUN_MODE=daemon then compose will exit."
   echo "Full example: $0 webdev 80:8080 start"
   exit 0
+fi
+
+if [ ! -d "./tmp" ]; then
+  mkdir ./tmp
 fi
 
 # this is the stack name for compose
@@ -86,30 +96,70 @@ if [ -z "$DEVNET_NAME" ]; then
   exit 1
 fi
 
-for a; do
-  if [[ "$a" =~ ^[0-9]+[:-][0-9]+ ]]; then
-    if [ -z "$PORT_FWD1" ]; then
-      PORT_FWD1="$a"
+CUSTOM_PORTS=""
+for i in $(seq 0 9); do
+  v="PORT_FWD$i"
+  a="${!v}"
+  if [ -n "$a" ]; then
+    if [[ "$a" =~ ^[0-9]+[:-][0-9]+ ]]; then
+      if [ -z "$CUSTOM_PORTS" ]; then
+        CUSTOM_PORTS="$a"
+      else
+        CUSTOM_PORTS="$CUSTOM_PORTS $a"
+      fi
     else
-      PORT_FWD2="$a"
+      echo "Bad port forward syntax for $v=$a"
+      exit 1
     fi
-  elif [[ "$a" =~ ^start|stop|daemon ]]; then
+  fi # end port forward var not empty
+done # end for 0-9
+
+for a; do
+  if [[ "$a" =~ ^[0-9]+[:-][0-9]+ ]]; then # matches custom port forward syntax
+    if [ -z "$CUSTOM_PORTS" ]; then
+      CUSTOM_PORTS="$a"
+    else
+      CUSTOM_PORTS="$CUSTOM_PORTS $a"
+    fi
+  elif [[ "$a" =~ ^start|stop|daemon|clean ]]; then # matches daemon run mode
     GDC_RUN_MODE="$a"
-  else
+  else # anything else is considered a custom entry point command
     GDC_ENTRYPOINT="$a"
   fi
-done
+done # for all parameters
+
+COMPOSE_FILES="-f docker-compose.yml"
+
+CUSTOM_PORT_FILE="./tmp/custom_ports_$COMPOSE_PROJECT_NAME.yml"
+if [ -r "$CUSTOM_PORT_FILE" ]; then
+  rm -rf "$CUSTOM_PORT_FILE"
+fi
+if [ -n "$CUSTOM_PORTS" ]; then
+  cat << EOF > "$CUSTOM_PORT_FILE"
+version: "3.8"
+
+services:
+  dev:
+    ports:
+EOF
+
+  for i in $CUSTOM_PORTS; do
+    cat << EOF >> "$CUSTOM_PORT_FILE"
+      - "$i"
+EOF
+  done
+  echo "" >> "$CUSTOM_PORT_FILE"
+  COMPOSE_FILES="$COMPOSE_FILES -f $CUSTOM_PORT_FILE"
+  echo "CUSTOM_PORTS=$CUSTOM_PORTS"
+fi
 
 #echo "GDC_RUN_MODE=$GDC_RUN_MODE"
-#echo "PORT_FWD1=$PORT_FWD1"
-#echo "PORT_FWD2=$PORT_FWD2"
 #echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 #exit
 export HOST_HOME="$HOME"
 export HOST_PROJECT_PATH
 export COMPOSE_PROJECT_NAME
-export PORT_FWD1
-export PORT_FWD2
+export CUSTOM_PORTS
 export GDC_ENTRYPOINT
 export DEVNET_NAME
 
@@ -117,19 +167,12 @@ if [ "$USE_WORKSPACE" = "yes" ]; then
   echo "HOST_PROJECT_PATH = $HOST_PROJECT_PATH"
 fi
 echo "COMPOSE_PROJECT_NAME = $COMPOSE_PROJECT_NAME"
-if [ -n "$PORT_FWD1" ]; then
-  echo "PORT_FWD1 = $PORT_FWD1"
-fi
-if [ -n "$PORT_FWD2" ]; then
-  echo "PORT_FWD2 = $PORT_FWD2"
-fi
 
 if [ -z "$USE_HOST_HOME" ]; then
   echo "Env variable USE_HOST_HOME is not set !"
   exit 1
 fi
 
-COMPOSE_FILES="-f docker-compose.yml"
 
 # enable mounting of current folder to /workspace in container
 if [ "$USE_WORKSPACE" = "yes" ]; then
@@ -147,16 +190,6 @@ fi
 if [ -n "$SSH_SERVER_PORT" ]; then
   echo "Adding compose layer dc-ssh.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-ssh.yml"
-fi
-# forwards 1st set of ports
-if [ -n "$PORT_FWD1" ]; then
-  echo "Adding compose layer dc-port-fwd1.yml"
-  COMPOSE_FILES="$COMPOSE_FILES -f dc-port-fwd1.yml"
-fi
-# forwards 2nd set of ports
-if [ -n "$PORT_FWD2" ]; then
-  echo "Adding compose layer dc-port-fwd2.yml"
-  COMPOSE_FILES="$COMPOSE_FILES -f dc-port-fwd2.yml"
 fi
 
 # this will start localstack container
@@ -224,9 +257,19 @@ if [[ -z "$NO_SSH_AGENT" && -r "$SSH_AUTH_SOCK" ]]; then
   fi
 fi
 
+if [ ! -r ./custom-yml.d ]; then
+  mkdir ./custom-yml.d
+fi
+if [ -n "$(ls -A ./custom-yml.d)" ]; then
+  for filename in ./custom-yml.d/*.yml; do
+    echo "Adding custom compose layer from $filename"
+    COMPOSE_FILES="$COMPOSE_FILES -f $filename"
+  done
+fi
+
 # add user specified compose file to list
 if [ -n "$COMPOSE_EX" ]; then
-  echo "Adding compose layer $COMPOSE_EX"
+  echo "Adding custom compose layer $COMPOSE_EX"
   COMPOSE_FILES="$COMPOSE_FILES -f $COMPOSE_EX"
 fi
 
@@ -235,6 +278,9 @@ if [ -n "$HOST_CUSTOM_MOUNT" ]; then
 fi
 export HOST_CUSTOM_MOUNT
 
+if [ "$GDC_RUN_MODE" = "clean" ]; then
+  CLEAN_ONLY="yes"
+fi
 # remove old stack and prune image files
 if [ "$CLEAN" = "yes" ] || [ "$CLEAN_ONLY" = "yes" ]; then
   docker-compose $COMPOSE_FILES down --rmi all
