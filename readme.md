@@ -124,7 +124,6 @@ These options control what packages / functionality are built into the container
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.
 * AUTH0_CONTAINER_NAME=auth0_mock_PROJECT_NAME - set name of auth0 container so more than one can be used in parallel.
-* AUTH0_URL=<auto generated> - generated using a combination of USE_AUTH0,USE_AUTH0_HOST,AUTH0_HOST_PORT,AUTH0_CONTAINER_NAME.
 * AUTH0_LOCAL_USERS_FILE=<not set> - used to specify location in container relative to /workspace for auth0 to mount users-local.json override file.
 * AUTH0_AUDIENCE=portal - used to override auth0 audience default of app.
 * AUTH0_DEFAULT_USER=user1 - used to auto-populate login form.
@@ -133,36 +132,40 @@ These options control what packages / functionality are built into the container
 * SSH_KEYSCAN_HOSTS=gitlab.com github.com bitbucket.org - copies SSH keys from list of hosts to known-hosts file.
 * SSH_SERVER_PORT=<not set> - if set will start sshd and forward this port from host to sshd in container.
 * PORT_FWD0 through PORT_FWD9=<not set> - allows up to 10 custom ports to forwards to specified in docker compose format.
-* CUSTOM_PORTS=<auto set> - list of custom ports forwards from host to container.
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
-* COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
 * DOCKER_VERSION=20.10.9 - install docker version inside container.
 * DOCKER_COMPOSE_VERSION=2.10.2 - install docker-compose version inside container.
 * DEVNET_NAME=<auto set to devnet_PROJECT_NAME> - name of gdc dev network that all containers will be attached to.
 * DEVNET_SUBNET=<not set> - cidr notation subnet.
 * DEVNET_GATEWAY=<not set> - gateway ip inside DEVNET_SUBNET.
-* DEV_CONTAINER=<auto set> - set to current dev container version. You can also use this to detect if you are running in a dev container.
 * CLEAN=<not set> - stops and removes existing stack and devnet, then does docker system prune before starting new dev container.
 * CLEAN_ONLY=<not set> - stops and removes existing stack and devnet, then does docker system prune and exits.
 * VISUAL=vi - editor for visual editing. Usual set to same as EDITOR var.
 * EDITOR=vi - editor for less advanced terminal editing. Usually set to same as VISUAL var.
 * DOCKER_OS_PLATFORM=<not set> can be used by docker commands to build containers for other arch's.
 * GDC_ENTRYPOINT=<not set> - runs the command in the GDC then exits if GDC_RUN_MODE!=daemon.
-* GDC_DIR=<auto set> - contains host location of GDC folder.
-* GDC_COMPOSE_FILES=<auto set> - contains list of all compose files in use to run GDC.
-* SHARED_VOLUMES=<auto set> - list of volumes shared between all GDC's.
 * SHARED_VOLUMES_EXTRA=<not set> - list separated by space of custom volumes you want shared between all GDC's.
 * GDC_RUN_MODE=start - valid options are start, stop, and daemon.
-* GDC_CONTAINER_NAME=<auto set> - name of GDC container running in docker.
 * FORCE_PROJECT_PATH=<not set> - if this is specified then WORKSPACE will be mounted from this path instead of current working directory.
 * HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.
-* HOST_HOME=<auto set> - set to user's home directory on host machine.
 * NO_DEVNET_RM=<not set> # if set to yes, GDC will not remove the DEVNET.
-* GDC_PARENT=<auto set> - if GDC is launched from inside another GDC this will be set to name of parent.
+* COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
+* HOST_PROJECT_FOLDER_NAME - dirname $HOST_PROJECT_PATH
+* GDC_PARENT - if GDC is launched from inside another GDC this will be set to name of parent.
+* HOST_HOME - set to user's home directory on host machine.
+* GDC_CONTAINER_NAME - name of GDC container running in docker.
+* GDC_COMPOSE_FILES - contains list of all compose files in use to run GDC.
+* AUTH0_URL - generated using a combination of USE_AUTH0,USE_AUTH0_HOST,AUTH0_HOST_PORT,AUTH0_CONTAINER_NAME. 
+* SHARED_VOLUMES - list of volumes shared between all GDC's.
+* CUSTOM_PORTS - list of custom ports forwards from host to container.
+* GDC_DIR - contains host location of GDC folder. 
+* DEV_CONTAINER - set to current dev container version. You can also use this to detect if you are running in a dev container.
+
+
 
 # Environment files
 The above environment variable values are the default unless overridden by environment variables setup in your environment or on the command line.   
