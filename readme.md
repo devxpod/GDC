@@ -326,7 +326,8 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 ## GDC
 * check-gdc-update.sh - checks GDC repo for updated version
 * gdcex.sh - executes a command in another GDC related container. Supports tab completion for available container names.
-* run-gdc.sh - executes another GDC while inside of a GDC. Note you should only launch a GDC from a folder under /workspace.
+* run-gdc.sh - executes another GDC while inside a GDC. Note you should only launch a GDC from a folder under /workspace.
+* gdc-pipeline-exec.sh - allows for running commands from pipeline.
 
 ### Aliases
 * ls_gdc_network - list all containers running on current GDC network.
