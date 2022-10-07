@@ -75,12 +75,13 @@ services:
       - GDC_RUN_MODE # start, stop, daemon, clean
       - GDC_CONTAINER_NAME # name of GDC container running in docker
       - CI_JOB_TOKEN # used for gitlab pipeline clones
+      - CI_PROJECT_DIR # used for gitlab pipeline mounts
       - HOST_CUSTOM_MOUNT # used to mount custom dir on host to /host_custom_mount in container
       - HOST_HOME # path to home directory of user on host
       - CHECK_UPDATES # check for GDC updates on each login
       - PARENT_GDC # if GDC is launched from inside another GDC this will be set to name of parent
       - NO_DEVNET_RM # if set to yes, GDC will not remove the DEVNET
-      - DEV_CONTAINER=1.3.5 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.3.6 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
