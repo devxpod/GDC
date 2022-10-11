@@ -197,6 +197,11 @@ fi
 
 # this will start localstack container
 if [ -n "$LS_VERSION" ]; then
+  if [ "$USE_LOCALSTACK_PERSISTENCE" = "yes" ]; then
+    USE_LOCALSTACK_PERSISTENCE=1
+  else
+    USE_LOCALSTACK_PERSISTENCE=0
+  fi
   export USE_LOCALSTACK=yes
   if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
     echo "Adding compose layer dc-ls-host.yml"

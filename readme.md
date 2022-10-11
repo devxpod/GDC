@@ -113,6 +113,7 @@ These options control what packages / functionality are built into the container
 * PERSIST_BITWARDEN_SESSION=no - persist bitwarden session to /root/persisted volume and autoload it in subsequent logins. Reduces need to enter master password, but is less secure.
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
+* USE_LOCALSTACK_PERSISTENCE=yes - toggle persistent storage for LS defaults to persistence enabled.
 * LOCALSTACK_VOLUME_DIR=/c/tmp/ls_volume or /tmp/ls_volume - on windows / mac respectively.
 * LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
 * LS_IMAGE=localstack/localstack - can override with custom image location. Still uses LS_VERSION to create final image location.
