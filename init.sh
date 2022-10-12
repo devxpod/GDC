@@ -32,7 +32,7 @@ fi
 
 
 echo -e "$bldwht""============================================================================================== $txtrst"
-echo -e "$bldgrn""connect to container shell via docker with:   docker exec -it $COMPOSE_PROJECT_NAME-dev-1 bash -l $txtrst    Command copied to clipboard."
+echo -e "$bldgrn""connect to container shell via docker with:   docker exec -it $GDC_CONTAINER_NAME bash -l $txtrst    Command copied to clipboard."
 
 echo -e "user:$bldwht root $txtrst  password default unless changed is:$bldwht ContainersRule $txtrst"
 if [ -n "$SSH_SERVER_PORT" ]; then

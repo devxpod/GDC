@@ -363,7 +363,7 @@ if [ "$GDC_RUN_MODE" = "stop" ]; then
 else
   GDC_RUN_MODE="start"
 fi
-export GDC_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"-dev-1"
+export GDC_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"-$DEV_CONTAINER_NAME"
 export GDC_ENTRYPOINT
 export CI_JOB_TOKEN
 export CI_PROJECT_DIR
@@ -376,10 +376,14 @@ elif [ "$OS" = "Linux" ]; then
   CLIP_CMD=xclip
 elif [ "$OS" = "Darwin" ]; then
   CLIP_CMD=pbcopy
+else
+  CLIP_CMD=""
 fi
 #echo "--------------- OS = $OS ---------------"
-#echo "CLIP_CMD=$CLIP_CMD"
-echo "docker exec -it $COMPOSE_PROJECT_NAME-dev-1 bash -l" | $CLIP_CMD > /dev/null 2>&1
+if [ -n "$CLIP_CMD" ]; then
+  #echo "CLIP_CMD=$CLIP_CMD"
+  echo "docker exec -it $GDC_CONTAINER_NAME bash -l" | $CLIP_CMD > /dev/null 2>&1
+fi
 
 docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
 RC=$? # capture the compose exit code so we can emit it after any cleanup
