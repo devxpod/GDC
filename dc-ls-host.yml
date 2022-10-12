@@ -20,7 +20,6 @@ services:
       - EXTRA_CORS_ALLOWED_ORIGINS=http://host.docker.internal:4566
       - DISABLE_CORS_CHECKS=1
       - DEBUG=${DEBUG-}
-      - PERSISTENCE=${USE_LOCALSTACK_PERSISTENCE-1}
       - PORT_WEB_UI=${PORT_WEB_UI-}
       - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}
       # Tell Localstack to put Lambda containers on the same shared network
@@ -39,7 +38,6 @@ services:
       # - LOCALSTACK_HOSTNAME=host.docker.internal
       # - CLOUDFRONT_STATIC_PORTS=1
     volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
 
