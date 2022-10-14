@@ -16,7 +16,7 @@ services:
     environment:
       NODE_ENV: test
       DEBUG: nodejs-docker-express:*
-      AUTH0_URL:
+      AUTH0_DOMAIN:
       AUTH0_AUDIENCE:
       AUTH0_DEFAULT_USER:
       AUTH0_DEFAULT_PASSWORD:

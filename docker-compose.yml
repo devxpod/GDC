@@ -43,7 +43,7 @@ services:
       - USE_AUTH0 # starts up auth0 mock container in container only mode
       - USE_AUTH0_HOST # starts up auth0 mock container and forwards port from host. Use AUTH0_HOST_PORT to change default of 3001
       - AUTH0_HOST_PORT # defaults to 3001 if not specified. only used with USE_AUTH0_HOST
-      - AUTH0_URL # url for hitting auth0 server
+      - AUTH0_DOMAIN # url for hitting auth0 server
       - AUTH0_CONTAINER_NAME # set name of auth0 container so more than one can be used in parallel
       - AUTH0_LOCAL_USERS_FILE # used to specify location in container for auth0 to mount user override file
       - AUTH0_AUDIENCE # used to override auth0 audience default of app
@@ -83,7 +83,7 @@ services:
       - CHECK_UPDATES # check for GDC updates on each login
       - PARENT_GDC # if GDC is launched from inside another GDC this will be set to name of parent
       - NO_DEVNET_RM # if set to yes, GDC will not remove the DEVNET
-      - DEV_CONTAINER=1.4.0 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.4.1 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

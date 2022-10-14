@@ -22,6 +22,6 @@ helpers.buildUriParams = (vars) =>
 
 helpers.port = process.env.APP_PORT || 3001;
 // auth0 mock url pieces
-helpers.auth0Url = process.env.AUTH0_URL || 'http://localhost:' + helpers.port;
+helpers.auth0Url = process.env.AUTH0_DOMAIN || 'http://localhost:' + helpers.port;
 
 module.exports = helpers;

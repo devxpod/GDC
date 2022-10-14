@@ -232,12 +232,12 @@ fi
 if [ "$USE_AUTH0_HOST" = "yes" ]; then
   echo "Adding compose layer dc-auth0-host.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0-host.yml"
-  export AUTH0_URL="http://host.docker.internal:$AUTH0_HOST_PORT"
+  export AUTH0_DOMAIN="http://host.docker.internal:$AUTH0_HOST_PORT"
 # this will start auth0 mock server in container only
 elif [ "$USE_AUTH0" = "yes" ]; then
   echo "Adding compose layer dc-auth0.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0.yml"
-  export AUTH0_URL="http://$AUTH0_CONTAINER_NAME:3001"
+  export AUTH0_DOMAIN="http://$AUTH0_CONTAINER_NAME:3001"
 fi
 
 if [ "$USE_AUTH0_HOST" = "yes" ] || [ "$USE_AUTH0" = "yes" ]; then

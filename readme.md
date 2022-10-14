@@ -161,7 +161,7 @@ These options control what packages / functionality are built into the container
 * HOST_HOME - set to user's home directory on host machine.
 * GDC_CONTAINER_NAME - name of GDC container running in docker.
 * GDC_COMPOSE_FILES - contains list of all compose files in use to run GDC.
-* AUTH0_URL - generated using a combination of USE_AUTH0,USE_AUTH0_HOST,AUTH0_HOST_PORT,AUTH0_CONTAINER_NAME. 
+* AUTH0_DOMAIN - generated using a combination of USE_AUTH0,USE_AUTH0_HOST,AUTH0_HOST_PORT,AUTH0_CONTAINER_NAME. 
 * SHARED_VOLUMES - list of volumes shared between all GDC's.
 * CUSTOM_PORTS - list of custom ports forwards from host to container.
 * GDC_DIR - contains host location of GDC folder. 
