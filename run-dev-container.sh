@@ -176,7 +176,6 @@ if [ -z "$USE_HOST_HOME" ]; then
   exit 1
 fi
 
-
 # enable mounting of current folder to /workspace in container
 if [ "$USE_WORKSPACE" = "yes" ]; then
   echo "Adding compose layer workspace mount  dc-host-workspace-dir.yml"
@@ -214,7 +213,7 @@ if [ -n "$LS_VERSION" ]; then
 fi
 
 # mount host ls volume dir in container
-if [ "$USE_LOCALSTACK" = "yes" ]; then
+if [ "$USE_LOCALSTACK_PERSISTENCE" = "yes" ]; then
   echo "Adding compose layer ls-volume.yml"
   if [ "$OS" = "Windows_NT" ]; then
     export LOCALSTACK_VOLUME_DIR="/c/tmp/ls_volume_$COMPOSE_PROJECT_NAME"

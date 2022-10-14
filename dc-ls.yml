@@ -14,6 +14,7 @@ services:
       - DEBUG=${DEBUG-}
       - PORT_WEB_UI=${PORT_WEB_UI-}
       - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}
+      - PERSISTENCE=0
       # Tell Localstack to put Lambda containers on the same shared network
       - LAMBDA_DOCKER_NETWORK=${DEVNET_NAME-devnet}
       - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY-}
