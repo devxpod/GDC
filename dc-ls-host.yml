@@ -40,7 +40,7 @@ services:
       # - CLOUDFRONT_STATIC_PORTS=1
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-
+      - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/var/lib/localstack"
 
 networks:
   devnet:

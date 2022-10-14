@@ -4,5 +4,4 @@ services:
   localstack:
     environment:
       - PERSISTENCE=1
-    volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/var/lib/localstack"
+
