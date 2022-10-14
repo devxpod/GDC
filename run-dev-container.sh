@@ -228,6 +228,15 @@ if [ "$USE_LOCALSTACK" = "yes" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f ls-volume.yml"
 fi
 
+if [ "$USE_AUTH0_HOST" = "yes" ] || [ "$USE_AUTH0" = "yes" ]; then
+  export AUTH0_CONTAINER_NAME=${AUTH0_CONTAINER_NAME:="auth0_mock_$COMPOSE_PROJECT_NAME"} # set name of auth0 container so more than one can be used in parallel
+  # add custom auth0 users file
+  if [ -n "$AUTH0_LOCAL_USERS_FILE" ]; then
+    echo "Adding compose layer dc-auth0-local-users.yml"
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0-local-users.yml"
+  fi
+fi
+
 # this will start auth0 mock server with host port forward
 if [ "$USE_AUTH0_HOST" = "yes" ]; then
   echo "Adding compose layer dc-auth0-host.yml"
@@ -240,14 +249,6 @@ elif [ "$USE_AUTH0" = "yes" ]; then
   export AUTH0_DOMAIN="http://$AUTH0_CONTAINER_NAME:3001"
 fi
 
-if [ "$USE_AUTH0_HOST" = "yes" ] || [ "$USE_AUTH0" = "yes" ]; then
-  export AUTH0_CONTAINER_NAME=${AUTH0_CONTAINER_NAME:="auth0_mock_$COMPOSE_PROJECT_NAME"} # set name of auth0 container so more than one can be used in parallel
-  # add custom auth0 users file
-  if [ -n "$AUTH0_LOCAL_USERS_FILE" ]; then
-    echo "Adding compose layer dc-auth0-local-users.yml"
-    COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0-local-users.yml"
-  fi
-fi
 
 # forwards ssh agent socket to container
 if [[ -z "$NO_SSH_AGENT" && -r "$SSH_AUTH_SOCK" ]]; then
