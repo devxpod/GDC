@@ -214,17 +214,11 @@ fi
 
 # mount host ls volume dir in container
 if [ "$USE_LOCALSTACK" = "yes" ]; then
-  echo "Adding compose layer ls-volume.yml"
-  if [ "$OS" = "Windows_NT" ]; then
-    export LOCALSTACK_VOLUME_DIR="/c/tmp/ls_volume_$COMPOSE_PROJECT_NAME"
-  else
-    export LOCALSTACK_VOLUME_DIR="/tmp/ls_volume_$COMPOSE_PROJECT_NAME"
-  fi
+  export LOCALSTACK_VOLUME_DIR="$HOST_PROJECT_FOLDER_NAME/ls_volume"
   echo "LOCALSTACK_VOLUME_DIR = $LOCALSTACK_VOLUME_DIR"
   if [ ! -r "$LOCALSTACK_VOLUME_DIR" ]; then
     mkdir -p "$LOCALSTACK_VOLUME_DIR"
   fi
-  COMPOSE_FILES="$COMPOSE_FILES -f ls-volume.yml"
 fi
 
 if [ "$USE_AUTH0_HOST" = "yes" ] || [ "$USE_AUTH0" = "yes" ]; then
