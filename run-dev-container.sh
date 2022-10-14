@@ -214,7 +214,7 @@ fi
 
 # mount host ls volume dir in container
 if [ "$USE_LOCALSTACK" = "yes" ]; then
-  export LOCALSTACK_VOLUME_DIR="$HOST_PROJECT_FOLDER_NAME/ls_volume"
+  export LOCALSTACK_VOLUME_DIR="$HOST_PROJECT_PATH/ls_volume"
   echo "LOCALSTACK_VOLUME_DIR = $LOCALSTACK_VOLUME_DIR"
   if [ ! -r "$LOCALSTACK_VOLUME_DIR" ]; then
     mkdir -p "$LOCALSTACK_VOLUME_DIR"
