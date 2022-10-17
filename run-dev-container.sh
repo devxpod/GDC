@@ -51,7 +51,6 @@ if [ -n "$SHARED_VOLUMES_EXTRA" ]; then
   SHARED_VOLUMES="$SHARED_VOLUMES $SHARED_VOLUMES_EXTRA"
 fi
 export SHARED_VOLUMES
-
 # if we cant change to this folder bail
 cd "$SCRIPT_DIR" || exit 1
 
@@ -76,6 +75,8 @@ if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
   echo "Full example: $0 webdev 80:8080 start"
   exit 0
 fi
+
+COMPOSE_FILES="-f docker-compose.yml"
 
 if [ ! -d "./tmp" ]; then
   mkdir ./tmp
@@ -131,8 +132,6 @@ for a; do
   fi
 done # for all parameters
 
-COMPOSE_FILES="-f docker-compose.yml"
-
 CUSTOM_PORT_FILE="./tmp/custom_ports_$COMPOSE_PROJECT_NAME.yml"
 if [ -r "$CUSTOM_PORT_FILE" ]; then
   rm -rf "$CUSTOM_PORT_FILE"
@@ -155,6 +154,47 @@ EOF
   COMPOSE_FILES="$COMPOSE_FILES -f $CUSTOM_PORT_FILE"
   echo "CUSTOM_PORTS=$CUSTOM_PORTS"
 fi
+
+
+CUSTOM_ENVS=""
+oIFS="$IFS"
+IFS=$'\n'
+for ENV in $(env); do
+  if [[ "$ENV" =~ ^GDC_ENV_ ]]; then
+    ENV=${ENV#*GDC_ENV_}
+    if [ -z "$CUSTOM_ENVS" ]; then
+      CUSTOM_ENVS="$ENV"
+    else
+      CUSTOM_ENVS="$CUSTOM_ENVS\n$ENV"
+    fi
+  fi
+done
+
+CUSTOM_ENV_FILE="./tmp/custom_env_$COMPOSE_PROJECT_NAME.yml"
+if [ -r "$CUSTOM_ENV_FILE" ]; then
+  rm -rf "$CUSTOM_ENV_FILE"
+fi
+if [ -n "$CUSTOM_ENVS" ]; then
+  cat << EOF > "$CUSTOM_ENV_FILE"
+version: "3.8"
+
+services:
+  dev:
+    environment:
+EOF
+
+  for i in $CUSTOM_ENVS; do
+    cat << EOF >> "$CUSTOM_ENV_FILE"
+      - $i
+EOF
+  done
+
+  echo "" >> "$CUSTOM_ENV_FILE"
+  COMPOSE_FILES="$COMPOSE_FILES -f $CUSTOM_ENV_FILE"
+  echo "CUSTOM_ENVS=$CUSTOM_ENVS"
+fi
+IFS="$oIFS"
+unset oIFS
 
 #echo "GDC_RUN_MODE=$GDC_RUN_MODE"
 #echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"

@@ -167,7 +167,16 @@ These options control what packages / functionality are built into the container
 * GDC_DIR - contains host location of GDC folder. 
 * DEV_CONTAINER - set to current dev container version. You can also use this to detect if you are running in a dev container.
 
-
+# To pass custom environment variables to the dev container prefix variable name with GDC_ENV_
+For example, to set a custom environment variable inside the dev container like MY_VAR="MY VALUE". Execute something like the following  
+```bash
+GDC_ENV_MY_VAR="MY VALUE" run-dev-container.sh proj
+```
+After shelling into the dev container you can do:
+```bash 
+echo $MY_VAR
+```
+You should see "MY VALUE" 
 
 # Environment files
 The above environment variable values are the default unless overridden by environment variables setup in your environment or on the command line.   
