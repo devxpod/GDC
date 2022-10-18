@@ -165,7 +165,7 @@ for ENV in $(env); do
     if [ -z "$CUSTOM_ENVS" ]; then
       CUSTOM_ENVS="$ENV"
     else
-      CUSTOM_ENVS="$CUSTOM_ENVS\n$ENV"
+      CUSTOM_ENVS="$CUSTOM_ENVS"$'\n'"$ENV"
     fi
   fi
 done
