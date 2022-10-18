@@ -161,7 +161,7 @@ oIFS="$IFS"
 IFS=$'\n'
 for ENV in $(env); do
   if [[ "$ENV" =~ ^GDC_ENV_ ]]; then
-    ENV=${ENV#*GDC_ENV_}
+    ENV=${ENV#GDC_ENV_}
     if [ -z "$CUSTOM_ENVS" ]; then
       CUSTOM_ENVS="$ENV"
     else

@@ -140,11 +140,17 @@ RUN  /bin/bash -c 'if [ "${USE_AWS}" = "yes" ] ; then \
        curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_arm64/session-manager-plugin.deb" -o "session-manager-plugin.deb" && \
        curl -o /usr/local/bin/aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/arm64/aws-iam-authenticator; \
     fi; \
-    chmod +x /usr/local/bin/aws-iam-authenticator; \
+    chmod +x /usr/local/bin/aws-iam-authenticator && \
     unzip -q "awscliv2.zip" && ./aws/install && rm awscliv2.zip && \
     dpkg -i session-manager-plugin.deb && rm ./session-manager-plugin.deb; \
+    curl -fsSL https://golang.org/dl/go1.18.linux-amd64.tar.gz | tar -C /usr/local -xzf - && \
+    ln -s /usr/local/go/bin/go /usr/bin/go && \
+    ln -s /usr/local/go/bin/gofmt /usr/bin/gofmt && \
+    go install github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cli/docker-credential-ecr-login@latest && \
+    mv /root/go/bin/docker-credential-ecr-login /usr/local/bin/docker-credential-ecr-login; \
 fi'
-
+RUN mkdir -p /root/.docker
+COPY docker-config.json /root/.docker/config.json
 
 ARG NODE_VERSION
 ARG USE_BITWARDEN
