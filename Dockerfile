@@ -71,7 +71,7 @@ fi'
 ARG GOLANG_VERSION
 RUN /bin/bash -c 'if [ -n "${GOLANG_VERSION}" ] ; then \
     ARCH=`uname -m` && \
-    if [ "$ARCH" == "x86_64" ]; then \
+    if [ "$ARCH" = "x86_64" ]; then \
        echo "go x86_64" && \
        curl -fsSL https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xzf -; \
     else \
@@ -87,7 +87,7 @@ ARG DOCKER_VERSION
 # install docker
 RUN  /bin/bash -c 'set -ex && \
     ARCH=`uname -m` && \
-    if [ "$ARCH" == "x86_64" ]; then \
+    if [ "$ARCH" = "x86_64" ]; then \
        echo "docker x86_64" && \
        wget -q https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz  -O docker.tgz && \
        tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
@@ -102,7 +102,7 @@ ARG DOCKER_COMPOSE_VERSION
 RUN  /bin/bash -c 'set -ex && \
     ARCH=`uname -m` && \
     PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
-    if [ "$ARCH" == "x86_64" ]; then \
+    if [ "$ARCH" = "x86_64" ]; then \
        echo "docker-compose x86_64" && \
        curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
     else \
@@ -115,7 +115,7 @@ RUN  /bin/bash -c 'set -ex && \
 RUN  /bin/bash -c 'set -ex && \
     ARCH=`uname -m` && \
     PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
-    if [ "$ARCH" == "x86_64" ]; then \
+    if [ "$ARCH" = "x86_64" ]; then \
        echo "websocat x86_64" && \
        curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.x86_64-unknown-linux-musl" -o /usr/local/bin/websocat;\
     else \
@@ -129,7 +129,7 @@ ARG USE_AWS
 RUN  /bin/bash -c 'if [ "${USE_AWS}" = "yes" ] ; then \
     set -ex && \
     ARCH=`uname -m` && \
-    if [ "$ARCH" == "x86_64" ]; then \
+    if [ "$ARCH" = "x86_64" ]; then \
        echo "aws x86_64" && \
        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
        curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb" && \
@@ -143,12 +143,9 @@ RUN  /bin/bash -c 'if [ "${USE_AWS}" = "yes" ] ; then \
     chmod +x /usr/local/bin/aws-iam-authenticator && \
     unzip -q "awscliv2.zip" && ./aws/install && rm awscliv2.zip && \
     dpkg -i session-manager-plugin.deb && rm ./session-manager-plugin.deb; \
-    curl -fsSL https://golang.org/dl/go1.18.linux-amd64.tar.gz | tar -C /usr/local -xzf - && \
-    ln -s /usr/local/go/bin/go /usr/bin/go && \
-    ln -s /usr/local/go/bin/gofmt /usr/bin/gofmt && \
-    go install github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cli/docker-credential-ecr-login@latest && \
-    mv /root/go/bin/docker-credential-ecr-login /usr/local/bin/docker-credential-ecr-login; \
+    apt install -fy --fix-missing amazon-ecr-credential-helper; \
 fi'
+
 RUN mkdir -p /root/.docker
 COPY docker-config.json /root/.docker/config.json
 
