@@ -8,6 +8,10 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 fi
 
 GDC_ROOT=/root/gdc-host
+if [ ! -r $GDC_ROOT ]; then
+  echo "GDC_ROOT: $GDC_ROOT is not mounted or not readable. Cant check GDC version."
+  exit 0
+fi
 REPO_VER=$(git --work-tree=$GDC_ROOT --git-dir=$GDC_ROOT/.git describe --match 'v[0-9]*\.[0-9]*\.[0-9]*' --abbrev=0 --tags \
 "$(git --work-tree=$GDC_ROOT --git-dir=$GDC_ROOT/.git rev-list --tags --max-count=1)" | cut -dv -f2)
 
