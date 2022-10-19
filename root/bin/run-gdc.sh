@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ "$1" = "--help" || "$1" = "-h" ]]; then
+  echo "Used to start a GDC session from inside a GDC session."
+  echo "Execute this as if you are running run-dev-container.sh"
+  exit 0
+fi
+
 P=$(pwd | sed 's/\/workspace//')
 P="$HOST_PROJECT_PATH$P"
 
