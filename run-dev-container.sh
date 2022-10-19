@@ -51,8 +51,7 @@ if [ -n "$SHARED_VOLUMES_EXTRA" ]; then
   SHARED_VOLUMES="$SHARED_VOLUMES $SHARED_VOLUMES_EXTRA"
 fi
 export SHARED_VOLUMES
-# if we cant change to this folder bail
-cd "$SCRIPT_DIR" || exit 1
+
 
 if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
   echo "usage: $0 STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]..."
@@ -69,12 +68,15 @@ if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
   echo "  stop will shutdown a running GDC environment running in foreground or background."
   echo "  clean start GDC environment with CLEAN=yes flag."
   echo "PORT_FWD optional, is in compose port forward format. Example 80:8080 or 4000-4005. You can specify this param more than once."
-  echo "GDC_ENTRYPOINT optional, runs a command in the GDC."
+  echo "GDC_ENTRYPOINT optional, runs a command in the GDC. Should be last parameter."
   echo "  the docker compose exit code will mirror the return code of the entrypoint command."
   echo "  if the entrypoint command returns a non-zero exit code even if GDC_RUN_MODE=daemon then compose will exit."
   echo "Full example: $0 webdev 80:8080 start"
   exit 0
 fi
+
+# if we cant change to this folder bail
+cd "$SCRIPT_DIR" || exit 1
 
 COMPOSE_FILES="-f docker-compose.yml"
 
