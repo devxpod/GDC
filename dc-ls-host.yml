@@ -10,8 +10,6 @@ services:
       devnet:
     ports:
       - "8001:8080"            # only required for Pro
-      - "53:53"                # only required for Pro
-      - "53:53/udp"            # only required for Pro
       - "443:443"              # only required for Pro
       - "4510-4560:4510-4560"  # only required for Pro
       - "4566:4566"
