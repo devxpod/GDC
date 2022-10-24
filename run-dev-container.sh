@@ -129,7 +129,7 @@ for a; do
     fi
   elif [[ "$a" =~ ^start|stop|daemon|clean ]]; then # matches daemon run mode
     GDC_RUN_MODE="$a"
-  else # anything else is considered a custom entry point command
+  elif [ -n "$a" ]; then # anything else is considered a custom entry point command
     GDC_ENTRYPOINT="$a"
   fi
 done # for all parameters
