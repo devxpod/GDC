@@ -200,8 +200,8 @@ Create another file named **start-pf.sh** that contains something similar to the
 FORCE_INTERACTIVE=yes # forces .bashrc to load
 shopt -s expand_aliases # ensure our bitwarden aliases are available to the script
 source /root/.bashrc # load all our aliases
-vgh_js_prod_assume # this alias assumes an admin role in the js prod account
-vgh_js_prod_rds_pf # this alias creates the ssm ssh port forward of postgres rds in aws to GDC
+rds_prod_assume # this alias assumes an admin role in the rds prod account
+rds_prod_rds_pf # this alias creates the ssm ssh port forward of postgres rds in aws to GDC
 ```
 
 Then you can simply do **run-dev-container.sh rdspf** from the folder you created with the above 2 files.
