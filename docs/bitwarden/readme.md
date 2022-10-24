@@ -171,3 +171,42 @@ I think this is due to some kind of clock skew issue for the MFA token generatio
 
 After you have assumed the role you can now execute other SSM / AWS commands or use any of your other aliases or aws cli
 commands.
+
+### Auto start RDS port forwards with GDC_ENTRYPOINT
+If you want to setup one or more SSM port forwards and are using the bitwarden solution for aws, you can do something like the following:  
+Create an empty folder name whatever you want, in this example I will use "rdspf"  
+In the rdspf folder create a file name **.env-gdc**  similar to the following:
+```bash
+# BEGIN this chunk helps speed up the launching of a GDC dedicated to port forwarding.
+USE_PRECOMMIT="no"
+SSH_KEYSCAN_HOSTS=""
+PYTHON_VERSION=""
+PHP_VERSION=""
+USE_JAVA="no"
+USE_DOT_NET="no"
+GOLANG_VERSION=""
+PULUMI_VERSION=""
+GIT_NAME=""
+# END this chunk helps speed up the launching of a GDC dedicated to port forwarding.
+
+GDC_ENTRYPOINT="bash /workspace/start-pf.sh" # this gets run by the GDC automatically and has our ssm assume and ssh port forwarding
+PORT_FWD0="5432:5432" # forwarding postgres port from container to host
+#PORT_FWD1=5433:5433 # can map as many ports as you need, just make sure they are unique in the container and on host
+```
+
+Create another file named **start-pf.sh** that contains something similar to the following:
+```bash
+#!/usr/bin/env bash
+FORCE_INTERACTIVE=yes # forces .bashrc to load
+shopt -s expand_aliases # ensure our bitwarden aliases are available to the script
+source /root/.bashrc # load all our aliases
+vgh_js_prod_assume # this alias assumes an admin role in the js prod account
+vgh_js_prod_rds_pf # this alias creates the ssm ssh port forward of postgres rds in aws to GDC
+```
+
+Then you can simply do **run-dev-container.sh rdspf** from the folder you created with the above 2 files.
+
+
+It will start the GDC forwarding ports you requested from GDC to host, then it will assume the needed role in aws account, then ssm ssh port forward from aws to GDC.  
+You can then open pg_admin dbeaver etc..., to localhost on port you specified for the host and manage DB in AWS.  
+This works for jumphosts and other SSM Port forward related things.

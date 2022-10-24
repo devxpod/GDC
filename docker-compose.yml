@@ -85,7 +85,7 @@ services:
       - CHECK_UPDATES # check for GDC updates on each login
       - PARENT_GDC # if GDC is launched from inside another GDC this will be set to name of parent
       - NO_DEVNET_RM # if set to yes, GDC will not remove the DEVNET
-      - DEV_CONTAINER=1.5.5 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.5.6 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

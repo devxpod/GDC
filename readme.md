@@ -115,7 +115,7 @@ These options control what packages / functionality are built into the container
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * USE_LOCALSTACK_PERSISTENCE=yes - toggle persistent storage for LS defaults to persistence enabled.
-* LOCALSTACK_VOLUME_DIR=/c/tmp/ls_volume or /tmp/ls_volume - on windows / mac respectively.
+* LOCALSTACK_VOLUME_DIR=$HOST_PROJECT_PATH/ls_volume.
 * LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
 * LS_IMAGE=localstack/localstack - can override with custom image location. Still uses LS_VERSION to create final image location.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
@@ -415,6 +415,9 @@ Many times only CLEAN=yes is needed, however if the problem persist you can use 
 * CLEAN_ONLY=yes - stops and removes existing stack and devnet, then does docker system prune and exits.
 
 ### Localstack won't let go of old state
-* Mac and Linux stop all GDCs and rm -rf /tmp/ls_volume*
-* Windows stop all GDCs and remove all /c/tmp/ls_volume* folders
-start GDC and run  *make reset*
+* All OS stop all GDC's and localstack containers and remove the following folders if they exist.
+* $HOST_PROJECT_PATH/ls_volume folder
+* /tmp/ls_volume*
+* /c/tmp/ls_volume*
+
+* start GDC and run  *make reset*
