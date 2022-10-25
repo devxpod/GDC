@@ -76,7 +76,7 @@ fi
 echo "ssh -i ~/.ssh/$key_name -N -L $interface$local_port:$remote_host:$remote_port ssm-user@$instance_id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ControlMaster=auto -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o ProxyCommand=\"aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p\""
 echo "the connection is not fully established until you see a message containing \"Permanently added '$instance_id' (ECDSA) to the list of known hosts.\""
 echo "press ^C to close port forward and cleanup"
-ssh -i ~/.ssh/$key_name -N -L $interface$local_port:$remote_host:$remote_port ssm-user@$instance_id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ControlMaster=auto -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o ProxyCommand="aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p" 2>&1
+ssh -i ~/.ssh/$key_name -N -L $interface$local_port:$remote_host:$remote_port ssm-user@$instance_id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ControlMaster=auto -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o IdentitiesOnly=yes -o ProxyCommand="aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p" 2>&1
 ret=$?
 if [ $ret -ne 0 ]; then
   echo "Failed to open tunnel with exit code ($ret)."
