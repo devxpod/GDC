@@ -53,8 +53,8 @@ done
 
 
 echo "Generating public key"
-echo "ssh-keygen -q -t rsa -f ~/.ssh/$key_name -N '' <<<y 2>&1"
-ssh-keygen -q -t rsa -f ~/.ssh/$key_name -N '' <<<y 2>&1
+echo "ssh-keygen -q -t ed25519 -f ~/.ssh/$key_name -N '' <<<y 2>&1"
+ssh-keygen -q -t ed25519 -f ~/.ssh/$key_name -N '' <<<y 2>&1
 ret=$?
 if [ $ret -ne 0 ]; then
   echo "Failed to generate $key_name rsa key with exit code ($ret). Aborting..."
