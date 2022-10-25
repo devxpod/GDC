@@ -92,7 +92,7 @@ if [[ "$USE_HOST_HOME" = "yes" &&   -r ~/home-host/.ssh ]]; then
 fi
 chmod 700 ~/.ssh
 chmod og-rwx ~/.ssh/*
-
+chown -R root.root ~/.ssh
 if [ -n "$SSH_KEYSCAN_HOSTS" ]; then
   ssh-keyscan $SSH_KEYSCAN_HOSTS >>~/.ssh/known_hosts
 fi
