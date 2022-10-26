@@ -78,6 +78,7 @@ services:
       - GDC_RUN_MODE # start, stop, daemon, clean
       - CI_JOB_TOKEN # used for gitlab pipeline clones
       - CI_PROJECT_DIR # used for gitlab pipeline mounts
+      - CI_JOB_ID # used for gitlab pipeline uuid
       - GIT_HASH # used for gitlab pipelines
       - GIT_SLUG # used for gitlab pipelines
       - HOST_CUSTOM_MOUNT # used to mount custom dir on host to /host_custom_mount in container
