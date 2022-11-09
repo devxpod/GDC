@@ -181,11 +181,17 @@ You should see "MY VALUE"
 # Environment files
 The above environment variable values are the default unless overridden by environment variables setup in your environment or on the command line.   
 Specific gdc related env files `GDC_PROJECT_PATH/.env-gdc`, `GDC_PROJECT_PATH/.env-gdc-local`, `$HOST_PROJECT_PATH/.env-gdc` and `$HOST_PROJECT_PATH/.env-gdc-local` will be sourced if they exist in the order listed before building and launching the container.  
-`.env-gdc` should be checked in with project and `.env-gdc-local` should be ignored by `.gitignore`.
+`.env-gdc` should be checked in with project and `.env-gdc-local` should be ignored by `.gitignore`.  
+## Variables set in the the environment files must be exported! 
 
 Format of the files should be as follows:
 ```bash
 export ENV_VAR_NAME=ENV_VAR_VALUE
+```
+
+Example:
+```bash
+export ROOT_PW=iAmGroot
 ```
 
 # Special folders
