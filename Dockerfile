@@ -3,6 +3,9 @@ FROM ubuntu:latest
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
+# turn off documentation
+COPY /etc/dpkg/dpkg.conf.d/01_nodoc /etc/dpkg/dpkg.conf.d/01_nodoc
+
 # update system
 RUN apt-get update -y --fix-missing && apt-get -y --fix-missing upgrade
 # install core
