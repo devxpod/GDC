@@ -52,7 +52,6 @@ if [ -n "$SHARED_VOLUMES_EXTRA" ]; then
 fi
 export SHARED_VOLUMES
 
-
 if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
   echo "usage: $0 STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]..."
   echo "current working directory will be mounted in container on /workspace."
@@ -156,7 +155,6 @@ EOF
   COMPOSE_FILES="$COMPOSE_FILES -f $CUSTOM_PORT_FILE"
   echo "CUSTOM_PORTS=$CUSTOM_PORTS"
 fi
-
 
 CUSTOM_ENVS=""
 oIFS="$IFS"
@@ -283,7 +281,6 @@ elif [ "$USE_AUTH0" = "yes" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f dc-auth0.yml"
   export AUTH0_DOMAIN="http://$AUTH0_CONTAINER_NAME:3001"
 fi
-
 
 # forwards ssh agent socket to container
 if [[ -z "$NO_SSH_AGENT" && -r "$SSH_AUTH_SOCK" ]]; then
@@ -415,12 +412,13 @@ elif [ "$OS" = "Darwin" ]; then
 else
   CLIP_CMD=""
 fi
-#echo "--------------- OS = $OS ---------------"
+CLIPBOARD_MSG=""
 if [ -n "$CLIP_CMD" ]; then
-  #echo "CLIP_CMD=$CLIP_CMD"
-  echo "docker exec -it $GDC_CONTAINER_NAME bash -l" | $CLIP_CMD > /dev/null 2>&1
+  if echo "docker exec -it $GDC_CONTAINER_NAME bash -l" | $CLIP_CMD > /dev/null 2>&1;  then
+    CLIPBOARD_MSG="Command copied to clipboard."
+  fi
 fi
-
+export CLIPBOARD_MSG
 docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
 RC=$? # capture the compose exit code so we can emit it after any cleanup
 

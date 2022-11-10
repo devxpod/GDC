@@ -153,6 +153,7 @@ These options control what packages / functionality are built into the container
 * HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.
 * NO_DEVNET_RM=<not set> # if set to yes, GDC will not remove the DEVNET.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
+* STARTUP_MSG=<not set> - dispays this message after container has started and init script is complete.
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
