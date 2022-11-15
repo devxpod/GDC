@@ -12,9 +12,9 @@ services:
       devnet:
     ports:
       - "${AUTH0_HOST_PORT-3001}:3001"
-    command: npm run start
+    command: yarn run start
     environment:
-      NODE_ENV: test
+      NODE_ENV: dev
       DEBUG: nodejs-docker-express:*
       AUTH0_DOMAIN:
       AUTH0_AUDIENCE:

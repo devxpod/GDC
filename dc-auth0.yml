@@ -10,9 +10,9 @@ services:
       dockerfile: Dockerfile
     networks:
       devnet:
-    command: npm run start
+    command: yarn run start
     environment:
-      NODE_ENV: test
+      NODE_ENV: dev
       DEBUG: nodejs-docker-express:*
       AUTH0_DOMAIN:
       AUTH0_AUDIENCE:
