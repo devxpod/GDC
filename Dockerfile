@@ -7,20 +7,20 @@ ENV TZ=Etc/UTC
 COPY /etc/dpkg/dpkg.conf.d/01_nodoc /etc/dpkg/dpkg.conf.d/01_nodoc
 
 # update system
-RUN apt-get update -y --fix-missing && apt-get -y --fix-missing upgrade
+RUN apt-get update -y --fix-missing --no-install-recommends && apt-get -y --fix-missing --no-install-recommends upgrade
 # install core
-RUN apt-get install -fy --fix-missing locales apt-transport-https \
+RUN apt-get install -fy --fix-missing --no-install-recommends locales apt-transport-https \
     software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff file bash-completion \
     inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat socat ca-certificates gnupg2 git \
     postgresql-client mysql-client
 
 # install dev
-RUN apt-get install -fy --fix-missing build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
+RUN apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
     libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm libncurses5-dev liblzma-dev libpq-dev libcurl4-openssl-dev
 
 # install editors and any extra packages user has requested
 ARG EXTRA_PACKAGES
-RUN apt-get install -fy --fix-missing libncurses5 joe nano vim $EXTRA_PACKAGES
+RUN apt-get install -fy --fix-missing --no-install-recommends libncurses5 joe nano vim $EXTRA_PACKAGES
 
 # update default editor
 RUN update-alternatives --install /usr/bin/editor editor /usr/bin/vim 80 && \
@@ -146,7 +146,7 @@ RUN  /bin/bash -c 'if [ "${USE_AWS}" = "yes" ] ; then \
     chmod +x /usr/local/bin/aws-iam-authenticator && \
     unzip -q "awscliv2.zip" && ./aws/install && rm awscliv2.zip && \
     dpkg -i session-manager-plugin.deb && rm ./session-manager-plugin.deb; \
-    apt install -fy --fix-missing amazon-ecr-credential-helper; \
+    apt install -fy --fix-missing --no-install-recommends amazon-ecr-credential-helper; \
 fi'
 
 RUN mkdir -p /root/.docker

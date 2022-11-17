@@ -97,6 +97,7 @@ These options control what packages / functionality are built into the container
 
 * PROJECT_NAME=<set to 1st command line parameter when run-dev-container.sh is invoked> - used to suffix DEVNET_NAME, LOCALSTACK_VOLUME_DIR, DEV_CONTAINER_NAME.
 * DEV_CONTAINER_NAME=dev-1 - sets the dev container name and is prepended with PROJECT_NAME.
+* COMPOSE_BIN=docker-compose - sets method of execution for compose. Should be set to ether "docker compose" or "docker-compose"
 * ROOT_PW=ContainersRule - sets root password in container.
 * CHECK_UPDATES=yes - check for GDC updates on each login.
 * USE_WORKSPACE=yes - mounts folder from host into /workspace folder in container. Setting this option to "no" is useful if you only want to use tools inside the container and not interact with a project.    

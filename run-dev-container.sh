@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ -z "$COMPOSE_BIN" ]; then
+  COMPOSE_BIN=docker-compose
+fi
+echo "Using compose bin $COMPOSE_BIN"
+
 # make sure windows git bash does not alter paths
 export MSYS_NO_PATHCONV=1
 # gets folder where this script actually lives, resolving symlinks if needed
@@ -322,7 +327,7 @@ if [ "$GDC_RUN_MODE" = "clean" ]; then
 fi
 # remove old stack and prune image files
 if [ "$CLEAN" = "yes" ] || [ "$CLEAN_ONLY" = "yes" ]; then
-  docker-compose $COMPOSE_FILES down --rmi all
+  $COMPOSE_BIN $COMPOSE_FILES down --rmi all
   docker network rm "$DEVNET_NAME" 2> /dev/null
 
   for v in $SHARED_VOLUMES_EXTRA; do
@@ -388,7 +393,7 @@ if [ "$GDC_RUN_MODE" = "daemon" ]; then
 fi
 
 if [ "$GDC_RUN_MODE" = "stop" ]; then
-  docker-compose $COMPOSE_FILES down
+  $COMPOSE_BIN $COMPOSE_FILES down
   if [ "$NO_DEVNET_RM" != "yes" ]; then
     docker network rm "$DEVNET_NAME" 2> /dev/null
   fi
@@ -419,7 +424,7 @@ if [ -n "$CLIP_CMD" ]; then
   fi
 fi
 export CLIPBOARD_MSG
-docker-compose $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
+$COMPOSE_BIN $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
 RC=$? # capture the compose exit code so we can emit it after any cleanup
 
 if [ "$GDC_RUN_MODE" != "daemon" ]; then
