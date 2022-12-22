@@ -24,6 +24,7 @@ services:
         - DOCKER_VERSION # install docker version inside container
         - DOCKER_COMPOSE_VERSION # install docker-compose version inside container
         - EXTRA_PACKAGES # any extra Ubuntu packages you want installed into the base container
+        - AWS_VERSION # install AWS CLI version
     environment:
       - COMPOSE_PROJECT_NAME
       - PROJECT_NAME=${COMPOSE_PROJECT_NAME}
