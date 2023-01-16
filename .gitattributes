@@ -28,6 +28,7 @@ Dockerfile text
 **/*.sh text eol=lf
 **/*.sql text eol=lf
 **/.env text eol=lf
+**/.env* text eol=lf
 **/Dockerfile text eol=lf
 **/*.py text eol=lf
 **/*.js text eol=lf
