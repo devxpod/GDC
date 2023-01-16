@@ -5,6 +5,7 @@ source /etc/term_colors.sh
 TITLE="GDC: $COMPOSE_PROJECT_NAME"
 echo -n -e "$title_start$TITLE$title_end"
 
+dos2unix /root/gdc-host/.env-gdc*
 
 cd /workspace || echo "$bldred Cant cd to /workspace!!!!! $txtrst"
 
