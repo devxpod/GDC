@@ -47,6 +47,9 @@ fi
 if [ -n "$LOCALSTACK_HOST_DNS_PORT" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host-dns.yml"
 fi
+if [ "$USE_LOCALSTACK_PERSISTENCE" = "yes" ]; then
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-persist.yml"
+fi
 
 
 docker-compose $COMPOSE_FILES up -d --build --force-recreate
