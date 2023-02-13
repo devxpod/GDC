@@ -407,6 +407,11 @@ export CI_JOB_TOKEN
 export CI_PROJECT_DIR
 export NO_DEVNET_RM
 
+if [ `docker ps --format "{{.Names}}" | grep -c "$GDC_CONTAINER_NAME" | tr -d '\n'''` != "0" ]; then
+  echo "$GDC_CONTAINER_NAME already running. Exiting..."
+  exit 1
+fi
+
 OS="$(uname -s)"
 if [[ "$OS" =~ ^MINGW64 ]]; then
   CLIP_CMD=clip.exe
@@ -417,8 +422,9 @@ elif [ "$OS" = "Darwin" ]; then
 else
   CLIP_CMD=""
 fi
+
 CLIPBOARD_MSG=""
-if [ -n "$CLIP_CMD" ]; then
+if [[ "$COPY_CMD_TO_CLIPBOARD" = "yes"  &&  -n "$CLIP_CMD" ]]; then
   if echo "docker exec -it $GDC_CONTAINER_NAME bash -l" | $CLIP_CMD > /dev/null 2>&1;  then
     CLIPBOARD_MSG="Command copied to clipboard."
   fi
