@@ -314,6 +314,37 @@ fi
 # add user specified compose file to list
 if [ -n "$COMPOSE_EX" ]; then
   echo "Adding custom compose layer $COMPOSE_EX"
+
+  if [[ "${COMPOSE_EX:0:1}" == "/" ]] ; then
+    echo "Absolute path detected. Converting to relative..."
+    path1=$GDC_DIR
+    path2=$(dirname "$COMPOSE_EX")
+
+    # Find the common prefix of the two paths
+    prefix=""
+    for (( i=0; i<${#path1}; i++ )); do
+      if [ "${path1:$i:1}" != "${path2:$i:1}" ]; then
+        break
+      fi
+      prefix="$prefix${path1:$i:1}"
+    done
+    prefix=${prefix%/}
+
+    # Compute the relative path from path1 to path2
+    rel_path=""
+    if [ "$prefix" == "/" ]; then
+      prefix=""
+    fi
+    if [ "${path1#$prefix/}" != "$path1" ]; then
+      up_dirs=$(echo "${path1#$prefix/}" | tr '/' '\n' | wc -l)
+      up_dirs=$(printf "../%.0s" $(seq 1 $((up_dirs))))
+      rel_path="$up_dirs${path2#$prefix/}"
+    else
+      rel_path="$path2"
+    fi
+    echo "Custom compose layer $COMPOSE_EX relative path computed as $rel_path/$(basename "$COMPOSE_EX")"
+    COMPOSE_EX=$rel_path/$(basename "$COMPOSE_EX")
+  fi
   COMPOSE_FILES="$COMPOSE_FILES -f $COMPOSE_EX"
 fi
 
