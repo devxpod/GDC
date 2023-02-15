@@ -116,14 +116,14 @@ These options control what packages / functionality are built into the container
 * PERSIST_BITWARDEN_SESSION=no - persist bitwarden session to /root/persisted volume and autoload it in subsequent logins. Reduces need to enter master password, but is less secure.
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
-* USE_LOCALSTACK_PERSISTENCE=yes - toggle persistent storage for LS defaults to persistence enabled.
+* USE_LOCALSTACK_PERSISTENCE=no - toggle persistent storage for LS defaults to persistence disabled.
 * LOCALSTACK_VOLUME_DIR=$HOST_PROJECT_PATH/ls_volume.
+* LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
 * LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
-* LS_IMAGE=localstack/localstack - can override with custom image location. Still uses LS_VERSION to create final image location.
+* LS_IMAGE=localstack/localstack - if LOCALSTACK_API_KEY is specified then defaults to localstack/localstack-pro. Can override with custom image location. Still uses LS_VERSION to create final image location.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
 * USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set.
 * LOCALSTACK_HOST_DNS_PORT=53 - when LocalStack is running in host mode forward this port from host to localstack. Set to blank string to disable localstack DNS forward.
-* LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.

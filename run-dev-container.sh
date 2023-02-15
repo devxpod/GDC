@@ -67,7 +67,7 @@ else
 fi
 export HOST_PROJECT_REL_PATH=$rel_path
 echo "Project path relative to GDC $HOST_PROJECT_REL_PATH"
-unset path1 path2 prefix up_dirs relpath
+unset path1 path2 prefix up_dirs rel_path
 
 if [ -r "./.env-gdc" ]; then
   echo "Loading project .env-gdc environment file"
@@ -374,7 +374,7 @@ if [ -n "$COMPOSE_EX" ]; then
     fi
     echo "Custom compose layer $COMPOSE_EX relative path computed as $rel_path/$(basename "$COMPOSE_EX")"
     COMPOSE_EX=$rel_path/$(basename "$COMPOSE_EX")
-    unset path1 path2 prefix up_dirs relpath
+    unset path1 path2 prefix up_dirs rel_path
   fi
   COMPOSE_FILES="$COMPOSE_FILES -f $COMPOSE_EX"
 fi

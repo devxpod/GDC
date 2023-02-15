@@ -18,7 +18,6 @@ services:
       - EXTRA_CORS_ALLOWED_ORIGINS=http://host.docker.internal:4566
       - DISABLE_CORS_CHECKS=1
       - DEBUG=${DEBUG-}
-      - PORT_WEB_UI=${PORT_WEB_UI-}
       - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}
 #      - PERSISTENCE=0
       # Tell Localstack to put Lambda containers on the same shared network
