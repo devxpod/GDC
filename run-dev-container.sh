@@ -383,14 +383,18 @@ for v in $SHARED_VOLUMES; do
 done
 
 export GDC_COMPOSE_FILES=$COMPOSE_FILES
-echo "GDC_COMPOSE_FILES $GDC_COMPOSE_FILES"
-echo "SHARED_VOLUMES $SHARED_VOLUMES"
-echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 
 GDC_DAEMON_MODE=""
 if [ "$GDC_RUN_MODE" = "daemon" ]; then
   GDC_DAEMON_MODE="-d "
+  export COPY_CMD_TO_CLIPBOARD="no"
 fi
+
+echo "GDC_COMPOSE_FILES $GDC_COMPOSE_FILES"
+echo "SHARED_VOLUMES $SHARED_VOLUMES"
+echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
+echo "COPY_CMD_TO_CLIPBOARD=$COPY_CMD_TO_CLIPBOARD"
+
 
 if [ "$GDC_RUN_MODE" = "stop" ]; then
   $COMPOSE_BIN $COMPOSE_FILES down
@@ -430,8 +434,14 @@ if [[ "$COPY_CMD_TO_CLIPBOARD" = "yes"  &&  -n "$CLIP_CMD" ]]; then
   fi
 fi
 export CLIPBOARD_MSG
-$COMPOSE_BIN $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
-RC=$? # capture the compose exit code so we can emit it after any cleanup
+if [ "$GDC_RUN_MODE" = "daemon" ]; then
+  $COMPOSE_BIN $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate &>/dev/null
+  RC=$? # capture the compose exit code so we can emit it after any cleanup
+else
+  $COMPOSE_BIN $COMPOSE_FILES up $GDC_DAEMON_MODE --build --force-recreate
+  RC=$? # capture the compose exit code so we can emit it after any cleanup
+fi
+
 
 if [ "$GDC_RUN_MODE" != "daemon" ]; then
   if [ "$NO_DEVNET_RM" != "yes" ]; then
