@@ -40,6 +40,35 @@ fi
 HOST_PROJECT_FOLDER_NAME="$(basename "$HOST_PROJECT_PATH")"
 export HOST_PROJECT_FOLDER_NAME
 
+path1=$GDC_DIR
+path2=$HOST_PROJECT_PATH
+
+# Find the common prefix of the two paths
+prefix=""
+for (( i=0; i<${#path1}; i++ )); do
+  if [ "${path1:$i:1}" != "${path2:$i:1}" ]; then
+    break
+  fi
+  prefix="$prefix${path1:$i:1}"
+done
+prefix=${prefix%/}
+
+# Compute the relative path from path1 to path2
+rel_path=""
+if [ "$prefix" == "/" ]; then
+  prefix=""
+fi
+if [ "${path1#$prefix/}" != "$path1" ]; then
+  up_dirs=$(echo "${path1#$prefix/}" | tr '/' '\n' | wc -l)
+  up_dirs=$(printf "../%.0s" $(seq 1 $((up_dirs))))
+  rel_path="$up_dirs${path2#$prefix/}"
+else
+  rel_path="$path2"
+fi
+export HOST_PROJECT_REL_PATH=$rel_path
+echo "Project path relative to GDC $HOST_PROJECT_REL_PATH"
+unset path1 path2 prefix up_dirs relpath
+
 if [ -r "./.env-gdc" ]; then
   echo "Loading project .env-gdc environment file"
   source ./.env-gdc
@@ -48,6 +77,7 @@ if [ -r "./.env-gdc-local" ]; then
   echo "Loading project .env-gdc-local environment file"
   source ./.env-gdc-local
 fi
+
 CACHE_VOLUMES_REQUIRED="pulumi pkg_cache"
 SHARED_VOLUMES_REQUIRED="shared home_config"
 
@@ -344,6 +374,7 @@ if [ -n "$COMPOSE_EX" ]; then
     fi
     echo "Custom compose layer $COMPOSE_EX relative path computed as $rel_path/$(basename "$COMPOSE_EX")"
     COMPOSE_EX=$rel_path/$(basename "$COMPOSE_EX")
+    unset path1 path2 prefix up_dirs relpath
   fi
   COMPOSE_FILES="$COMPOSE_FILES -f $COMPOSE_EX"
 fi

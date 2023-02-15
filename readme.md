@@ -161,6 +161,7 @@ These options control what packages / functionality are built into the container
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
 * HOST_PROJECT_FOLDER_NAME - dirname $HOST_PROJECT_PATH
+* HOST_PROJECT_REL_PATH - Project path on host relative to GDC repository. This can be used to set vars needed by compose files specified in COMPOSE_EX environment variable.
 * GDC_PARENT - if GDC is launched from inside another GDC this will be set to name of parent.
 * HOST_HOME - set to user's home directory on host machine.
 * GDC_CONTAINER_NAME - name of GDC container running in docker.
