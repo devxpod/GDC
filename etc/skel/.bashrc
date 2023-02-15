@@ -152,6 +152,7 @@ if [ -r "$NVM_DIR/nvm.sh" ]; then
 fi
 
 if [ "$USE_BITWARDEN" = "yes" ]; then
+  echo "bitwarden cli version $(bw --version)"
   alias load_aliases="eval \`bw get item aws_bash_rc | jq -r '.notes'\`"
   alias bw_reload="bw sync; load_aliases"
 
@@ -168,7 +169,6 @@ if [ "$USE_BITWARDEN" = "yes" ]; then
   if [ "$USE_AWS" = "yes" ]; then
     alias aws-otp="bw get totp 'aws-ident' | tr -d '\n'"
   fi
-  echo "bitwarden cli version $(bw --version)"
 fi
 
 if [ "$USE_AWS" = "yes" ]; then
