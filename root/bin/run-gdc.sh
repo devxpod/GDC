@@ -54,5 +54,9 @@ fi
 IFS="$oIFS"
 unset oIFS
 
-echo
-env -i bash --noprofile --rcfile "$CUSTOM_ENV_FILE" -ic "run-dev-container.sh $* &>/dev/null"
+
+if [[ "$*" =~ daemon ]]; then
+  env -i bash --noprofile --rcfile "$CUSTOM_ENV_FILE" -ic "run-dev-container.sh $* &> /dev/null"
+else
+  env -i bash --noprofile --rcfile "$CUSTOM_ENV_FILE" -ic "run-dev-container.sh $*"
+fi
