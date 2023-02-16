@@ -92,7 +92,7 @@ services:
       - COMPOSE_BIN # used to toggle between docker-compose and docker compose invocations
       - COPY_CMD_TO_CLIPBOARD # defaults to yse to copy gdc shell launch command to clipboard
       - HOST_PROJECT_REL_PATH # Project path on host relative to GDC repository
-      - DEV_CONTAINER=1.7.4 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.7.5 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

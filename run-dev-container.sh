@@ -87,7 +87,7 @@ if [ -n "$SHARED_VOLUMES_EXTRA" ]; then
 fi
 export SHARED_VOLUMES
 
-if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   echo "usage: $0 STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]..."
   echo "current working directory will be mounted in container on /workspace."
   echo "Env vars are set in the following order with last to set winning"
@@ -112,6 +112,16 @@ fi
 # if we cant change to this folder bail
 cd "$SCRIPT_DIR" || exit 1
 
+if [ -n "$1" ]; then
+  GDC_NAME="$1"
+fi
+export GDC_NAME
+
+if [[ -z "$GDC_NAME" ]]; then
+  echo "GDC_NAME environment variable not set and no name argument specified."
+  exit 1
+fi
+
 COMPOSE_FILES="-f docker-compose.yml"
 
 if [ ! -d "./tmp" ]; then
@@ -119,7 +129,7 @@ if [ ! -d "./tmp" ]; then
 fi
 
 # this is the stack name for compose
-COMPOSE_PROJECT_NAME="$1"
+COMPOSE_PROJECT_NAME="$GDC_NAME"
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME// /_}"
 shift
 

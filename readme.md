@@ -78,7 +78,7 @@ run the script `run-dev-container.sh` in the root of this repository.
 
 Running with no arguments or `-h` as first arguments will display help.
 
-`run-dev-container.sh STACK_NAME [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]`
+`run-dev-container.sh [STACK_NAME] [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]`
 * your current working directory will be mounted in container on `/workspace`
 * STACK_NAME required, is used to name the stack in case you want to run more than one.
 * GDC_RUN_MODE optional, valid values are start, stop, daemon, clean. **start** is the default.
@@ -95,6 +95,7 @@ Running with no arguments or `-h` as first arguments will display help.
 These options control what packages / functionality are built into the container.  
 `USE_` vars are **yes / no** values for toggling related options.
 
+* GDC_NAME=<not set> - PROJECT_NAME will be set to this if no command line argument is specified for name
 * PROJECT_NAME=<set to 1st command line parameter when run-dev-container.sh is invoked> - used to suffix DEVNET_NAME, LOCALSTACK_VOLUME_DIR, DEV_CONTAINER_NAME.
 * DEV_CONTAINER_NAME=dev-1 - sets the dev container name and is prepended with PROJECT_NAME.
 * COMPOSE_BIN=docker-compose - sets method of execution for compose. Should be set to ether "docker compose" or "docker-compose"
