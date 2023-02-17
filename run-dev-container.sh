@@ -501,7 +501,7 @@ echo "SHARED_VOLUMES=$SHARED_VOLUMES"
 echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 echo "COPY_CMD_TO_CLIPBOARD=$COPY_CMD_TO_CLIPBOARD"
 
-exit ########### DEBUG #############
+#exit ########### DEBUG #############
 
 if [ "$GDC_RUN_MODE" = "stop" ]; then
   $COMPOSE_BIN $COMPOSE_FILES down
