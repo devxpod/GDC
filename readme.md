@@ -80,7 +80,7 @@ Running with no arguments or `-h` as first arguments will display help.
 
 `run-dev-container.sh [STACK_NAME] [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]`
 * your current working directory will be mounted in container on `/workspace`
-* STACK_NAME required, is used to name the stack in case you want to run more than one.
+* STACK_NAME if not set via GDC_NAME env var or as first arg will be generated based on current folder.  It's used to name the stack in case you want to run more than one.
 * GDC_RUN_MODE optional, valid values are start, stop, daemon, clean. **start** is the default.
 * * start will start the GDC environment.
 * * daemon will start a GDC environment in the background.

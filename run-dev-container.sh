@@ -109,14 +109,47 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   exit 0
 fi
 
+run_modes=("start" "stop" "daemon" "clean")
+
+
 # if we cant change to this folder bail
 cd "$SCRIPT_DIR" || exit 1
 
-if [ -n "$1" ]; then
-  GDC_NAME="$1"
-fi
-export GDC_NAME
+variable="$1"
 
+if [[ ! " ${run_modes[*]} " =~ " ${variable} " ]]; then
+  if [[ ! "$variable" =~ ^[0-9]+[:-][0-9]+ ]]; then
+    if [ -n "$1" ]; then
+      GDC_NAME="$1"
+      shift
+    fi
+  fi
+fi
+unset variable
+
+if [[ -z "$GDC_NAME" ]]; then
+  # start with folder name
+  string="$HOST_PROJECT_FOLDER_NAME"
+  # if folder name is less than 12 chars, then use it
+  if [ "${#string}" -lt 12 ]; then
+    new_string="$string"
+  else
+    # Replace all hyphens and underscores with spaces
+    temp_string="${string//[-_]/ }"
+    # Loop through each word in the string, and take lowercase first letter of each word
+    new_string=""
+    for word in $temp_string; do
+        new_string="$new_string$(echo "$word" | awk '{print tolower(substr($0,1,1))}') "
+    done
+    # Remove any whitespace from the new string
+    new_string="${new_string// /}"
+    # if new string is less than 3 chars, fall back to folder name
+    if [ "${#new_string}" -lt 3 ]; then
+      new_string="$HOST_PROJECT_FOLDER_NAME"
+    fi
+  fi
+  GDC_NAME="$new_string"
+fi
 if [[ -z "$GDC_NAME" ]]; then
   echo "GDC_NAME environment variable not set and no name argument specified."
   exit 1
@@ -130,8 +163,7 @@ fi
 
 # this is the stack name for compose
 COMPOSE_PROJECT_NAME="$GDC_NAME"
-COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME// /_}"
-shift
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME//[ -]/_}"
 
 export LS_MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME:="localstack_$COMPOSE_PROJECT_NAME"} # used by localstack to name main container
 if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
@@ -241,7 +273,6 @@ fi
 IFS="$oIFS"
 unset oIFS
 
-#echo "GDC_RUN_MODE=$GDC_RUN_MODE"
 #echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 #exit
 export HOST_HOME="$HOME"
@@ -462,11 +493,15 @@ if [ "$GDC_RUN_MODE" = "daemon" ]; then
   export COPY_CMD_TO_CLIPBOARD="no"
 fi
 
-echo "GDC_COMPOSE_FILES $GDC_COMPOSE_FILES"
-echo "SHARED_VOLUMES $SHARED_VOLUMES"
+echo "COMPOSE_PROJECT_NAME=$COMPOSE_PROJECT_NAME"
+echo "GDC_RUN_MODE=$GDC_RUN_MODE"
+echo "CUSTOM_PORTS=$CUSTOM_PORTS"
+echo "GDC_COMPOSE_FILES=$GDC_COMPOSE_FILES"
+echo "SHARED_VOLUMES=$SHARED_VOLUMES"
 echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 echo "COPY_CMD_TO_CLIPBOARD=$COPY_CMD_TO_CLIPBOARD"
 
+exit ########### DEBUG #############
 
 if [ "$GDC_RUN_MODE" = "stop" ]; then
   $COMPOSE_BIN $COMPOSE_FILES down
