@@ -66,6 +66,11 @@ if [ -n "$PULUMI_VERSION" ]; then
     pulumi plugin install resource mysql
 fi
 
+if [[ -n "$PROXY_URL" && "$PROXY_AUTO_EXPORT_ENV" = "yes" ]]; then
+  export HTTP_PROXY=$PROXY_URL
+  export HTTPS_PROXY=$PROXY_URL
+fi
+
 
 #if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
 #  if [ -z "$LS_MAIN_CONTAINER_NAME" ]; then

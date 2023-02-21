@@ -223,3 +223,9 @@ fi
 if [ "$CHECK_UPDATES" = "yes" ]; then
   /root/bin-extra/check-gdc-update.sh
 fi
+
+if [[ -n "$PROXY_URL" && "$PROXY_AUTO_EXPORT_ENV" = "yes" ]]; then
+  export HTTP_PROXY=$PROXY_URL
+  export HTTPS_PROXY=$PROXY_URL
+fi
+

@@ -156,8 +156,15 @@ These options control what packages / functionality are built into the container
 * HOST_CUSTOM_MOUNT=<not set> - used to mount custom dir on host to /host_custom_mount in container.
 * NO_DEVNET_RM=<not set> # if set to yes, GDC will not remove the DEVNET.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
-* STARTUP_MSG=<not set> - dispays this message after container has started and init script is complete.
-* COPY_CMD_TO_CLIPBOARD=yes - copy gdc shell launch command to clipboard
+* STARTUP_MSG=<not set> - displays this message after container has started and init script is complete.
+* COPY_CMD_TO_CLIPBOARD=yes - copy gdc shell launch command to clipboard. 
+* USE_PROXY_HOST=no - can be no/proxy/dump/web.
+* PROXY_VERSION=latest - version of proxy image to start.
+* PROXY_CONTAINER_NAME=proxy - name of proxy container.
+* PROXY_HOST_PORT=8080 - host proxy port.
+* PROXY_WEB_HOST_PORT=8081 - host port when running in web mode.
+* PROXY_VOLUME_DIR=/tmp/mitproxy - where to persist cert files.
+* PROXY_AUTO_EXPORT_ENV=no  # auto export HTTP_PROXY and HTTPS_PROXY set to PROXY_URL. PROXY_URL is auto set when USE_PROXY_HOST != no
 
 # Extra environment vars available in dev container
 * HOST_PROJECT_PATH - Absolute path to mounted workspace on host. Can be used to map /workspace paths to host paths.
@@ -168,10 +175,11 @@ These options control what packages / functionality are built into the container
 * GDC_CONTAINER_NAME - name of GDC container running in docker.
 * GDC_COMPOSE_FILES - contains list of all compose files in use to run GDC.
 * AUTH0_DOMAIN - generated using a combination of USE_AUTH0,USE_AUTH0_HOST,AUTH0_HOST_PORT,AUTH0_CONTAINER_NAME. 
-* SHARED_VOLUMES - list of volumes shared between all GDC's.
+* SHARED_VOLUMES - list of volumes shared between all GDCs.
 * CUSTOM_PORTS - list of custom ports forwards from host to container.
 * GDC_DIR - contains host location of GDC folder. 
 * DEV_CONTAINER - set to current dev container version. You can also use this to detect if you are running in a dev container.
+* PROXY_URL - url of proxy server for use with http proxy related configs
 
 # To pass custom environment variables to the dev container prefix variable name with GDC_ENV_
 For example, to set a custom environment variable inside the dev container like MY_VAR="MY VALUE". Execute something like the following  
