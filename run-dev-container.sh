@@ -312,6 +312,9 @@ fi
 
 # this will start localstack container
 if [ -n "$LS_VERSION" ]; then
+  if [ "$LS_VERSION" = "latest" ]; then
+    docker pull "$LS_IMAGE"
+  fi
   export USE_LOCALSTACK=yes
   if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
     echo "Adding compose layer dc-ls-host.yml"
