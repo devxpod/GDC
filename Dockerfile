@@ -38,7 +38,7 @@ RUN /bin/bash -c 'if [ -n "${PYTHON_VERSION}" ] ; then \
     apt-get install -fy python3-dev python3-openssl && \
     export PYENV_ROOT=/usr/local/pyenv && \
     curl https://pyenv.run | bash && \
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"; \
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH" && \
     eval "$(pyenv init -)" && \
     eval "$(pyenv virtualenv-init -)" && \
     pyenv install -v $PYTHON_VERSION && \
