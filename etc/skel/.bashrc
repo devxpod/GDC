@@ -182,11 +182,11 @@ fi
 
 if [ "$USE_LOCALSTACK" = "yes" ]; then
   if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
-    export LOCALSTACK_HOST=host.docker.internal:4566/
+    export LOCALSTACK_HOST=host.docker.internal:4566
     alias awsl="aws --no-sign-request --endpoint-url http://$LOCALSTACK_HOST"
   else
-    alias awsl="aws --endpoint-url http://$LS_MAIN_CONTAINER_NAME:4566/"
-    export LOCALSTACK_HOST=localstack:4566/
+    alias awsl="aws --endpoint-url http://$LS_MAIN_CONTAINER_NAME:4566"
+    export LOCALSTACK_HOST=localstack:4566
   fi
 fi
 
