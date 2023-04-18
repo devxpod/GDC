@@ -105,13 +105,13 @@ These options control what packages / functionality are built into the container
 * USE_HOST_HOME=yes - mounts users home directory into container under /root/host-home. Required by some other options.
 * USE_HOME_BIN=no - copy bin folder from host home directory if it exists. Enables USE_HOST_HOME.
 * PULUMI_VERSION=latest - a version or "latest" must be specified for Pulumi to be installed.
-* PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1
+* PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2
 * USE_DOT_NET=no - installs .NET SDK v6.x
 * USE_JAVA=no - installs headless openjdk v11.x.
-* USE_PRECOMMIT=yes - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
-* PYTHON_VERSION=3.10.5 - installs Python v3.10.5.
+* PYTHON_VERSION=3.10.10 - installs Python v3.10.10.
+* USE_PRECOMMIT=no - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
 * USE_AWS=yes - installs the latest AWS CLI, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
-* AWS_VERSION=2.9.7 - installs specified AWS cli version.
+* AWS_VERSION=2.11.13 - installs specified AWS cli version.
 * USE_AWS_HOME=yes - copies ~/.aws folder from host if exists to container /root/.aws. Enables USE_HOST_HOME.
 * USE_BITWARDEN=yes - installs Bitwarden cli and enables NODE_VERSION=18 if NODE_VERSION is not already configured.
 * PERSIST_BITWARDEN_SESSION=no - persist bitwarden session to /root/persisted volume and autoload it in subsequent logins. Reduces need to enter master password, but is less secure.
