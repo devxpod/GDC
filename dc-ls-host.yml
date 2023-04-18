@@ -32,10 +32,12 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME-localstack}
       - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-host.docker.internal}
+      - LOCALSTACK_HOST=${HOSTNAME_EXTERNAL-host.docker.internal}
       # enable IAM checks. Only takes action if IAM_SOFT_MODE=0
       - ENFORCE_IAM=${LS_ENFORCE_IAM-1}
       # only check IAM do not enforce it
       - IAM_SOFT_MODE=${LS_IAM_SOFT_MODE-1}
+      - OPENSEARCH_ENDPOINT_STRATEGY=port
       # - USE_SSL=false
       # - DNS_ADDRESS=127.0.0.11
       # - HOSTNAME=localstack
