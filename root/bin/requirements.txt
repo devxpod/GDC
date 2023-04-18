@@ -1,3 +1,4 @@
 boto3
 click
+awscliv2
 awscli-local
