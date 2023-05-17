@@ -57,7 +57,7 @@ routerAuth.get('/authorize', async (req: Request, res: Response) => {
         username: process.env.AUTH0_DEFAULT_USER || 'user1',
         password: process.env.AUTH0_DEFAULT_PASSWORD || 'user1',
         redirect: redirect_uri,
-        state
+        state: encodeURIComponent(state)
     });
 });
 
