@@ -130,6 +130,9 @@ fi
 TITLE="GDC: $COMPOSE_PROJECT_NAME shell"
 echo -n -e "$title_start$TITLE$title_end"
 
+docker --version
+docker-compose --version
+
 if [ -n "$PHP_VERSION" ]; then
   echo "php version $(php --version)"
 fi
