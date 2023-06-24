@@ -88,31 +88,40 @@ WORKDIR /usr/local/data
 
 ARG DOCKER_VERSION
 # install docker
-RUN  /bin/bash -c 'set -ex && \
-    ARCH=`uname -m` && \
-    if [ "$ARCH" = "x86_64" ]; then \
-       echo "docker x86_64" && \
-       wget -q https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz  -O docker.tgz && \
-       tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
-    else \
-       echo "docker assuming ARM" && \
-       wget -q https://download.docker.com/linux/static/stable/aarch64/docker-${DOCKER_VERSION}.tgz  -O docker.tgz && \
-       tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
-    fi'
+RUN install -m 0755 -d /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+RUN chmod a+r /etc/apt/keyrings/docker.gpg
+RUN echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update
+RUN apt-get install -fy --fix-missing  docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+#RUN  /bin/bash -c 'set -ex && \
+#    ARCH=`uname -m` && \
+#    if [ "$ARCH" = "x86_64" ]; then \
+#       echo "docker x86_64" && \
+#       wget -q https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz  -O docker.tgz && \
+#       tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
+#    else \
+#       echo "docker assuming ARM" && \
+#       wget -q https://download.docker.com/linux/static/stable/aarch64/docker-${DOCKER_VERSION}.tgz  -O docker.tgz && \
+#       tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
+#    fi'
 
 ARG DOCKER_COMPOSE_VERSION
 # Install docker-compose
-RUN  /bin/bash -c 'set -ex && \
-    ARCH=`uname -m` && \
-    PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
-    if [ "$ARCH" = "x86_64" ]; then \
-       echo "docker-compose x86_64" && \
-       curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
-    else \
-       echo "docker-compose assuming ARM" && \
-       curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-aarch64" -o /usr/local/bin/docker-compose;\
-    fi; \
-    chmod +x /usr/local/bin/docker-compose;'
+#RUN  /bin/bash -c 'set -ex && \
+#    ARCH=`uname -m` && \
+#    PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
+#    if [ "$ARCH" = "x86_64" ]; then \
+#       echo "docker-compose x86_64" && \
+#       curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
+#    else \
+#       echo "docker-compose assuming ARM" && \
+#       curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-aarch64" -o /usr/local/bin/docker-compose;\
+#    fi; \
+#    chmod +x /usr/local/bin/docker-compose;'
 
 # Install websocat
 RUN  /bin/bash -c 'set -ex && \
