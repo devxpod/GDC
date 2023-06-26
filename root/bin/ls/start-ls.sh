@@ -51,7 +51,10 @@ if [ "$USE_LOCALSTACK_PERSISTENCE" = "yes" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-persist.yml"
 fi
 
+if [ -z "$COMPOSE_BIN" ]; then
+  COMPOSE_BIN="docker compose"
+fi
 
-docker-compose $COMPOSE_FILES up -d --build --force-recreate
+$COMPOSE_BIN $COMPOSE_FILES up -d --build --force-recreate
 
 sleep 5

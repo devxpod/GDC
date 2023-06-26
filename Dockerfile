@@ -86,7 +86,7 @@ fi'
 RUN mkdir -p /usr/local/data
 WORKDIR /usr/local/data
 
-ARG DOCKER_VERSION
+#ARG DOCKER_VERSION
 # install docker
 RUN install -m 0755 -d /etc/apt/keyrings
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -109,7 +109,7 @@ RUN apt-get install -fy --fix-missing  docker-ce docker-ce-cli containerd.io doc
 #       tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
 #    fi'
 
-ARG DOCKER_COMPOSE_VERSION
+#ARG DOCKER_COMPOSE_VERSION
 # Install docker-compose
 #RUN  /bin/bash -c 'set -ex && \
 #    ARCH=`uname -m` && \

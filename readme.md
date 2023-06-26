@@ -98,7 +98,7 @@ These options control what packages / functionality are built into the container
 * GDC_NAME=<not set> - PROJECT_NAME will be set to this if no command line argument is specified for name
 * PROJECT_NAME=<set to 1st command line parameter when run-dev-container.sh is invoked> - used to suffix DEVNET_NAME, LOCALSTACK_VOLUME_DIR, DEV_CONTAINER_NAME.
 * DEV_CONTAINER_NAME=dev-1 - sets the dev container name and is prepended with PROJECT_NAME.
-* COMPOSE_BIN=docker-compose - sets method of execution for compose. Should be set to ether "docker compose" or "docker-compose"
+* COMPOSE_BIN="docker compose" - sets method of execution for compose. Should be set to ether "docker compose" or "docker-compose"
 * ROOT_PW=ContainersRule - sets root password in container.
 * CHECK_UPDATES=yes - check for GDC updates on each login.
 * USE_WORKSPACE=yes - mounts folder from host into /workspace folder in container. Setting this option to "no" is useful if you only want to use tools inside the container and not interact with a project.    
@@ -139,8 +139,6 @@ These options control what packages / functionality are built into the container
 * PORT_FWD0 through PORT_FWD9=<not set> - allows up to 10 custom ports to forwards to specified in docker compose format.
 * EXTRA_PACKAGES=<not set> - if set should be a quoted space separated list of ubuntu:latest packages names you want installed.
 * NO_SSH_AGENT=<any value> - set this to any value to disable any attempt to mount SSH agent socket inside dev container.
-* DOCKER_VERSION=20.10.9 - install docker version inside container.
-* DOCKER_COMPOSE_VERSION=2.10.2 - install docker-compose version inside container.
 * DEVNET_NAME=<auto set to devnet_PROJECT_NAME> - name of gdc dev network that all containers will be attached to.
 * DEVNET_SUBNET=<not set> - cidr notation subnet.
 * DEVNET_GATEWAY=<not set> - gateway ip inside DEVNET_SUBNET.

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 if [ -z "$COMPOSE_BIN" ]; then
-  COMPOSE_BIN=docker-compose
+  COMPOSE_BIN="docker compose"
 fi
 echo "Using compose bin $COMPOSE_BIN"
+export COMPOSE_BIN
 
 # make sure windows git bash does not alter paths
 export MSYS_NO_PATHCONV=1
