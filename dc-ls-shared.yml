@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  localstack:
+    volumes:
+      - shared:/shared # persisted and shared between stacks / containers
+
+volumes:
+  shared: # this volume is persisted and shared between all stacks
+    name: shared
+    external: true

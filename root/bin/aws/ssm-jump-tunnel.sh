@@ -28,6 +28,9 @@ fi
 instance_id=$1
 shift
 region=$1
+if [[ $region =~ [a-zA-Z]$ ]]; then
+  region="${region%?}"
+fi
 shift
 local_port=$1
 shift

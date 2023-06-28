@@ -330,6 +330,9 @@ if [ -n "$LS_VERSION" ]; then
   if [ "$USE_LOCALSTACK_PERSISTENCE" = "yes" ]; then
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-persist.yml"
   fi
+  if [ "$USE_LOCALSTACK_SHARED" = "yes" ]; then
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-shared.yml"
+  fi
 fi
 
 # mount host ls volume dir in container

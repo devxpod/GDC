@@ -124,6 +124,7 @@ These options control what packages / functionality are built into the container
 * LS_IMAGE=localstack/localstack - if LOCALSTACK_API_KEY is specified then defaults to localstack/localstack-pro. Can override with custom image location. Still uses LS_VERSION to create final image location.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
 * USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set.
+* USE_LOCALSTACK_SHARED=no - mount gdc shared volume in LS container under /shared
 * LOCALSTACK_HOST_DNS_PORT=53 - when LocalStack is running in host mode forward this port from host to localstack. Set to blank string to disable localstack DNS forward.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
