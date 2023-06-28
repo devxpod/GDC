@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USAGE=$(cat <<-END
-./ssm-jump-tunnel.sh [EC2 Bastion instance id] [region] [local port] [remote host] [remote port] [gdc port]
+./ssm-jump-tunnel.sh [EC2 Bastion instance id] [region] [local port] [remote host] [remote port]
    Script to create an SSH tunnel through a private EC2 instance to another private resource port.
    For example:
      - your machine
@@ -12,7 +12,7 @@ USAGE=$(cat <<-END
 END
 )
 
-if [[ $# -lt 5 ]]; then
+if [[ $# -ne 5 ]]; then
   echo "$USAGE" >&2
   exit 1
 fi
@@ -35,13 +35,11 @@ remote_host=$1
 shift
 remote_port=$1
 shift
-gdc_port=$1
-shift
 
 echo "Starting SSM tunnel to:  $remote_host:$remote_port with local port $local_port"
 echo "Press ^C to close port forward."
 
-if [ -z "$gdc_port" ]; then
+if [ -z "$DEV_CONTAINER" ]; then
   echo "The connection is not fully established until you see a message containing \"Waiting for connections...\""
   aws ssm start-session \
     --output text \
@@ -55,7 +53,7 @@ if [ -z "$gdc_port" ]; then
   fi
   exit $ret
 else
-  echo "socat exposing localhost:$local_port to all GDC interfaces...."
+  echo "socat exposing localhost:$local_port to GDC eth0...."
   aws ssm start-session \
     --output text \
     --region "$region" \
@@ -64,5 +62,5 @@ else
     --parameters host="$remote_host",portNumber="$remote_port",localPortNumber="$local_port" &>/dev/null &
 
   # if we are running in a dev container listen on all interface so port can be forwarded to host if desired
-  socat "tcp-l:$gdc_port",fork,reuseaddr "tcp:0.0.0.0:$local_port"
+  socat "tcp-l:$local_port",fork,reuseaddr,bind="$(ifconfig | grep inet | head -n1 | cut -dt -f2 | cut -d' ' -f2)" "tcp:127.0.0.1:$local_port"
 fi
