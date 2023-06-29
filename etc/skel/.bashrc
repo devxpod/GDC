@@ -140,6 +140,8 @@ fi
 
 if [ "$USE_DOT_NET" = "yes" ]; then
   echo ".NET version $(dotnet --list-sdks)"
+  export DOTNET_ROOT=/usr/local/dotnet
+  export PATH=${PATH}:${DOTNET_ROOT}
 fi
 
 if [ -n "$GOLANG_VERSION" ]; then
