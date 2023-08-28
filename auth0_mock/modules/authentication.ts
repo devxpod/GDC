@@ -33,4 +33,4 @@ class Authentication {
 
 }
 
-export const Auth = new Authentication()
+export const Auth = new Authentication();
