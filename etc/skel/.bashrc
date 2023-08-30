@@ -186,6 +186,12 @@ if [ "$USE_AWS" = "yes" ]; then
   echo "aws cli version $(aws --version)"
 fi
 
+if [ "$USE_CDK" = "yes" ]; then
+    echo "cdk version $(cdk --version)"
+    echo "terraform version $(terraform -version)"
+    echo "cdktf version $(cdktf --version)"
+fi
+
 if [ "$USE_LOCALSTACK" = "yes" ]; then
   if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
     export LOCALSTACK_HOST=host.docker.internal:4566

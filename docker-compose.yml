@@ -20,6 +20,7 @@ services:
         - USE_AWS # install latest aws cli, ssm plugin, and ecr helper
         - NODE_VERSION # install this version of node. blank for none
         - USE_BITWARDEN # enable bitwarden workflow helpers. will enable NODE_VERSION=18 if not set
+        - USE_CDK # install aws cdk, terraform and cdk for terraform
         - USE_JAVA # install ubuntu:latest openjdk packages
 #        - DOCKER_VERSION # install docker version inside container
 #        - DOCKER_COMPOSE_VERSION # install docker-compose version inside container
@@ -60,6 +61,7 @@ services:
       - LOCALSTACK_API_KEY # required if you want to use localstack pro
       - LOCALSTACK_HOST_DNS_PORT # forward this port from host to localstack for DNS
       - PERSIST_BITWARDEN_SESSION # persist unlocked vault creds between container sessions
+      - USE_CDK # install cdk if set to yes
       - USE_AWS_HOME # copy .aws folder from host home if exists and USE_HOST_HOME=yes
       - AWS_IDENTITY_ACCOUNT # used by AWS assume-role.sh script
       - GIT_EMAIL # required for GIT if you don't have a .gitconfig in your home directory
@@ -101,7 +103,7 @@ services:
       - PROXY_VOLUME_DIR # where to persist cert files. defaults to /tmp/mitproxy
       - PROXY_URL # http(s) proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.8.9 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.9.0 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

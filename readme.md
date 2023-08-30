@@ -108,13 +108,14 @@ These options control what packages / functionality are built into the container
 * PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2
 * USE_DOT_NET=no - installs .NET SDK v6.x
 * USE_JAVA=no - installs headless openjdk v11.x.
-* PYTHON_VERSION=3.10.10 - installs Python v3.10.10.
+* PYTHON_VERSION=3.11 - installs Python v3.11, which is highest aws lambda supported python runtime
 * USE_PRECOMMIT=no - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
-* USE_AWS=yes - installs the latest AWS CLI, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
-* AWS_VERSION=2.11.13 - installs specified AWS cli version.
+* USE_AWS=yes - installs AWS CLI version specified by AWS_VERSION, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
+* AWS_VERSION=latest - installs specified AWS cli version if USE_AWS=yes. Defaults to latest.
 * USE_AWS_HOME=yes - copies ~/.aws folder from host if exists to container /root/.aws. Enables USE_HOST_HOME.
 * USE_BITWARDEN=yes - installs Bitwarden cli and enables NODE_VERSION=18 if NODE_VERSION is not already configured.
 * PERSIST_BITWARDEN_SESSION=no - persist bitwarden session to /root/persisted volume and autoload it in subsequent logins. Reduces need to enter master password, but is less secure.
+* USE_CDK=USE_AWS - installs aws cdk, terraform, cdk for terraform and enables NODE_VERSION=18 if NODE_VERSION is not already configured. Defaults to value of USE_AWS.
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * USE_LOCALSTACK_PERSISTENCE=no - toggle persistent storage for LS defaults to persistence disabled.

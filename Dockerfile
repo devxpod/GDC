@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-# only effect build time and and makes it so we dont have to specify it every apt install
+# only effects build time and and makes it so we dont have to specify it every apt install
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
@@ -7,20 +7,28 @@ ENV TZ=Etc/UTC
 COPY /etc/dpkg/dpkg.conf.d/01_nodoc /etc/dpkg/dpkg.conf.d/01_nodoc
 
 # update system
-RUN apt-get update -y --fix-missing --no-install-recommends && apt-get -y --fix-missing --no-install-recommends upgrade
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get update -y --fix-missing --no-install-recommends && apt-get -y --fix-missing --no-install-recommends upgrade
 # install core
-RUN apt-get install -fy --fix-missing --no-install-recommends locales apt-transport-https \
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get install -fy --fix-missing --no-install-recommends locales apt-transport-https \
     software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff file bash-completion \
     inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat socat ca-certificates gnupg2 git \
     postgresql-client mysql-client
 
 # install dev
-RUN apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
     libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm libncurses5-dev liblzma-dev libpq-dev libcurl4-openssl-dev
 
 # install editors and any extra packages user has requested
 ARG EXTRA_PACKAGES
-RUN apt-get install -fy --fix-missing --no-install-recommends libncurses5 joe nano vim $EXTRA_PACKAGES
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get install -fy --fix-missing --no-install-recommends libncurses5 joe nano vim $EXTRA_PACKAGES
 
 # update default editor
 RUN update-alternatives --install /usr/bin/editor editor /usr/bin/vim 80 && \
@@ -182,6 +190,17 @@ RUN  /bin/bash -c 'if [ "${USE_BITWARDEN}" = "yes" ] ; then \
   . $NVM_DIR/nvm.sh && \
   npm -g i @bitwarden/cli; \
 fi'
+
+ARG USE_CDK
+# cdk is installed as global node cli module
+RUN  /bin/bash -c 'if [ "${USE_CDK}" = "yes" ] ; then \
+  wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor > /usr/share/keyrings/hashicorp-archive-keyring.gpg; \
+  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list; \
+  apt-get update && apt-get install terraform; \
+  . $NVM_DIR/nvm.sh && \
+  npm -g i aws-cdk cdktf-cli@latest; \
+fi'
+
 
 # if pulumi version is set then install pulumi
 ARG PULUMI_VERSION
