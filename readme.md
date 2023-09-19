@@ -387,6 +387,7 @@ Example:  SSH_SERVER_PORT=1022  would forward port 1022 on the host to port 22 i
 * export-aws-session.sh - Exports AWS_* and PULUMI_* from environment to a file named aws_session in current folder.
 * check-ecs-exec.sh - Checks for needed configs required to shell into ecs containers
 * awslocal - requires python be enabled
+* terraform-local - requires python be enabled
 
 ### Aliases
 * unset-aws - Unsets AWS_* and PULUMI_* from environment.
