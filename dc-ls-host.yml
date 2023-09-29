@@ -19,7 +19,9 @@ services:
       - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY-}
       - EXTRA_CORS_ALLOWED_ORIGINS=http://host.docker.internal:4566
       - DISABLE_CORS_CHECKS=1
+      - PROVIDER_OVERRIDE_S3=v3 # new LS native s3
       - DEBUG=${DEBUG-}
+#      - LS_LOG=trace
       # docker or docker-reuse
       - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}  # this is deprecated in V2 and will be removed.
       # remove idle lambdas
@@ -31,7 +33,7 @@ services:
       - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY-}
       - DOCKER_HOST=unix:///var/run/docker.sock
       - MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME-localstack}
-      - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-host.docker.internal}
+      # - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-host.docker.internal} # deprecated in favor of LOCALSTACK_HOST
       - LOCALSTACK_HOST=${HOSTNAME_EXTERNAL-host.docker.internal}
       # enable IAM checks. Only takes action if IAM_SOFT_MODE=0
       - ENFORCE_IAM=${LS_ENFORCE_IAM-1}
