@@ -23,7 +23,7 @@ services:
       - DEBUG=${DEBUG-}
 #      - LS_LOG=trace
       # docker or docker-reuse
-      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}  # this is deprecated in V2 and will be removed.
+#      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}  # this is deprecated in V2 and will be removed.
       # remove idle lambdas
       - LAMBDA_REMOVE_CONTAINERS=1
       # how long to keep idle lambdas around

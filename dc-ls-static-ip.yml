@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  localstack:
+    networks:
+      devnet:
+        ipv4_address: ${LOCALSTACK_STATIC_IP}

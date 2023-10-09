@@ -95,7 +95,9 @@ Running with no arguments or `-h` as first arguments will display help.
 These options control what packages / functionality are built into the container.  
 `USE_` vars are **yes / no** values for toggling related options.
 
-* GDC_NAME=<not set> - PROJECT_NAME will be set to this if no command line argument is specified for name
+* GDC_NAME=<not set> - PROJECT_NAME will be set to this if no command line argument is specified for name.
+* GDC_DNS_PRI_IP=8.8.8.8 - sets primary dns for GDC container. USE_LOCALSTACK_DNS=yes will override this.
+* GDC_DNS_SEC_IP=8.8.4.4 - sets primary dns for GDC container. USE_LOCALSTACK_DNS=yes will override this.
 * PROJECT_NAME=<set to 1st command line parameter when run-dev-container.sh is invoked> - used to suffix DEVNET_NAME, LOCALSTACK_VOLUME_DIR, DEV_CONTAINER_NAME.
 * DEV_CONTAINER_NAME=dev-1 - sets the dev container name and is prepended with PROJECT_NAME.
 * COMPOSE_BIN="docker compose" - sets method of execution for compose. Should be set to ether "docker compose" or "docker-compose"
@@ -105,8 +107,8 @@ These options control what packages / functionality are built into the container
 * USE_HOST_HOME=yes - mounts users home directory into container under /root/host-home. Required by some other options.
 * USE_HOME_BIN=no - copy bin folder from host home directory if it exists. Enables USE_HOST_HOME.
 * PULUMI_VERSION=latest - a version or "latest" must be specified for Pulumi to be installed.
-* PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2
-* USE_DOT_NET=no - installs .NET SDK v6.x
+* PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2.
+* USE_DOT_NET=no - installs .NET SDK v6.x.
 * USE_JAVA=no - installs headless openjdk v11.x.
 * PYTHON_VERSION=3.11 - installs Python v3.11, which is highest aws lambda supported python runtime
 * USE_PRECOMMIT=no - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
@@ -125,7 +127,9 @@ These options control what packages / functionality are built into the container
 * LS_IMAGE=localstack/localstack - if LOCALSTACK_API_KEY is specified then defaults to localstack/localstack-pro. Can override with custom image location. Still uses LS_VERSION to create final image location.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
 * USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set.
-* USE_LOCALSTACK_SHARED=no - mount gdc shared volume in LS container under /shared
+* USE_LOCALSTACK_SHARED=no - mount gdc shared volume in LS container under /shared.
+* USE_LOCALSTACK_DNS=no - assigns static ip to LS container and sets GDC to use its dns.
+* LOCALSTACK_STATIC_IP=<not set> - sets a static ip for LS container if set. Will be auto set if not specified and USE_LOCALSTACK_DNS=yes.
 * LOCALSTACK_HOST_DNS_PORT=53 - when LocalStack is running in host mode forward this port from host to localstack. Set to blank string to disable localstack DNS forward.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.

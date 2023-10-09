@@ -14,7 +14,7 @@ services:
       - PROVIDER_OVERRIDE_S3=v3 # new LS native s3
       - DEBUG=${DEBUG-}
 #      - LS_LOG=trace
-      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse} # this is deprecated in V2 and will be removed
+#      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse} # this is deprecated in V2 and will be removed
       # Tell Localstack to put Lambda containers on the same shared network
       - LAMBDA_DOCKER_NETWORK=${DEVNET_NAME-devnet}
       - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY-}
@@ -36,3 +36,4 @@ networks:
   devnet:
     name: ${DEVNET_NAME-devnet}
     external: true
+

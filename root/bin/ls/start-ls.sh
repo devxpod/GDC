@@ -44,6 +44,9 @@ else
   COMPOSE_FILES="-f dc-ls-host.yml"
 fi
 
+if [ -n "$LOCALSTACK_STATIC_IP" ]; then
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-static-ip.yml"
+fi
 if [ -n "$LOCALSTACK_HOST_DNS_PORT" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host-dns.yml"
 fi

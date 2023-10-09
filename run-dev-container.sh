@@ -79,6 +79,21 @@ if [ -r "./.env-gdc-local" ]; then
   source ./.env-gdc-local
 fi
 
+if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
+  if [[ -n "$DEVNET_SUBNET" && -z "$LOCALSTACK_STATIC_IP" ]]; then
+    echo "ERROR: When USE_LOCALSTACK_DNS=yes and DEVNET_SUBNET is specified, you must also specify LOCALSTACK_STATIC_IP"
+    exit 1
+  fi
+  if [ -z "$DEVNET_SUBNET" ]; then
+    export DEVNET_SUBNET="172.20.0.0/16"
+    export LOCALSTACK_STATIC_IP=172.20.0.10
+  fi
+  export GDC_DNS_PRI_IP="$LOCALSTACK_STATIC_IP"
+fi
+
+export DEVNET_SUBNET
+export LOCALSTACK_STATIC_IP
+
 CACHE_VOLUMES_REQUIRED="pulumi pkg_cache"
 SHARED_VOLUMES_REQUIRED="shared home_config"
 
@@ -319,6 +334,10 @@ if [ -n "$LS_VERSION" ]; then
     docker pull "$LS_IMAGE"
   fi
   export USE_LOCALSTACK=yes
+
+  if [ -n "$LOCALSTACK_STATIC_IP" ]; then
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-static-ip.yml"
+  fi
   if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
     echo "Adding compose layer dc-ls-host.yml"
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host.yml"
