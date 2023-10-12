@@ -17,6 +17,7 @@ services:
     environment:
       # needed for LS Pro
       - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY-}
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN-}
       - EXTRA_CORS_ALLOWED_ORIGINS=http://host.docker.internal:4566
       - DISABLE_CORS_CHECKS=1
       - PROVIDER_OVERRIDE_S3=v3 # new LS native s3

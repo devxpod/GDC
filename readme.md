@@ -79,6 +79,7 @@ run the script `run-dev-container.sh` in the root of this repository.
 Running with no arguments or `-h` as first arguments will display help.
 
 `run-dev-container.sh [STACK_NAME] [GDC_RUN_MODE | PORT_FWD | GDC_ENTRYPOINT]`
+
 * your current working directory will be mounted in container on `/workspace`
 * STACK_NAME if not set via GDC_NAME env var or as first arg will be generated based on current folder.  It's used to name the stack in case you want to run more than one.
 * GDC_RUN_MODE optional, valid values are start, stop, daemon, clean. **start** is the default.
@@ -90,6 +91,35 @@ Running with no arguments or `-h` as first arguments will display help.
 * GDC_ENTRYPOINT optional, runs a command in the GDC."
 * * the docker compose exit code will mirror the return code of the entrypoint command."
 * * if the entrypoint command returns a non-zero exit code even if GDC_RUN_MODE=daemon then compose will exit."
+
+## Example Project Configuration
+This configuration enables shared DNS between LocalStack and the Dev Container.
+The DevContainer will use LocalStack's DNS service.
+
+Create a file called `.env-gdc` in the root of your project direct. Put the following in it:
+```shell
+export AWS_REGION=us-east-1
+export GDC_NAME=lappc
+export LS_VERSION=latest
+export LS_IMAGE=localstack/localstack-pro # use localstack/localstack   if you are using LocalStack Community
+export USE_LOCALSTACK=yes
+export USE_LOCALSTACK_HOST=yes
+export USE_LOCALSTACK_PERSISTENCE=no
+export USE_LOCALSTACK_DNS=yes
+export LOCALSTACK_HOST_DNS_PORT="" # this makes LocalStack not map port 53 the host
+export USE_PRECOMMIT=no
+```
+If you're using LocalStack Pro, create a file called `.env-gdc-local` and put your LOCALSTACK_API_KEY or LOCALSTACK_AUTH_TOKEN in it.
+```shell
+# Either Key
+export LOCALSTACK_API_KEY="<your real key>"
+# or
+export LOCALSTACK_AUTH_TOKEN="<your real token>"
+```
+Run your project with GDC
+```shell
+run-dev-container.sh
+```
 
 # Environment Options
 These options control what packages / functionality are built into the container.  
@@ -123,8 +153,9 @@ These options control what packages / functionality are built into the container
 * USE_LOCALSTACK_PERSISTENCE=no - toggle persistent storage for LS defaults to persistence disabled.
 * LOCALSTACK_VOLUME_DIR=$HOST_PROJECT_PATH/ls_volume.
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
+* LOCALSTACK_AUTH_TOKEN=<not set> # (future) only needed for local stack pro.
 * LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
-* LS_IMAGE=localstack/localstack - if LOCALSTACK_API_KEY is specified then defaults to localstack/localstack-pro. Can override with custom image location. Still uses LS_VERSION to create final image location.
+* LS_IMAGE=localstack/localstack - if LOCALSTACK_API_KEY or LOCALSTACK_AUTH_TOKEN is specified then defaults to localstack/localstack-pro. Can override with custom image location. Still uses LS_VERSION to create final image location.
 * LS_VERSION=<not set> - starts a localstack container running specified version.
 * USE_LOCALSTACK_HOST=yes - forwards localstack ports to host if LS_VERSION is set.
 * USE_LOCALSTACK_SHARED=no - mount gdc shared volume in LS container under /shared.

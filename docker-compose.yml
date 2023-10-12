@@ -68,6 +68,7 @@ services:
       - LS_VERSION # starts up localstack with specified version >= 1.x.x.
       - LS_MAIN_CONTAINER_NAME # used by localstack
       - LOCALSTACK_API_KEY # required if you want to use localstack pro
+      - LOCALSTACK_AUTH_TOKEN # future LocalStack Auth token support
       - LOCALSTACK_HOST_DNS_PORT # forward this port from host to localstack for DNS
       - LOCALSTACK_STATIC_IP # set static container ip for LS. Useful for DNS
       - PERSIST_BITWARDEN_SESSION # persist unlocked vault creds between container sessions
