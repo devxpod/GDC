@@ -3,3 +3,4 @@ click
 awscliv2
 awscli-local
 terraform-local
+pipenv
