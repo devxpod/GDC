@@ -477,3 +477,6 @@ Many times only CLEAN=yes is needed, however if the problem persist you can use 
 * /c/tmp/ls_volume*
 
 * start GDC and run  *make reset*
+
+# Contributing
+[Contributing is here](./docs/contributing.md)
