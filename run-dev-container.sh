@@ -3,8 +3,10 @@
 if [ -z "$COMPOSE_BIN" ]; then
   COMPOSE_BIN="docker compose"
 fi
-echo "Using compose bin $COMPOSE_BIN"
+echo "Using compose bin '$COMPOSE_BIN'"
 export COMPOSE_BIN
+
+docker --version
 
 # make sure windows git bash does not alter paths
 export MSYS_NO_PATHCONV=1
@@ -85,8 +87,8 @@ if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
     exit 1
   fi
   if [ -z "$DEVNET_SUBNET" ]; then
-    export DEVNET_SUBNET="172.20.0.0/16"
-    export LOCALSTACK_STATIC_IP=172.20.0.10
+    export DEVNET_SUBNET="172.21.0.0/16"
+    export LOCALSTACK_STATIC_IP=172.21.0.10
   fi
   export GDC_DNS_PRI_IP="$LOCALSTACK_STATIC_IP"
 fi
@@ -312,7 +314,7 @@ fi
 
 # enable mounting of current folder to /workspace in container
 if [ "$USE_WORKSPACE" = "yes" ]; then
-  echo "Adding compose layer workspace mount  dc-host-workspace-dir.yml"
+  echo "Adding compose layer workspace mount dc-host-workspace-dir.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-host-workspace-dir.yml"
 fi
 

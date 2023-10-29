@@ -7,6 +7,7 @@ if [[ "$1" = "--help" || "$1" = "-h" ]]; then
   exit 0
 fi
 
-
 docker rm -f "$LS_MAIN_CONTAINER_NAME"
+docker ps -a --format '{{.Names}}' | grep "^$(echo "$LS_MAIN_CONTAINER_NAME-" | tr "_" "-")" | xargs -I {} docker rm -f {}
+
 sleep 2
