@@ -1,0 +1,6 @@
+version: "3.8"
+
+services:
+  dev:
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/ls_volume"

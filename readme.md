@@ -151,7 +151,7 @@ These options control what packages / functionality are built into the container
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * USE_LOCALSTACK_PERSISTENCE=no - toggle persistent storage for LS defaults to persistence disabled.
-* LOCALSTACK_VOLUME_DIR=$HOST_PROJECT_PATH/ls_volume.
+* LOCALSTACK_VOLUME_DIR=$TEMP/ls_volume.
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
 * LOCALSTACK_AUTH_TOKEN=<not set> # (future) only needed for local stack pro.
 * LS_MAIN_CONTAINER_NAME=localstack_PROJECT_NAME - used by localstack to name main container. Can also be accessed via this name inside containers.
