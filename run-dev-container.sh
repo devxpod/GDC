@@ -360,12 +360,11 @@ fi
 
 # mount host ls volume dir in container
 if [ "$USE_LOCALSTACK" = "yes" ]; then
-  export LOCALSTACK_VOLUME_DIR="$TEMP/ls_volume"
+  export LOCALSTACK_VOLUME_DIR="$HOST_PROJECT_PATH/ls_volume"
   echo "LOCALSTACK_VOLUME_DIR = $LOCALSTACK_VOLUME_DIR"
   if [ ! -r "$LOCALSTACK_VOLUME_DIR" ]; then
     mkdir -p "$LOCALSTACK_VOLUME_DIR"
   fi
-  COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-volume.yml"
 fi
 
 if [ "$USE_AUTH0_HOST" = "yes" ] || [ "$USE_AUTH0" = "yes" ]; then
