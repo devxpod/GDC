@@ -105,7 +105,7 @@ export LS_IMAGE=localstack/localstack-pro # use localstack/localstack   if you a
 export USE_LOCALSTACK=yes
 export USE_LOCALSTACK_HOST=yes
 export USE_LOCALSTACK_PERSISTENCE=no
-export USE_LOCALSTACK_DNS=yes
+export USE_LOCALSTACK_DNS=yes # Configure the dev container to use LocalStack for DNS
 export LOCALSTACK_HOST_DNS_PORT="" # this makes LocalStack not map port 53 the host
 export USE_PRECOMMIT=no
 ```
