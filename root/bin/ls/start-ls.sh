@@ -36,14 +36,11 @@ elif [ "$1" = "internal" ]; then
   IS_HOST="0"
 fi
 
-if [ "$IS_HOST" = "0" ]; then
-  echo "start-ls.sh using container mode"
-  COMPOSE_FILES="-f dc-ls.yml"
-else
+COMPOSE_FILES="-f dc-ls.yml"
+if [ "$IS_HOST" = "1" ]; then
   echo "start-ls.sh using host mode"
-  COMPOSE_FILES="-f dc-ls-host.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host.yml"
 fi
-
 if [ -n "$LOCALSTACK_STATIC_IP" ]; then
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-static-ip.yml"
 fi
