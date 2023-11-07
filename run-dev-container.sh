@@ -336,6 +336,8 @@ if [ -n "$LS_VERSION" ]; then
     docker pull "$LS_IMAGE"
   fi
   export USE_LOCALSTACK=yes
+  echo "Adding compose layer dc-ls.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-ls.yml"
 
   if [ -n "$LOCALSTACK_STATIC_IP" ]; then
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-static-ip.yml"
@@ -346,9 +348,6 @@ if [ -n "$LS_VERSION" ]; then
     if [ -n "$LOCALSTACK_HOST_DNS_PORT" ]; then
       COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-host-dns.yml"
     fi
-  else
-    echo "Adding compose layer dc-ls.yml"
-    COMPOSE_FILES="$COMPOSE_FILES -f dc-ls.yml"
   fi
   if [ "$USE_LOCALSTACK_PERSISTENCE" = "yes" ]; then
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-persist.yml"

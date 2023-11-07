@@ -2,12 +2,6 @@ version: '3.8'
 
 services:
   localstack:
-    image: "${LS_IMAGE-localstack/localstack}:${LS_VERSION-latest}"
-    container_name: "${LS_MAIN_CONTAINER_NAME-localstack}"
-    stdin_open: true
-    tty: true
-    networks:
-      devnet:
     ports:
       - "4566:4566"            # LocalStack Gateway
       - "4510-4560:4510-4560"  # external services port range
@@ -15,45 +9,4 @@ services:
       - "443:443"              # LocalStack HTTPS Gateway (required for Pro)
       - "4571:4571"            # elasticsearch service
     environment:
-      # needed for LS Pro
-      - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY-}
-      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN-}
-      - EXTRA_CORS_ALLOWED_ORIGINS=http://host.docker.internal:4566
-      - DISABLE_CORS_CHECKS=1
-      - PROVIDER_OVERRIDE_S3=v3 # new LS native s3
-      - DEBUG=${DEBUG-}
-#      - LS_LOG=trace
-      # docker or docker-reuse
-#      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker-reuse}  # this is deprecated in V2 and will be removed.
-      # remove idle lambdas
-      - LAMBDA_REMOVE_CONTAINERS=1
-      # how long to keep idle lambdas around
-      - LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT=15
-      # Tell Localstack to put Lambda containers on the same shared network
-      - LAMBDA_DOCKER_NETWORK=${DEVNET_NAME-devnet}
-      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY-}
-      - DOCKER_HOST=unix:///var/run/docker.sock
-      - MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME-localstack}
-      # - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-host.docker.internal} # deprecated in favor of LOCALSTACK_HOST
       - LOCALSTACK_HOST=${HOSTNAME_EXTERNAL-host.docker.internal}
-      # enable IAM checks. Only takes action if IAM_SOFT_MODE=0
-      - ENFORCE_IAM=${LS_ENFORCE_IAM-1}
-      # only check IAM do not enforce it
-      - IAM_SOFT_MODE=${LS_IAM_SOFT_MODE-1}
-      - OPENSEARCH_ENDPOINT_STRATEGY=port
-      # - USE_SSL=false
-      # - DNS_ADDRESS=127.0.0.11
-      # - HOSTNAME=localstack
-      # - HOSTNAME_EXTERNAL=localstack
-      # - DNS_RESOLVE_IP=169.254.170.3
-      # - DOCKER_BRIDGE_IP=169.254.170.1
-      # - LOCALSTACK_HOSTNAME=host.docker.internal
-      # - CLOUDFRONT_STATIC_PORTS=1
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/var/lib/localstack"
-
-networks:
-  devnet:
-    name: ${DEVNET_NAME-devnet}
-    external: true
