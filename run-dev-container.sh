@@ -102,7 +102,7 @@ if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
     echo "ERROR: When USE_LOCALSTACK_DNS=yes and DEVNET_SUBNET is specified, you must also specify LOCALSTACK_STATIC_IP"
     exit 1
   fi
-  if [ -z "$DEVNET_SUBNET" ]; then
+  if [[ -z "$DEVNET_SUBNET" && -z "$LOCALSTACK_STATIC_IP" ]]; then
     D=$(date)
     OCTET=$(convert_string_to_number "$CI_JOB_TOKEN,$D")
     export DEVNET_SUBNET="172.$OCTET.0.0/16"

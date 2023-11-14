@@ -203,6 +203,8 @@ if [ "$USE_LOCALSTACK" = "yes" ]; then
   if [ -n "$LOCALSTACK_STATIC_IP" ]; then
     echo "Localstack static ip: $LOCALSTACK_STATIC_IP"
   fi
+  echo "GDC PRI DNS IP $GDC_DNS_PRI_IP"
+  echo "GDC SEC DNS IP $GDC_DNS_SEC_IP"
 fi
 
 if [ -n "$PULUMI_VERSION" ]; then
