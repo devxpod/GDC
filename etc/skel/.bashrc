@@ -200,6 +200,9 @@ if [ "$USE_LOCALSTACK" = "yes" ]; then
     alias awsl="aws --endpoint-url http://$LS_MAIN_CONTAINER_NAME:4566"
     export LOCALSTACK_HOST=localstack:4566
   fi
+  if [ -n "$LOCALSTACK_STATIC_IP" ]; then
+    echo "Localstack static ip: $LOCALSTACK_STATIC_IP"
+  fi
 fi
 
 if [ -n "$PULUMI_VERSION" ]; then

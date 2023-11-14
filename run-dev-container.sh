@@ -81,14 +81,32 @@ if [ -r "./.env-gdc-local" ]; then
   source ./.env-gdc-local
 fi
 
+# Function to convert a string to a number in the range 10-200
+convert_string_to_number() {
+    local input_string=$1
+
+    # Compute a simple hash of the string
+    local hash_value=$(echo -n "$input_string" | md5sum | cut -d' ' -f1 | tr -cd '0-9' | cut -c 1-5)
+
+    # Ensure the hash value is treated as base-10
+    local numeric_value=$((10#$hash_value))
+
+    # Scale the hash value to the range 10-200
+    local scaled_value=$((10 + numeric_value % 191))
+
+    echo $scaled_value
+}
+
 if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
   if [[ -n "$DEVNET_SUBNET" && -z "$LOCALSTACK_STATIC_IP" ]]; then
     echo "ERROR: When USE_LOCALSTACK_DNS=yes and DEVNET_SUBNET is specified, you must also specify LOCALSTACK_STATIC_IP"
     exit 1
   fi
   if [ -z "$DEVNET_SUBNET" ]; then
-    export DEVNET_SUBNET="172.21.0.0/16"
-    export LOCALSTACK_STATIC_IP=172.21.0.10
+    D=$(date)
+    OCTET=$(convert_string_to_number "$CI_JOB_TOKEN,$D")
+    export DEVNET_SUBNET="172.$OCTET.0.0/16"
+    export LOCALSTACK_STATIC_IP="172.$OCTET.0.10"
   fi
   export GDC_DNS_PRI_IP="$LOCALSTACK_STATIC_IP"
 fi
@@ -544,7 +562,9 @@ echo "GDC_COMPOSE_FILES=$GDC_COMPOSE_FILES"
 echo "SHARED_VOLUMES=$SHARED_VOLUMES"
 echo "GDC_ENTRYPOINT=$GDC_ENTRYPOINT"
 echo "COPY_CMD_TO_CLIPBOARD=$COPY_CMD_TO_CLIPBOARD"
-
+if [ -n "$LOCALSTACK_STATIC_IP" ]; then
+  echo "LOCALSTACK_STATIC_IP=$LOCALSTACK_STATIC_IP"
+fi
 #exit ########### DEBUG #############
 
 if [ "$GDC_RUN_MODE" = "stop" ]; then
