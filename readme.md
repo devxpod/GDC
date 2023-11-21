@@ -126,8 +126,8 @@ These options control what packages / functionality are built into the container
 `USE_` vars are **yes / no** values for toggling related options.
 
 * GDC_NAME=<not set> - PROJECT_NAME will be set to this if no command line argument is specified for name.
-* GDC_DNS_PRI_IP=8.8.8.8 - sets primary dns for GDC container. USE_LOCALSTACK_DNS=yes will override this.
-* GDC_DNS_SEC_IP=8.8.4.4 - sets primary dns for GDC container. USE_LOCALSTACK_DNS=yes will override this.
+* GDC_DNS_PRI_IP=<not set> - sets primary dns for GDC container. USE_LOCALSTACK_DNS=yes will override this.
+* GDC_DNS_SEC_IP=8.8.4.4 - sets secondary dns for GDC container. This value is only used if GDC_DNS_PRI_IP is set.
 * PROJECT_NAME=<set to 1st command line parameter when run-dev-container.sh is invoked> - used to suffix DEVNET_NAME, LOCALSTACK_VOLUME_DIR, DEV_CONTAINER_NAME.
 * DEV_CONTAINER_NAME=dev-1 - sets the dev container name and is prepended with PROJECT_NAME.
 * COMPOSE_BIN="docker compose" - sets method of execution for compose. Should be set to ether "docker compose" or "docker-compose"

@@ -114,6 +114,7 @@ fi
 export DEVNET_SUBNET
 export LOCALSTACK_STATIC_IP
 
+
 CACHE_VOLUMES_REQUIRED="pulumi pkg_cache"
 SHARED_VOLUMES_REQUIRED="shared home_config"
 
@@ -193,6 +194,12 @@ fi
 
 COMPOSE_FILES="-f docker-compose.yml"
 
+if [ -n "$GDC_DNS_PRI_IP" ]; then
+  echo "Adding compose layer dc-dns.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-dns.yml"
+fi
+
+
 if [ ! -d "./tmp" ]; then
   mkdir ./tmp
 fi
@@ -203,12 +210,11 @@ COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME//[ -]/_}"
 
 export LS_MAIN_CONTAINER_NAME=${LS_MAIN_CONTAINER_NAME:="localstack_$COMPOSE_PROJECT_NAME"} # used by localstack to name main container
 if [ "$USE_LOCALSTACK_HOST" = "yes" ]; then
-  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=host.docker.internal}
+  export LOCALSTACK_HOST=${LOCALSTACK_HOST:=host.docker.internal:4566}
 else
-  export HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL:=$LS_MAIN_CONTAINER_NAME}
+  export LOCALSTACK_HOST=${LOCALSTACK_HOST:=$LS_MAIN_CONTAINER_NAME:4566}
 fi
-export LOCALSTACK_HOSTNAME="$HOSTNAME_EXTERNAL"
-
+export LOCALSTACK_HOSTNAME=$(echo "$LOCALSTACK_HOST" | cut -d: -f1)
 
 export DEVNET_NAME=${DEVNET_NAME:="devnet_$COMPOSE_PROJECT_NAME"}
 if [ -z "$DEVNET_NAME" ]; then

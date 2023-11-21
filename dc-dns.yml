@@ -1,0 +1,7 @@
+version: "3.8"
+
+services:
+  dev:
+    dns:
+      - ${GDC_DNS_PRI_IP}
+      - ${GDC_DNS_SEC_IP}

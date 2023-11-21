@@ -7,9 +7,6 @@ services:
     tty: true
     networks:
       devnet:
-    dns:
-      - ${GDC_DNS_PRI_IP}
-      - ${GDC_DNS_SEC_IP}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     build:
@@ -77,8 +74,8 @@ services:
       - AWS_IDENTITY_ACCOUNT # used by AWS assume-role.sh script
       - GIT_EMAIL # required for GIT if you don't have a .gitconfig in your home directory
       - GIT_NAME # required for GIT if you don't have a .gitconfig in your home directory
-      - HOSTNAME_EXTERNAL # used by localstack
       - LOCALSTACK_HOST # used by localstack
+      - LOCALSTACK_GATEWAY_LISTEN # used by localstack
       - YARN_CACHE_FOLDER=/usr/local/share/.cache/yarn # cache yarn installs
       - PIP_CACHE_DIR=/usr/local/share/.cache/pip # cache pip installs
       - npm_config_cache=/usr/local/share/.cache/npm # case npm installs
@@ -114,7 +111,7 @@ services:
       - PROXY_VOLUME_DIR # where to persist cert files. defaults to /tmp/mitproxy
       - PROXY_URL # http(s) proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.9.66 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.9.7 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
