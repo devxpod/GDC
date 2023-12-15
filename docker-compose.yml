@@ -50,6 +50,8 @@ services:
       - USE_AUTH0_HOST # starts up auth0 mock container and forwards port from host. Use AUTH0_HOST_PORT to change default of 3001
       - AUTH0_HOST_PORT # defaults to 3001 if not specified. only used with USE_AUTH0_HOST
       - AUTH0_DOMAIN # url for hitting auth0 server
+      - AUTH0_ACCESS_TOKEN_EXP # custom token exp for access token auth0 server
+      - AUTH0_ID_TOKEN_EXP # custom token exp for ID token auth0 server
       - AUTH0_CONTAINER_NAME # set name of auth0 container so more than one can be used in parallel
       - AUTH0_LOCAL_USERS_FILE # used to specify location in container for auth0 to mount user override file
       - AUTH0_AUDIENCE # used to override auth0 audience default of app
@@ -111,7 +113,7 @@ services:
       - PROXY_VOLUME_DIR # where to persist cert files. defaults to /tmp/mitproxy
       - PROXY_URL # http(s) proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.9.7 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.9.8 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

@@ -45,12 +45,13 @@ routerApi.post('/oauth/token', checkLogin, async (req: Request, res: Response) =
     console.log({accessTokenClaim});
     res.status(200).send({
         access_token: await JwkWrapper.createToken(accessTokenClaim),
-        expires_in: 86400,
+        expires_in: (JwkWrapper.expirationDurationInMinutesAccessToken * 60),
         id_token: await JwkWrapper.createToken(
             removeNonceIfEmpty(idTokenClaims(client_id))
         ),
         scope: accessTokenClaim.scope,
-        token_type: 'Bearer'
+        token_type: 'Bearer',
+        refresh_token: "refresh_token"
     });
 });
 

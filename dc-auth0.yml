@@ -18,7 +18,8 @@ services:
       AUTH0_AUDIENCE:
       AUTH0_DEFAULT_USER:
       AUTH0_DEFAULT_PASSWORD:
-
+      AUTH0_ACCESS_TOKEN_EXP:
+      AUTH0_ID_TOKEN_EXP:
 
 networks:
   devnet:

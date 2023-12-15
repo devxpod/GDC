@@ -18,7 +18,7 @@ export const idTokenClaims = (aud: string = ''): IIdTokenClaims => {
         sub: tokenDefaults.sub + email,
         aud: [aud] || tokenDefaults.aud,
         iat: JwkWrapper.getIat(),
-        exp: JwkWrapper.getExp(),
+        exp: JwkWrapper.getExp(JwkWrapper.expirationDurationInMinutesIdToken),
         amr: tokenDefaults.amr,
         nonce: JwkWrapper.getNonce()
     };

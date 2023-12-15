@@ -100,6 +100,8 @@ To modify a user go into [user.json](./users.json). From here you can add/remove
 
 *Every user must have a username and a pw*
 
+*If you are adding users & wish to use refresh tokens make sure to add offline_access to scope property*
+
 ### Modify token claims
 
 Claims may be modified from within the *Token_Claims* directory. Claim values can be static or pulled from user file (

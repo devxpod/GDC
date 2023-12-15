@@ -8,7 +8,8 @@ class JWKWrapper {
     private readonly kty: string;
     private readonly size: number;
     private readonly jwkFileName: string;
-    private readonly expirationDurationInMinutes: number;
+    public readonly expirationDurationInMinutesAccessToken: number;
+    public readonly expirationDurationInMinutesIdToken: number;
     private nonce: string;
     private readonly props: any;
     private keyStore: JWK.KeyStore;
@@ -25,7 +26,8 @@ class JWKWrapper {
         this.jwkFileName = jwkFileName;
         this.keyStore = JWK.createKeyStore();
         // 1440 minutes === 24 hours
-        this.expirationDurationInMinutes = 1440;
+        this.expirationDurationInMinutesAccessToken = parseInt(process.env.AUTH0_ACCESS_TOKEN_EXP, 10) || 1440;
+        this.expirationDurationInMinutesIdToken = parseInt(process.env.AUTH0_ID_TOKEN_EXP, 10) || 1440;
         this.nonce = '';
         this.createJwks();
     }
@@ -45,10 +47,13 @@ class JWKWrapper {
     }
 
     // generate & return exp value
-    getExp(): number {
-        return Math.floor(
-            (Date.now() + this.expirationDurationInMinutes * 60 * 1000) / 1000
+    getExp(durationInMinutes: number): number {
+        const res= Math.floor(
+            (Date.now() + durationInMinutes * 60 * 1000) / 1000
         );
+        console.log(`RES EXP ${res}`);
+        console.log(`expirationDurationInMinutes ${durationInMinutes}`);
+        return res
     }
 
     // Create key set and store on local file system
