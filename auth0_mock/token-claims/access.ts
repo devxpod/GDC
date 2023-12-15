@@ -14,7 +14,7 @@ export const accessTokenClaims = (azp: string = '', aud: string[] = []): IAccess
         sub: tokenDefaults.sub + email,
         aud: tokenDefaults.aud.concat(aud),
         iat: JwkWrapper.getIat(),
-        exp: JwkWrapper.getExp(),
+        exp: JwkWrapper.getExp(JwkWrapper.expirationDurationInMinutesAccessToken),
         azp,
         scope: Auth.currentUser.scope || tokenDefaults.defaultScope,
         permissions: Auth.currentUser.permissions || tokenDefaults.defaultPermissions
