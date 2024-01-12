@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  dev:
+    image: ${IMAGE}:${TAG}
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - ROOT_PW # sets root password in container
+        - PULUMI_VERSION # install this version of pulumi
+        - PHP_VERSION # 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1
+        - USE_DOT_NET # install ubuntu:latest dotnet core packages
+        - GOLANG_VERSION # install this golang version. blank for none. latest is 1.18
+        - PYTHON_VERSION # install this python version
+        - USE_AWS # install latest aws cli, ssm plugin, and ecr helper
+        - NODE_VERSION # install this version of node. blank for none
+        - USE_BITWARDEN # enable bitwarden workflow helpers. will enable NODE_VERSION=18 if not set
+        - USE_CDK # install aws cdk, terraform and cdk for terraform
+        - USE_JAVA # install ubuntu:latest openjdk packages
+#        - DOCKER_VERSION # install docker version inside container
+#        - DOCKER_COMPOSE_VERSION # install docker-compose version inside container
+        - EXTRA_PACKAGES # any extra Ubuntu packages you want installed into the base container
+        - AWS_VERSION # install AWS CLI version
+    environment:
+      - COMPOSE_PROJECT_NAME
+      - PROJECT_NAME=${COMPOSE_PROJECT_NAME}
+      - GDC_CONTAINER_NAME # name of GDC container running in docker
+      - HOST_OS=${OS:-} # used to remap paths in windows format to linux format
+      - USE_PRECOMMIT # use pre-commit hooks in git to format and lint files
+      - EDITOR # sets default editor in container. usually set to same as VISUAL
+      - VISUAL # sets default editor in container. usually set to same as EDITOR
+      - USE_COLOR_PROMPT # enable colored bash prompt
+      - USE_CDK # install cdk if set to yes
+      - YARN_CACHE_FOLDER=/usr/local/share/.cache/yarn # cache yarn installs
+      - PIP_CACHE_DIR=/usr/local/share/.cache/pip # cache pip installs
+      - npm_config_cache=/usr/local/share/.cache/npm # case npm installs
+      - GDC_ENTRYPOINT # run this command and exit unless GDC_RUN_MODE
+      - GDC_COMPOSE_FILES # contains list of all compose files in use by GDC
+      - GDC_RUN_MODE # start, stop, daemon, clean
+      - STARTUP_MSG # message to display after startup
+      - CLIPBOARD_MSG # used internally to show message about launch command copied to clipboard
+      - COPY_CMD_TO_CLIPBOARD # defaults to yes to copy gdc shell launch command to clipboard
+      - DEV_CONTAINER=1.9.8 # used to detect if running inside dev container

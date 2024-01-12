@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: dev
+  name: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: dev
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.31.2 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8s-default: "true"
+        io.kompose.service: dev
+    spec:
+      containers:
+        - env:
+            - name: COMPOSE_PROJECT_NAME
+              value: k8s
+            - name: COPY_CMD_TO_CLIPBOARD
+              value: "yes"
+            - name: DEV_CONTAINER
+              value: 1.9.8
+            - name: EDITOR
+              value: vi
+            - name: GDC_RUN_MODE
+              value: start
+            - name: HOST_OS
+            - name: PIP_CACHE_DIR
+              value: /usr/local/share/.cache/pip
+            - name: PROJECT_NAME
+              value: k8s
+            - name: USE_CDK
+              value: "yes"
+            - name: USE_COLOR_PROMPT
+              value: "yes"
+            - name: USE_PRECOMMIT
+              value: "no"
+            - name: VISUAL
+              value: vi
+            - name: YARN_CACHE_FOLDER
+              value: /usr/local/share/.cache/yarn
+            - name: npm_config_cache
+              value: /usr/local/share/.cache/npm
+          image: dev
+          name: k8s-dev-1
+          resources: {}
+          stdin: true
+          tty: true
+      restartPolicy: Always
+status: {}

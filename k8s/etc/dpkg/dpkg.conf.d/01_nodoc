@@ -1,0 +1,18 @@
+# /etc/dpkg/dpkg.conf.d/01_nodoc
+
+# Delete locales
+path-exclude=/usr/share/locale/*
+
+# Delete docs
+path-exclude=/usr/share/doc/*
+# we need to keep copyright files for legal reasons
+path-include=/usr/share/doc/*/copyright
+
+# remove the man pages
+path-exclude /usr/share/man/*
+path-exclude /usr/share/groff/*
+path-exclude /usr/share/info/*
+
+# lintian stuff is small, but really unnecessary
+path-exclude /usr/share/lintian/*
+path-exclude /usr/share/linda/*

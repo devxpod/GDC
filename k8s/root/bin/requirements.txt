@@ -1,0 +1,7 @@
+boto3
+click
+awscliv2
+awscli-local
+terraform-local
+pipenv
+localstack
