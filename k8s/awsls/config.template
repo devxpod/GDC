@@ -1,4 +1,4 @@
 [profile localstack]
 region=us-east-1
 output=json
-endpoint_url = http://localstack:4566
+endpoint_url = http://${NS_LOCALSTACK_HOST}:4566

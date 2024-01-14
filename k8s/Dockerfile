@@ -112,7 +112,7 @@ RUN mkdir -p /root/bash_history
 
 RUN  mkdir /root/.aws
 RUN  chmod 700 /root/.aws
-COPY awsls/config /root/.aws
+COPY awsls/config.template /root/.aws
 COPY awsls/credentials /root/.aws
 
 ARG NODE_VERSION
@@ -172,6 +172,11 @@ RUN rm -rf /usr/local/data
 # set default root password
 ARG ROOT_PW=ContanersRule
 RUN yes "$ROOT_PW" | passwd root
+
+# install extras
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get install -fy --fix-missing --no-install-recommends gettext-base
 
 # host project will be mounted here
 RUN mkdir /workspace
