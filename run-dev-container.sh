@@ -81,6 +81,15 @@ if [ -r "./.env-gdc-local" ]; then
   source ./.env-gdc-local
 fi
 
+if [[ "$AWS_VERSION" = "latest" ]]; then
+  # latest version
+  export AWS_VERSION=$(curl -s https://raw.githubusercontent.com/aws/aws-cli/v2/awscli/__init__.py | grep __version__ | cut -f3 -d' ' | tr -d "'")
+  if [[ -z "$AWS_VERSION" ]]; then # if failed to fetch use known good version
+    export AWS_VERSION=2.15.12
+  fi
+fi
+
+
 # Function to convert a string to a number in the range 10-200
 convert_string_to_number() {
     local input_string=$1
@@ -362,6 +371,11 @@ if [ -n "$LS_VERSION" ]; then
   export USE_LOCALSTACK=yes
   echo "Adding compose layer dc-ls.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-ls.yml"
+
+  if [ "$USE_LOCALSTACK_PRO" = "yes" ]; then
+    echo "Adding compose layer dc-ls-pro.yml"
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-pro.yml"
+  fi
 
   if [ -n "$LOCALSTACK_STATIC_IP" ]; then
     COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-static-ip.yml"

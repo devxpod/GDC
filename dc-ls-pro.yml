@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  localstack:
+    environment:
+      - LOCALSTACK_API_KEY=${LOCALSTACK_API_KEY-}
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN-}

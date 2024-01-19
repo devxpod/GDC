@@ -150,6 +150,7 @@ These options control what packages / functionality are built into the container
 * USE_CDK=USE_AWS - installs aws cdk, terraform, cdk for terraform and enables NODE_VERSION=18 if NODE_VERSION is not already configured. Defaults to value of USE_AWS.
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
+* USE_LOCALSTACK_PRO=yes - enables localstack pro keys / tokens.
 * USE_LOCALSTACK_PERSISTENCE=no - toggle persistent storage for LS defaults to persistence disabled.
 * LOCALSTACK_VOLUME_DIR=$HOST_PROJECT_PATH/ls_volume.
 * LOCALSTACK_API_KEY=<not set> # only needed for local stack pro.
