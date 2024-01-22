@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [ -z "$ARCH" ]; then
+  export ARCH=$(uname -m)
+fi
+
 if [ -z "$COMPOSE_BIN" ]; then
   COMPOSE_BIN="docker compose"
 fi
@@ -88,7 +92,6 @@ if [[ "$AWS_VERSION" = "latest" ]]; then
     export AWS_VERSION=2.15.12
   fi
 fi
-
 
 # Function to convert a string to a number in the range 10-200
 convert_string_to_number() {
