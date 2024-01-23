@@ -116,7 +116,7 @@ services:
       - PROXY_VOLUME_DIR # where to persist cert files. defaults to /tmp/mitproxy
       - PROXY_URL # http(s) proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.9.91 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.9.92 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
