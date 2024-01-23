@@ -9,5 +9,5 @@ services:
       - "443:443"              # LocalStack HTTPS Gateway (required for Pro)
       - "4571:4571"            # elasticsearch service
     environment:
-#      - LOCALSTACK_HOST=${LOCALSTACK_HOST-host.docker.internal:4566} # dont use this with LS 3.x
+      - LOCALSTACK_HOST=${LOCALSTACK_HOST-localhost.localstack.cloud:4566} 
       - GATEWAY_LISTEN=${LOCALSTACK_GATEWAY_LISTEN-0.0.0.0:4566,0.0.0.0:443}
