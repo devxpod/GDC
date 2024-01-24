@@ -50,6 +50,10 @@ fi
 if [ "$USE_LOCALSTACK_PERSISTENCE" = "yes" ]; then
   COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-persist.yml"
 fi
+if [ "$USE_LOCALSTACK_PRO" = "yes" ]; then
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-ls-pro.yml"
+fi
+
 
 if [ -z "$COMPOSE_BIN" ]; then
   COMPOSE_BIN="docker compose"
