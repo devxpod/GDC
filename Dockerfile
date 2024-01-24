@@ -105,31 +105,6 @@ RUN echo \
   tee /etc/apt/sources.list.d/docker.list > /dev/null
 RUN apt-get update
 RUN apt-get install -fy --fix-missing  docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-#RUN  /bin/bash -c 'set -ex && \
-#    ARCH=`uname -m` && \
-#    if [ "$ARCH" = "x86_64" ]; then \
-#       echo "docker x86_64" && \
-#       wget -q https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz  -O docker.tgz && \
-#       tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
-#    else \
-#       echo "docker assuming ARM" && \
-#       wget -q https://download.docker.com/linux/static/stable/aarch64/docker-${DOCKER_VERSION}.tgz  -O docker.tgz && \
-#       tar -xzvf docker.tgz && ls -al && cp ./docker/* /usr/local/bin/ && rm -rf ./docker; \
-#    fi'
-
-#ARG DOCKER_COMPOSE_VERSION
-# Install docker-compose
-#RUN  /bin/bash -c 'set -ex && \
-#    ARCH=`uname -m` && \
-#    PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
-#    if [ "$ARCH" = "x86_64" ]; then \
-#       echo "docker-compose x86_64" && \
-#       curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;\
-#    else \
-#       echo "docker-compose assuming ARM" && \
-#       curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-aarch64" -o /usr/local/bin/docker-compose;\
-#    fi; \
-#    chmod +x /usr/local/bin/docker-compose;'
 
 # Install websocat
 RUN  /bin/bash -c 'set -ex && \
@@ -196,11 +171,9 @@ ARG USE_CDK
 RUN  /bin/bash -c 'if [ "${USE_CDK}" = "yes" ] ; then \
   wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor > /usr/share/keyrings/hashicorp-archive-keyring.gpg; \
   echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list; \
-  apt-get update && apt-get install terraform; \
   . $NVM_DIR/nvm.sh && \
-  npm -g i aws-cdk-local@latest aws-cdk@latest cdktf-cli@latest; \
+  npm -g i aws-cdk-local@latest aws-cdk@latest; \
 fi'
-
 
 # if pulumi version is set then install pulumi
 ARG PULUMI_VERSION
@@ -234,12 +207,40 @@ RUN rm -rf /usr/local/data
 ARG ROOT_PW=ContanersRule
 RUN yes "$ROOT_PW" | passwd root
 
+# install extras
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get install -fy --fix-missing --no-install-recommends gettext-base
+
+ARG TERRAFORM_VERSION
+
+# terraform is installed
+RUN /bin/bash -c 'if [ -n "${TERRAFORM_VERSION}" ]; then \
+    set -ex; \
+    ARCH=`uname -m`; \
+    if [ "${TERRAFORM_VERSION}" = "latest" ]; then \
+        apt-get update && apt-get install -y terraform; \
+    else \
+        if [ "$ARCH" = "x86_64" ]; then \
+           echo "aws x86_64"; \
+           curl "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" -o terraform.zip; \
+        else \
+           echo "aws assuming ARM"; \
+           curl "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_arm64.zip" -o terraform.zip; \
+        fi; \
+        unzip -q terraform.zip; \
+        mv terraform /usr/local/bin; \
+        rm terraform.zip; \
+    fi; \
+    . $NVM_DIR/nvm.sh && \
+    npm -g i cdktf-cli@latest; \
+fi'
+
 # host project will be mounted here
 RUN mkdir /workspace
 WORKDIR /workspace
 
 # transfer build args to env vars for container
-
 ENV PHP_VERSION=$PHP_VERSION
 ENV USE_JAVA=$USE_JAVA
 ENV PYTHON_VERSION=$PYTHON_VERSION
@@ -249,6 +250,7 @@ ENV USE_AWS=$USE_AWS
 ENV NODE_VERSION=$NODE_VERSION
 ENV USE_BITWARDEN=$USE_BITWARDEN
 ENV PULUMI_VERSION=$PULUMI_VERSION
+ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
 
 ENV PATH="$PATH:/root/bin:/root/bin-extra:/root/bin-extra/docker:/root/gdc-host"
 
