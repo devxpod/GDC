@@ -27,6 +27,8 @@ services:
       # only check IAM do not enforce it
       - IAM_SOFT_MODE=${LS_IAM_SOFT_MODE-1}
       - OPENSEARCH_ENDPOINT_STRATEGY=port
+      - PROVIDER_OVERRIDE_CLOUDWATCH=v2
+      - DYNAMODB_REMOVE_EXPIRED_ITEMS=1
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/var/lib/localstack"
