@@ -234,6 +234,25 @@ if [ -z "$DEVNET_NAME" ]; then
   exit 1
 fi
 
+# setup docker devnet network if needed
+if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then
+  if [ -n "$DEVNET_SUBNET" ]; then
+    DEVNET_SUBNET="--subnet $DEVNET_SUBNET"
+  else
+    DEVNET_SUBNET=""
+  fi
+  if [ -n "$DEVNET_GATEWAY" ]; then
+    DEVNET_GATEWAY="--gateway $DEVNET_GATEWAY"
+  else
+    DEVNET_GATEWAY=""
+  fi
+  echo "Network $DEVNET_NAME not found. creating... $DEVNET_SUBNET $DEVNET_GATEWAY"
+  docker network create --attachable -d bridge $DEVNET_SUBNET $DEVNET_GATEWAY "$DEVNET_NAME"
+else
+  echo "Network $DEVNET_NAME found"
+fi
+
+
 CUSTOM_PORTS=""
 for i in $(seq 0 9); do
   v="PORT_FWD$i"
@@ -545,23 +564,6 @@ if [ "$PULUMI_VERSION" = "latest" ]; then
   echo "Latest pulumi version is $PULUMI_VERSION"
 fi
 
-# setup docker devnet network if needed
-if [ -z "$(docker network ls --format '{{.Name}}' --filter name="$DEVNET_NAME")" ]; then
-  if [ -n "$DEVNET_SUBNET" ]; then
-    DEVNET_SUBNET="--subnet $DEVNET_SUBNET"
-  else
-    DEVNET_SUBNET=""
-  fi
-  if [ -n "$DEVNET_GATEWAY" ]; then
-    DEVNET_GATEWAY="--gateway $DEVNET_GATEWAY"
-  else
-    DEVNET_GATEWAY=""
-  fi
-  echo "Network $DEVNET_NAME not found. creating... $DEVNET_SUBNET $DEVNET_GATEWAY"
-  docker network create --attachable -d bridge $DEVNET_SUBNET $DEVNET_GATEWAY "$DEVNET_NAME"
-else
-  echo "Network $DEVNET_NAME found"
-fi
 
 for v in $SHARED_VOLUMES; do
   if [ "$(docker volume ls | grep -Ec "local\s+$v\$")" = "0" ]; then
