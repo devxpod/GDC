@@ -196,6 +196,7 @@ These options control what packages / functionality are built into the container
 * STARTUP_MSG=<not set> - displays this message after container has started and init script is complete.
 * COPY_CMD_TO_CLIPBOARD=yes - copy gdc shell launch command to clipboard.
 * USE_PROXY=no - can be no/proxy/dump/web.
+* USE_PROXY_CA=yes - if yes and USE_PROXY is not set to no then install proxy CA in GDC
 * USE_PROXY_HOST=no - can be no/yes.
 * PROXY_VERSION=latest - version of proxy image to start.
 * PROXY_CONTAINER_NAME=proxy - name of proxy container.
