@@ -449,17 +449,33 @@ fi
 
 
 # this will start mitm proxy server
-if [[ -n "$USE_PROXY_HOST" && "$USE_PROXY_HOST" != "no" ]]; then
-  echo "Adding compose layer dc-proxy-host.yml"
-  COMPOSE_FILES="$COMPOSE_FILES -f dc-proxy-host.yml"
-  if [[ "$USE_PROXY_HOST" = "web" ]]; then
-    echo "Adding compose layer dc-proxy-web-host.yml"
-    COMPOSE_FILES="$COMPOSE_FILES -f dc-proxy-web-host.yml"
-  elif [[ "$USE_PROXY_HOST" = "dump" ]]; then
+if [[ -n "$USE_PROXY" && "$USE_PROXY" != "no" ]]; then
+  if [ -z "$PROXY_VOLUME_DIR" ]; then
+    PROXY_VOLUME_DIR="$HOST_PROJECT_PATH/proxy_volume"
+  fi
+  export PROXY_VOLUME_DIR
+  echo "Adding compose layer dc-proxy.yml"
+  COMPOSE_FILES="$COMPOSE_FILES -f dc-proxy.yml"
+
+  if [[ -n "$USE_PROXY_HOST" && "$USE_PROXY_HOST" != "no" ]]; then
+    echo "Adding compose layer dc-proxy-host.yml"
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-proxy-host.yml"
+    if [[ "$USE_PROXY" = "web" ]]; then
+      echo "Adding compose layer dc-proxy-web-host.yml"
+      COMPOSE_FILES="$COMPOSE_FILES -f dc-proxy-web-host.yml"
+    fi
+  else
+    if [[ "$USE_PROXY" = "web" ]]; then
+      echo "Adding compose layer dc-proxy-web.yml"
+      COMPOSE_FILES="$COMPOSE_FILES -f dc-proxy-web.yml"
+    fi
+  fi
+  if [[ "$USE_PROXY" = "dump" ]]; then
     echo "Adding compose layer dc-proxy-dump.yml"
     COMPOSE_FILES="$COMPOSE_FILES -f dc-proxy-dump.yml"
   fi
   export PROXY_URL=http://$PROXY_CONTAINER_NAME:8080
+  export PROXY_URL_SSL=https://$PROXY_CONTAINER_NAME:8080
 fi
 
 # forwards ssh agent socket to container

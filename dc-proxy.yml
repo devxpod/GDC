@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  proxy:
+    image: "mitmproxy/mitmproxy:${PROXY_VERSION-latest}"
+    container_name: "${PROXY_CONTAINER_NAME-proxy}"
+    stdin_open: true
+    tty: true
+    dns:
+      - ${GDC_DNS_PRI_IP}
+      - ${GDC_DNS_SEC_IP}
+    networks:
+      devnet:
+    volumes:
+      - "${PROXY_VOLUME_DIR:-/tmp/mitmproxy}:/home/mitmproxy/.mitmproxy"
+
+
+networks:
+  devnet:
+    name: ${DEVNET_NAME-devnet}
+    external: true

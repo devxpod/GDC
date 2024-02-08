@@ -2,4 +2,4 @@ version: '3.8'
 
 services:
   proxy:
-    command: mitdump
+    command: mitmdump --set block_global=false  --set flow_detail=3

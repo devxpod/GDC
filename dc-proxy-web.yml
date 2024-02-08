@@ -2,6 +2,4 @@ version: '3.8'
 
 services:
   proxy:
-    ports:
-      - "${PROXY_WEB_HOST_PORT-8081}:8081"
     command: mitmweb --web-iface 0.0.0.0 --web-host 0.0.0.0

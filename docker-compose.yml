@@ -109,15 +109,18 @@ services:
       - COMPOSE_BIN # used to toggle between docker-compose and docker compose invocations
       - COPY_CMD_TO_CLIPBOARD # defaults to yes to copy gdc shell launch command to clipboard
       - HOST_PROJECT_REL_PATH # Project path on host relative to GDC repository
-      - USE_PROXY_HOST # can be no/proxy/dump/web. defaults to no
+      - USE_PROXY # can be no/proxy/dump/web. defaults to no
+      - USE_PROXY_HOST # can be no/yes. defaults to no
+      - USE_PROXY_CA # if yes and USE_PROXY is not set to no then install proxy CA in GDC
       - PROXY_VERSION # version of proxy image to start. default to latest
       - PROXY_CONTAINER_NAME # name of proxy container. defaults to proxy
       - PROXY_HOST_PORT # proxy port. defaults to 8080
       - PROXY_WEB_HOST_PORT # when running in web mode defaults to port 8081
       - PROXY_VOLUME_DIR # where to persist cert files. defaults to /tmp/mitproxy
-      - PROXY_URL # http(s) proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
+      - PROXY_URL # http proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
+      - PROXY_URL_SSL # https proxy to use. if USE_PROXY_HOST is enabled will be set to https://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.10.3 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.10.4 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

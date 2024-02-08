@@ -194,13 +194,14 @@ These options control what packages / functionality are built into the container
 * NO_DEVNET_RM=<not set> # if set to yes, GDC will not remove the DEVNET.
 * COMPOSE_EX=<not set> - add specified compose yaml file to list of compose files that get loaded for solution. Note paths in specified compose.yaml are relative to generic-dev-container repo folder.
 * STARTUP_MSG=<not set> - displays this message after container has started and init script is complete.
-* COPY_CMD_TO_CLIPBOARD=yes - copy gdc shell launch command to clipboard. 
-* USE_PROXY_HOST=no - can be no/proxy/dump/web.
+* COPY_CMD_TO_CLIPBOARD=yes - copy gdc shell launch command to clipboard.
+* USE_PROXY=no - can be no/proxy/dump/web.
+* USE_PROXY_HOST=no - can be no/yes.
 * PROXY_VERSION=latest - version of proxy image to start.
 * PROXY_CONTAINER_NAME=proxy - name of proxy container.
 * PROXY_HOST_PORT=8080 - host proxy port.
 * PROXY_WEB_HOST_PORT=8081 - host port when running in web mode.
-* PROXY_VOLUME_DIR=/tmp/mitproxy - where to persist cert files.
+* PROXY_VOLUME_DIR=$HOST_PROJECT_PATH/proxy_volume - where to persist cert files.
 * PROXY_AUTO_EXPORT_ENV=no  # auto export HTTP_PROXY and HTTPS_PROXY set to PROXY_URL. PROXY_URL is auto set when USE_PROXY_HOST != no
 
 # Extra environment vars available in dev container

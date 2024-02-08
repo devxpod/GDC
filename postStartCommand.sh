@@ -68,7 +68,19 @@ fi
 
 if [[ -n "$PROXY_URL" && "$PROXY_AUTO_EXPORT_ENV" = "yes" ]]; then
   export HTTP_PROXY=$PROXY_URL
-  export HTTPS_PROXY=$PROXY_URL
+  export HTTPS_PROXY=$PROXY_URL_SSL
+fi
+
+if [[ -n "$USE_PROXY" && "$USE_PROXY" != "no" && "$USE_PROXY_CA" = "yes" ]]; then
+  if [ -r /workspace/proxy_volume/mitmproxy-ca-cert.pem ]; then
+    echo "Setting up proxy CA..."
+    cp /workspace/proxy_volume/mitmproxy-ca-cert.pem /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
+    update-ca-certificates
+    cat /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt >> "$(python -m certifi)"
+    export AWS_CA_BUNDLE=/usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
+  else
+    echo "Unable to locate mitmproxy-ca-cert.pem. Please ensure the proxy_volume is mounted"
+  fi
 fi
 
 
