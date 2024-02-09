@@ -196,7 +196,8 @@ RUN chmod a+rx -R /init.sh /postStartCommand.sh /root/bin-extra
 
 # fix line endings in case files where copied from windows
 RUN dos2unix /postStartCommand.sh /init.sh /etc/profile.d/* /etc/skel/.* /root/bin-extra/aws/* /root/bin-extra/docker/*
-RUN cp /etc/skel/.bashrc /root/.bashrc
+RUN cp /etc/skel/.*rc  /root/
+
 
 WORKDIR /root
 
