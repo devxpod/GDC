@@ -47,6 +47,7 @@ services:
       - EDITOR # sets default editor in container. usually set to same as VISUAL
       - VISUAL # sets default editor in container. usually set to same as EDITOR
       - USE_COLOR_PROMPT # enable colored bash prompt
+      - SHOW_VERSIONS_ON_LOGIN # show versions of installed tools on login
       - SSH_SERVER_PORT # host port you want forwarded to ssh server in container
       - SSH_KEYSCAN_HOSTS # copy ssh keys from these hosts to prevent unknown key prompts
       - USE_AUTH0 # starts up auth0 mock container in container only mode
@@ -107,7 +108,7 @@ services:
       - STARTUP_MSG # message to display after startup
       - CLIPBOARD_MSG # used internally to show message about launch command copied to clipboard
       - COMPOSE_BIN # used to toggle between docker-compose and docker compose invocations
-      - COPY_CMD_TO_CLIPBOARD # defaults to yes to copy gdc shell launch command to clipboard
+      - COPY_CMD_TO_CLIPBOARD # defaults to yes to copy gdc shell-launch command to clipboard
       - HOST_PROJECT_REL_PATH # Project path on host relative to GDC repository
       - USE_PROXY # can be no/proxy/dump/web. defaults to no
       - USE_PROXY_HOST # can be no/yes. defaults to no
@@ -120,7 +121,7 @@ services:
       - PROXY_URL # http proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_URL_SSL # https proxy to use. if USE_PROXY_HOST is enabled will be set to https://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.10.4 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.10.5 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

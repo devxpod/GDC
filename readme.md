@@ -136,6 +136,7 @@ These options control what packages / functionality are built into the container
 * USE_WORKSPACE=yes - mounts folder from host into /workspace folder in container. Setting this option to "no" is useful if you only want to use tools inside the container and not interact with a project.    
 * USE_HOST_HOME=yes - mounts users home directory into container under /root/host-home. Required by some other options.
 * USE_HOME_BIN=no - copy bin folder from host home directory if it exists. Enables USE_HOST_HOME.
+* SHOW_VERSIONS_ON_LOGIN=yes # show versions of installed tools on login
 * PULUMI_VERSION=latest - a version or "latest" must be specified for Pulumi to be installed.
 * TERRAFORM_VERSION=latest - default is latest. Versions are here. https://releases.hashicorp.com/terraform
 * PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2.

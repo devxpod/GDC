@@ -1,7 +1,3 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-
 if [ "$FORCE_INTERACTIVE" != "yes" ]; then
   # If not running interactively, don't do anything
   case $- in
@@ -91,10 +87,6 @@ alias l='ls -CF'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
   . "$HOME/.bash_aliases"
 fi
@@ -132,41 +124,63 @@ fi
 TITLE="GDC: $COMPOSE_PROJECT_NAME shell"
 echo -n -e "$title_start$TITLE$title_end"
 
-docker --version
+if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+  docker --version
+fi
 
 if [ -n "$PHP_VERSION" ]; then
-  echo "php version $(php --version)"
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "php version $(php --version)"
+  fi
 fi
 
 if [ "$USE_DOT_NET" = "yes" ]; then
-  echo ".NET version $(dotnet --list-sdks)"
   export DOTNET_ROOT=/usr/local/dotnet
   export PATH=${PATH}:${DOTNET_ROOT}
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo ".NET version $(dotnet --list-sdks)"
+  fi
 fi
 
 if [ -n "$GOLANG_VERSION" ]; then
   export GOPATH=/go
   export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin
-  go version
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    go version
+  fi
 fi
 
 if [ -r "$NVM_DIR/nvm.sh" ]; then
   echo "activating nvm env"
   . "$NVM_DIR/nvm.sh"
-  echo "node version $(node --version)"
-  echo "npm version $(npm --version)"
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "node version $(node --version)"
+    echo "npm version $(npm --version)"
+  fi
 fi
 
 if [ "$USE_BITWARDEN" = "yes" ]; then
-  echo "bitwarden cli version $(bw --version)"
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "bitwarden cli version $(bw --version)"
+  fi
   alias load_aliases="eval \`bw get item aws_bash_rc | jq -r '.notes'\`"
   alias bw_reload="bw sync; load_aliases"
 
   if [ "$PERSIST_BITWARDEN_SESSION" = "yes" ]; then
-    alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases">/root/persisted/.bw_session'
+    alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION">/root/persisted/.bw_session'
     if [ -r ~/persisted/.bw_session ]; then
-      echo "loading existing bitwarden session"
+      echo "Attempting to load existing bitwarden session..."
       . "$HOME/persisted/.bw_session"
+      bw get item aws_bash_rc --nointeraction --quiet
+      if [ $? -ne 0 ] ; then
+        echo -e $bldred"Existing session invalid$txtrst. Please run '$bldgrn""unlock$txtrst'"
+        rm -f ~/persisted/.bw_session
+        bw sync --nointeraction --quiet
+      else
+        eval `bw get item aws_bash_rc | jq -r '.notes'`
+      fi
+    else
+      echo -e $bldylw"No existing bitwarden session found$txtrst. Please run '$bldgrn""unlock$txtrst'"
     fi
   else
     alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases"'
@@ -183,13 +197,17 @@ if [ "$USE_AWS" = "yes" ]; then
   if [ ! -r ~/.aws/config ]; then
     echo "**** No AWS credentials found, run setup-aws.sh to configure ****"
   fi
-  echo "aws cli version $(aws --version)"
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "aws cli version $(aws --version)"
+  fi
 fi
 
 if [ "$USE_CDK" = "yes" ]; then
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
     echo "cdk version $(cdk --version)"
     echo "terraform version $(terraform -version)"
     echo "cdktf version $(cdktf --version)"
+  fi
 fi
 
 if [ "$USE_LOCALSTACK" = "yes" ]; then
@@ -207,13 +225,17 @@ fi
 
 if [ -n "$GDC_DNS_PRI_IP" ]; then
   echo "GDC PRI DNS IP $GDC_DNS_PRI_IP"
+fi
+if [ -n "$GDC_DNS_SEC_IP" ]; then
   echo "GDC SEC DNS IP $GDC_DNS_SEC_IP"
 fi
 
 if [ -n "$PULUMI_VERSION" ]; then
   alias pr="clear;pulumi refresh -fy"
   alias pu="clear;pulumi up -fy"
-  echo "pulumi version $(pulumi version)"
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "pulumi version $(pulumi version)"
+  fi
 fi
 
 if [ -r /usr/local/pyenv ]; then
@@ -222,13 +244,17 @@ if [ -r /usr/local/pyenv ]; then
   command -v pyenv > /dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
   #eval "$(pyenv virtualenv-init -)"
-  echo "python version $(python --version)"
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "python version $(python --version)"
+  fi
 fi
 
 if [ -r ~/venv/bin/activate ]; then
   echo "activating python venv"
   . "$HOME/venv/bin/activate"
-  echo "python version $(python --version)"
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "python version $(python --version)"
+  fi
 fi
 
 export PATH="$PATH:/root/bin-extra/ls"
