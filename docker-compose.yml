@@ -121,7 +121,7 @@ services:
       - PROXY_URL # http proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_URL_SSL # https proxy to use. if USE_PROXY_HOST is enabled will be set to https://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.10.6 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.10.7 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
@@ -130,6 +130,7 @@ services:
       - shared:/root/shared # persisted and shared between stacks / containers
       - package_cache:/usr/local/share/.cache # persist npm, yarn and pip cache for faster rebuilds
       - pulumi:/root/.pulumi # persist pulumi plugin install
+      - terraform:/root/.terraform_plugin_cache # persist terraform plugin install
       - cache:/root/.cache # persist caches in ~/.cache folder
       - home_config:/root/.config # persist data for various apps such as bitwarden
 
@@ -137,6 +138,9 @@ volumes:
   bash_history: # persist bash history
   persisted: # put things you want to persist between container rebuilds here
   cache: # .cache folder in home dir
+  terraform: # persist terraform plugin install across all stacks
+    name: terraform
+    external: true
   pulumi:
     name: pulumi # persist pulumi plugin install across all stacks
     external: true
