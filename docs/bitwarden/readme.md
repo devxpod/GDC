@@ -37,7 +37,7 @@ Copy the SSM scripts from this repo in the /root/bin/aws folder and put in your 
 Add the following to your .bashrc or .zshrc file your home directory.  
 ```bash
 export AWS_PROFILE=YOUR-identity
-alias load_aliases="eval \`bw get item aws_bash_rc | jq -r '.notes'\`";
+alias load_aliases="eval \`bw get item bw_bash_rc | jq -r '.notes'\`";
 alias bw_reload="bw sync; load_aliases";
 alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases"'
 echo "unlock"
@@ -72,7 +72,7 @@ token to assume roles.
 
 You can then stretch the window bigger which will let you then stretch the note edit box bigger.**
 
-Using your browser log into your Bitwarden vault and create a secure note named **[company]_aws_bash_rc** with the following content:
+Using your browser log into your Bitwarden vault and create a secure note named **[company]_bash_rc** with the following content:
 ```bash
 alias [company]_aws_otp="bw get totp '[company]_aws_ident' | tr -d '\n'";
 alias [company]_aws_assume="AWS_IDENTITY_ACCOUNT=[AWS_IDENTITY_ACCOUNT] source assume-role.sh [YOUR_AWS_SSO_ACCOUNT] [YOUR-identity]";
@@ -108,7 +108,7 @@ such as:
 The above script block is soft wrapping some lines, when you enter them ensure they are on a single line.
 
 ### Additional companies (optional)
-Create a secure note named **[company2]_aws_bash_rc** with the following content:
+Create a secure note named **[company2]_bash_rc** with the following content:
 ```bash
 alias [company2]_aws_otp="bw get totp '[company2]_aws_ident' | tr -d '\n'";
 alias [company2]_aws_assume="AWS_IDENTITY_ACCOUNT=[AWS_IDENTITY_ACCOUNT] source assume-role.sh [YOUR_AWS_SSO_ACCOUNT] [YOUR-identity]";
@@ -122,10 +122,10 @@ echo "[company2] aliases loaded";
 ```
 
 ### Alias entrypoint
-Now create a secure note named **aws_bash_rc** with the following content:
+Now create a secure note named **bw_bash_rc** with the following content:
 ```bash
-eval `bw get item [company]_aws_bash_rc | jq -r '.notes'`;
-eval `bw get item [company2]_aws_bash_rc | jq -r '.notes'`; 
+eval `bw get item [company]_bash_rc | jq -r '.notes'`;
+eval `bw get item [company2]_bash_rc | jq -r '.notes'`; 
 echo "all aws aliases loaded";
 ```
 **_Omit company2 line if you are only using one company._**
@@ -137,7 +137,7 @@ company / org then eval them all from the notes you create.
 #### Core
 * unlock - unlocks your vault, syncs it with cloud, and calls load_aliases.
 * * if you are using the dev container and PERSIST_BITWARDEN_SESSION=yes then it will also write your session key to /root/persisted/.bw_session and this file will be sourced by any other shells you open to reduce need to unlock vault.
-* load_aliases - loads the secure note with name aws_bash_rc into your environment.
+* load_aliases - loads the secure note with name bw_bash_rc into your environment.
 * bw_reload - syncs vault with cloud and calls load_aliases.
 
 #### Custom

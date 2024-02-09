@@ -1,3 +1,4 @@
+START_TIME=$(date +%s)
 if [ "$FORCE_INTERACTIVE" != "yes" ]; then
   # If not running interactively, don't do anything
   case $- in
@@ -163,7 +164,7 @@ if [ "$USE_BITWARDEN" = "yes" ]; then
   if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
     echo "bitwarden cli version $(bw --version)"
   fi
-  alias load_aliases="eval \`bw get item aws_bash_rc | jq -r '.notes'\`"
+  alias load_aliases="eval \`bw get item bw_bash_rc | jq -r '.notes'\`"
   alias bw_reload="bw sync; load_aliases"
 
   if [ "$PERSIST_BITWARDEN_SESSION" = "yes" ]; then
@@ -171,14 +172,15 @@ if [ "$USE_BITWARDEN" = "yes" ]; then
     if [ -r ~/persisted/.bw_session ]; then
       echo "Attempting to load existing bitwarden session..."
       . "$HOME/persisted/.bw_session"
-      bw get item aws_bash_rc --nointeraction --quiet
-      if [ $? -ne 0 ] ; then
+      BW_RC=$(bw get item bw_bash_rc --nointeraction 2>/dev/null | jq -r '.notes' 2>/dev/null)
+      if [ -z "$BW_RC" ] ; then
         echo -e $bldred"Existing session invalid$txtrst. Please run '$bldgrn""unlock$txtrst'"
         rm -f ~/persisted/.bw_session
         bw sync --nointeraction --quiet
       else
-        eval `bw get item aws_bash_rc | jq -r '.notes'`
+        eval $BW_RC
       fi
+      unset BW_RC
     else
       echo -e $bldylw"No existing bitwarden session found$txtrst. Please run '$bldgrn""unlock$txtrst'"
     fi
@@ -274,4 +276,5 @@ if [[ -n "$PROXY_URL" && "$PROXY_AUTO_EXPORT_ENV" = "yes" ]]; then
   export HTTP_PROXY=$PROXY_URL
   export HTTPS_PROXY=$PROXY_URL
 fi
-
+END_TIME=$(date +%s)
+echo "Shell startup took $(($END_TIME - $START_TIME)) seconds"

@@ -158,7 +158,7 @@ fi
 
 if [ "$USE_BITWARDEN" = "yes" ]; then
   echo "bitwarden cli version $(bw --version)"
-  alias load_aliases="eval \`bw get item aws_bash_rc | jq -r '.notes'\`"
+  alias load_aliases="eval \`bw get item bw_bash_rc | jq -r '.notes'\`"
   alias bw_reload="bw sync; load_aliases"
 
   if [ "$PERSIST_BITWARDEN_SESSION" = "yes" ]; then
