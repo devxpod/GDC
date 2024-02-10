@@ -22,7 +22,7 @@ RUN \
 RUN \
     --mount=type=cache,target=/var/cache/apt \
     apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
-    libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm libncurses5-dev liblzma-dev libpq-dev libcurl4-openssl-dev
+    libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm libncurses5-dev liblzma-dev libpq-dev libcurl4-openssl-dev pkg-config
 
 # install editors and any extra packages user has requested
 ARG EXTRA_PACKAGES
@@ -90,6 +90,15 @@ RUN /bin/bash -c 'if [ -n "${GOLANG_VERSION}" ] ; then \
        curl -fsSL https://golang.org/dl/go${GOLANG_VERSION}.linux-arm64.tar.gz | tar -C /usr/local -xzf -; \
     fi; \
 fi'
+
+
+ARG RUST_VERSION
+RUN  /bin/bash -c 'if [ -n "${RUST_VERSION}" ]; then \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain "${RUST_VERSION}"; \
+    source "$HOME/.cargo/env"; \
+    rustup completions bash > /etc/bash_completion.d/rustup; \
+fi'
+
 
 RUN mkdir -p /usr/local/data
 WORKDIR /usr/local/data
@@ -220,6 +229,10 @@ RUN /bin/bash -c 'if [ -n "${TERRAFORM_VERSION}" ]; then \
     set -ex; \
     ARCH=`uname -m`; \
     if [ "${TERRAFORM_VERSION}" = "latest" ]; then \
+        wget -O- https://apt.releases.hashicorp.com/gpg | \
+        gpg --dearmor >/usr/share/keyrings/hashicorp-archive-keyring.gpg; \
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+        https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list; \
         apt-get update && apt-get install -y terraform; \
     else \
         if [ "$ARCH" = "x86_64" ]; then \
@@ -249,6 +262,7 @@ ENV GOLANG_VERSION=$GOLANG_VERSION
 ENV USE_DOT_NET=$USE_DOT_NET
 ENV USE_AWS=$USE_AWS
 ENV NODE_VERSION=$NODE_VERSION
+ENV RUST_VERSION=$RUST_VERSION
 ENV USE_BITWARDEN=$USE_BITWARDEN
 ENV PULUMI_VERSION=$PULUMI_VERSION
 ENV TERRAFORM_VERSION=$TERRAFORM_VERSION

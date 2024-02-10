@@ -151,6 +151,13 @@ if [ -n "$GOLANG_VERSION" ]; then
   fi
 fi
 
+if [ -n "$RUST_VERSION" ]; then
+  export PATH=$PATH:/root/.cargo/bin
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "rustc version $(rustc --version)"
+  fi
+fi
+
 if [ -r "$NVM_DIR/nvm.sh" ]; then
   echo "activating nvm env"
   . "$NVM_DIR/nvm.sh"
