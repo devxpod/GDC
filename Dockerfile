@@ -91,12 +91,15 @@ RUN /bin/bash -c 'if [ -n "${GOLANG_VERSION}" ] ; then \
     fi; \
 fi'
 
-
 ARG RUST_VERSION
+ARG CARGO_EXTRA
 RUN  /bin/bash -c 'if [ -n "${RUST_VERSION}" ]; then \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain "${RUST_VERSION}"; \
     source "$HOME/.cargo/env"; \
     rustup completions bash > /etc/bash_completion.d/rustup; \
+    if [ -n "${CARGO_EXTRA}" ]; then \
+        cargo install ${CARGO_EXTRA}; \
+    fi; \
 fi'
 
 
@@ -263,6 +266,7 @@ ENV USE_DOT_NET=$USE_DOT_NET
 ENV USE_AWS=$USE_AWS
 ENV NODE_VERSION=$NODE_VERSION
 ENV RUST_VERSION=$RUST_VERSION
+ENV CARGO_EXTRA=$CARGO_EXTRA
 ENV USE_BITWARDEN=$USE_BITWARDEN
 ENV PULUMI_VERSION=$PULUMI_VERSION
 ENV TERRAFORM_VERSION=$TERRAFORM_VERSION

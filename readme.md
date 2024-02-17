@@ -150,7 +150,8 @@ These options control what packages / functionality are built into the container
 * USE_BITWARDEN=yes - installs Bitwarden cli and enables NODE_VERSION=18 if NODE_VERSION is not already configured.
 * PERSIST_BITWARDEN_SESSION=no - persist bitwarden session to /root/persisted volume and autoload it in subsequent logins. Reduces need to enter master password, but is less secure.
 * USE_CDK=USE_AWS - installs aws cdk, terraform, cdk for terraform and enables NODE_VERSION=18 if NODE_VERSION is not already configured. Defaults to value of USE_AWS.
-* RUST_VERSION<not set> - installs latest rust and cargo if set to stable or a specific version.
+* RUST_VERSION=<not set> - installs latest rust and cargo if set to stable or a specific version.
+* CARGO_EXTRA=<not set> - if set should be a quoted space separated list of cargo packages you want installed.
 * NODE_VERSION=18 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * USE_LOCALSTACK_PRO=yes - enables localstack pro keys / tokens.
