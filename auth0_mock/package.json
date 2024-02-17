@@ -5,7 +5,7 @@
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
-    "prestart": "yarn install && yarn run build",
+    "prestart": "npm install && npm run build",
     "start": "node .",
     "cleanup": "rm -rf node_modules keys.json",
     "test": "jest",
