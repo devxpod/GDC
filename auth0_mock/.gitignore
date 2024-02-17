@@ -2,3 +2,4 @@ coverage/*
 keys.json
 *.log
 *.lock
+/package-lock.json
