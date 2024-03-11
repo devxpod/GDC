@@ -83,7 +83,7 @@ aws_secret_access_key=6dy4rr0LVztfvTF/Xp+VMqKjqaPmBjmn1P+JRCpX
 
 [localstack]
 aws_access_key_id=test
-aws_secret_access_kty=test
+aws_secret_access_key=test
 ```
 Next create or edit a file named config in that folder with the following structure:
 Replacing

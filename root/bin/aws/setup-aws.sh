@@ -40,7 +40,7 @@ aws_secret_access_key=
 
 [localstack]
 aws_access_key_id=test
-aws_secret_access_kty=test
+aws_secret_access_key=test
 EOF
 
 ln -s $AWS_DIR ~/.aws
