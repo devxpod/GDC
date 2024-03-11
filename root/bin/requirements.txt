@@ -2,5 +2,5 @@ boto3
 click
 awscliv2
 awscli-local
-terraform-local
+terraform-local==0.17.1
 pipenv
