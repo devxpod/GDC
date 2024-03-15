@@ -1,6 +1,5 @@
 docker-compose.yml
 **/temp
-**/tmp
 test
 **/*.ps1
 **/.idea

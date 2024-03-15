@@ -143,6 +143,7 @@ These options control what packages / functionality are built into the container
 * USE_DOT_NET=no - installs .NET SDK v6.x.
 * USE_JAVA=no - installs headless openjdk v11.x.
 * PYTHON_VERSION=3.11 - installs Python v3.11, which is highest aws lambda supported python runtime
+* PIP_EXTRA_REQUIREMENTS_TXT=<not set> - if set should be a name of a requirements pip file to be installed if python is installed.
 * USE_PRECOMMIT=no - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
 * USE_AWS=yes - installs AWS CLI version specified by AWS_VERSION, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
 * AWS_VERSION=latest - installs specified AWS cli version if USE_AWS=yes. Defaults to latest.

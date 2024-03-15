@@ -20,6 +20,7 @@ services:
         - USE_DOT_NET # install ubuntu:latest dotnet core packages
         - GOLANG_VERSION # install this golang version. blank for none. latest is 1.18
         - PYTHON_VERSION # install this python version
+        - PIP_EXTRA_REQUIREMENTS_TXT # install extra pip requirements if python is installed
         - USE_AWS # install latest aws cli, ssm plugin, and ecr helper
         - NODE_VERSION # install this version of node. blank for none
         - RUST_VERSION # install this version of rust. blank for none
@@ -31,6 +32,7 @@ services:
 #        - DOCKER_COMPOSE_VERSION # install docker-compose version inside container
         - EXTRA_PACKAGES # any extra Ubuntu packages you want installed into the base container
         - AWS_VERSION # install AWS CLI version
+        - HOST_PROJECT_FOLDER_NAME
     environment:
       - ARCH
       - AWS_VERSION
@@ -123,7 +125,7 @@ services:
       - PROXY_URL # http proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_URL_SSL # https proxy to use. if USE_PROXY_HOST is enabled will be set to https://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.10.12 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.10.13 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files

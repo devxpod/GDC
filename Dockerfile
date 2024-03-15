@@ -39,24 +39,33 @@ COPY /etc/locale.gen /etc/locale.gen
 RUN LC_ALL=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANG=en_US.UTF-8 locale-gen
 RUN mkdir -p /usr/local/share/.cache
 
-# intstall python if requested
-COPY /root/bin/requirements.txt /root/requirements.txt
-ARG PYTHON_VERSION
-RUN /bin/bash -c 'if [ -n "${PYTHON_VERSION}" ] ; then \
-    apt-get install -fy python3-dev python3-openssl && \
-    export PYENV_ROOT=/usr/local/pyenv && \
-    curl https://pyenv.run | bash && \
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH" && \
-    eval "$(pyenv init -)" && \
-    eval "$(pyenv virtualenv-init -)" && \
-    pyenv install -v $PYTHON_VERSION && \
-    pyenv global $PYTHON_VERSION && \
-    python -m pip install --upgrade pip && \
-    pip install virtualenv pre-commit && \
-    pip install -r /root/requirements.txt; \
-fi; \
-rm /root/requirements.txt; \
-'
+RUN mkdir -p /usr/local/data
+WORKDIR /usr/local/data
+
+#ARG DOCKER_VERSION
+# install docker
+RUN install -m 0755 -d /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+RUN chmod a+r /etc/apt/keyrings/docker.gpg
+RUN echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update
+RUN apt-get install -fy --fix-missing  docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Install websocat
+RUN  /bin/bash -c 'set -ex && \
+    ARCH=`uname -m` && \
+    PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
+    if [ "$ARCH" = "x86_64" ]; then \
+       echo "websocat x86_64" && \
+       curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.x86_64-unknown-linux-musl" -o /usr/local/bin/websocat;\
+    else \
+       echo "websocat assuming ARM" && \
+       curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.arm-unknown-linux-musleabi" -o /usr/local/bin/websocat;\
+    fi; \
+    chmod +x /usr/local/bin/websocat;'
 
 # install php if requested
 ARG PHP_VERSION
@@ -102,34 +111,29 @@ RUN  /bin/bash -c 'if [ -n "${RUST_VERSION}" ]; then \
     fi; \
 fi'
 
-
-RUN mkdir -p /usr/local/data
-WORKDIR /usr/local/data
-
-#ARG DOCKER_VERSION
-# install docker
-RUN install -m 0755 -d /etc/apt/keyrings
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-RUN chmod a+r /etc/apt/keyrings/docker.gpg
-RUN echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN apt-get update
-RUN apt-get install -fy --fix-missing  docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# Install websocat
-RUN  /bin/bash -c 'set -ex && \
-    ARCH=`uname -m` && \
-    PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
-    if [ "$ARCH" = "x86_64" ]; then \
-       echo "websocat x86_64" && \
-       curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.x86_64-unknown-linux-musl" -o /usr/local/bin/websocat;\
-    else \
-       echo "websocat assuming ARM" && \
-       curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.arm-unknown-linux-musleabi" -o /usr/local/bin/websocat;\
+# intstall python if requested
+RUN mkdir -p /build-tmp
+COPY /root/bin/requirements.txt /build-tmp/requirements.txt
+ARG PYTHON_VERSION
+ARG PIP_EXTRA_REQUIREMENTS_TXT
+ARG HOST_PROJECT_FOLDER_NAME
+COPY tmp/$HOST_PROJECT_FOLDER_NAME-* /build-tmp/
+RUN /bin/bash -c 'if [ -n "${PYTHON_VERSION}" ] ; then \
+    apt-get install -fy python3-dev python3-openssl && \
+    export PYENV_ROOT=/usr/local/pyenv && \
+    curl https://pyenv.run | bash && \
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH" && \
+    eval "$(pyenv init -)" && \
+    eval "$(pyenv virtualenv-init -)" && \
+    pyenv install -v $PYTHON_VERSION && \
+    pyenv global $PYTHON_VERSION && \
+    python -m pip install --upgrade pip && \
+    pip install -r /build-tmp/requirements.txt && \
+    if [ -n "${PIP_EXTRA_REQUIREMENTS_TXT}" ]; then \
+        pip install -r "/build-tmp/${HOST_PROJECT_FOLDER_NAME}-pip-extra-requirements.txt" || exit 1; \
     fi; \
-    chmod +x /usr/local/bin/websocat;'
+fi; \
+'
 
 # Install AWS CLI and SSM plugin
 ARG USE_AWS
@@ -261,6 +265,7 @@ WORKDIR /workspace
 ENV PHP_VERSION=$PHP_VERSION
 ENV USE_JAVA=$USE_JAVA
 ENV PYTHON_VERSION=$PYTHON_VERSION
+ENV PIP_EXTRA_REQUIREMENTS_TXT=$PIP_EXTRA_REQUIREMENTS_TXT
 ENV GOLANG_VERSION=$GOLANG_VERSION
 ENV USE_DOT_NET=$USE_DOT_NET
 ENV USE_AWS=$USE_AWS

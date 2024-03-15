@@ -47,6 +47,12 @@ fi
 HOST_PROJECT_FOLDER_NAME="$(basename "$HOST_PROJECT_PATH")"
 export HOST_PROJECT_FOLDER_NAME
 
+if [ ! -d "./tmp" ]; then
+  mkdir ./tmp
+fi
+rm -rf "$GDC_DIR/tmp/$HOST_PROJECT_FOLDER_NAME-*"
+cp "$GDC_DIR/noop" "$GDC_DIR/tmp/$HOST_PROJECT_FOLDER_NAME-noop"
+
 path1=$GDC_DIR
 path2=$HOST_PROJECT_PATH
 
@@ -90,6 +96,13 @@ if [[ "$AWS_VERSION" = "latest" ]]; then
   export AWS_VERSION=$(curl -s https://raw.githubusercontent.com/aws/aws-cli/v2/awscli/__init__.py | grep __version__ | cut -f3 -d' ' | tr -d "'")
   if [[ -z "$AWS_VERSION" ]]; then # if failed to fetch use known good version
     export AWS_VERSION=2.15.12
+  fi
+fi
+
+if [ -n "$PYTHON_VERSION" ]; then
+  if [ -n "$PIP_EXTRA_REQUIREMENTS_TXT" ]; then
+    export PIP_EXTRA_REQUIREMENTS_TXT
+    cp "$HOST_PROJECT_PATH/$PIP_EXTRA_REQUIREMENTS_TXT" "$GDC_DIR/tmp/$HOST_PROJECT_FOLDER_NAME-pip-extra-requirements.txt" || exit 1
   fi
 fi
 
@@ -209,11 +222,6 @@ COMPOSE_FILES="-f docker-compose.yml"
 if [ -n "$GDC_DNS_PRI_IP" ]; then
   echo "Adding compose layer dc-dns.yml"
   COMPOSE_FILES="$COMPOSE_FILES -f dc-dns.yml"
-fi
-
-
-if [ ! -d "./tmp" ]; then
-  mkdir ./tmp
 fi
 
 # this is the stack name for compose
