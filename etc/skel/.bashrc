@@ -176,6 +176,7 @@ if [ "$USE_BITWARDEN" = "yes" ]; then
 
   if [ "$PERSIST_BITWARDEN_SESSION" = "yes" ]; then
     alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION">/root/persisted/.bw_session'
+    alias unlock_quiet='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION">/root/persisted/.bw_session'
     if [ -r ~/persisted/.bw_session ]; then
       echo "Attempting to load existing bitwarden session..."
       . "$HOME/persisted/.bw_session"
@@ -189,10 +190,11 @@ if [ "$USE_BITWARDEN" = "yes" ]; then
       fi
       unset BW_RC
     else
-      echo -e $bldylw"No existing bitwarden session found$txtrst. Please run '$bldgrn""unlock$txtrst'"
+      echo -e $bldylw"No existing bitwarden session found$txtrst. Please run '$bldgrn""unlock or unlock_quiet$txtrst'"
     fi
   else
     alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases"'
+    alias unlock_quiet='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "load_aliases"'
   fi
 
   if [ "$USE_AWS" = "yes" ]; then
