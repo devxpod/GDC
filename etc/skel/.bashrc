@@ -285,5 +285,6 @@ if [[ -n "$PROXY_URL" && "$PROXY_AUTO_EXPORT_ENV" = "yes" ]]; then
   export HTTP_PROXY=$PROXY_URL
   export HTTPS_PROXY=$PROXY_URL
 fi
+
 END_TIME=$(date +%s)
 echo "Shell startup took $(($END_TIME - $START_TIME)) seconds"
