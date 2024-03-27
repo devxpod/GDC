@@ -16,7 +16,7 @@ RUN \
     apt-get install -fy --fix-missing --no-install-recommends locales apt-transport-https \
     software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff file bash-completion \
     inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat socat ca-certificates gnupg2 git \
-    postgresql-client mysql-client
+    postgresql-client mysql-client fzf
 
 # install dev
 RUN \
