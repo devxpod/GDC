@@ -44,6 +44,10 @@ Checkout your hosts file to make sure. `C:\Windows\System32\drivers\etc\hosts`
 
 Run editor as Admin to edit it if necessary.
 
+### Note
+The first time you launch the GDC it can take several minutes to pull in and build all the layers.  
+Subsequent launches will be much faster as the layers will be cached.
+
 ## Optional
 ### Symlink `run-dev-container.sh` in the dev container repo to a bin folder in your path.
 This will allow you to more easily launch dev containers.
@@ -102,6 +106,7 @@ export AWS_REGION=us-east-1
 export GDC_NAME=lappc
 export LS_VERSION=latest
 export LS_IMAGE=localstack/localstack-pro # use localstack/localstack   if you are using LocalStack Community
+export USE_AWS=yes
 export USE_LOCALSTACK=yes
 export USE_LOCALSTACK_HOST=yes
 export USE_LOCALSTACK_PERSISTENCE=no
@@ -137,15 +142,15 @@ These options control what packages / functionality are built into the container
 * USE_HOST_HOME=yes - mounts users home directory into container under /root/host-home. Required by some other options.
 * USE_HOME_BIN=no - copy bin folder from host home directory if it exists. Enables USE_HOST_HOME.
 * SHOW_VERSIONS_ON_LOGIN=yes # show versions of installed tools on login
-* PULUMI_VERSION=latest - a version or "latest" must be specified for Pulumi to be installed.
-* TERRAFORM_VERSION=latest - default is latest. Versions are here. https://releases.hashicorp.com/terraform
+* PULUMI_VERSION=<not set> - a version or "latest" must be specified for Pulumi to be installed.
+* TERRAFORM_VERSION=<not set> - set to latest or specify version. Versions are here. https://releases.hashicorp.com/terraform
 * PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2.
 * USE_DOT_NET=no - installs .NET SDK v6.x.
 * USE_JAVA=no - installs headless openjdk v11.x.
 * PYTHON_VERSION=3.11 - installs Python v3.11, which is highest aws lambda supported python runtime
 * PIP_EXTRA_REQUIREMENTS_TXT=<not set> - if set should be a name of a requirements pip file to be installed if python is installed.
 * USE_PRECOMMIT=no - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
-* USE_AWS=yes - installs AWS CLI version specified by AWS_VERSION, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
+* USE_AWS=no - installs AWS CLI version specified by AWS_VERSION, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
 * AWS_VERSION=latest - installs specified AWS cli version if USE_AWS=yes. Defaults to latest.
 * USE_AWS_HOME=yes - copies ~/.aws folder from host if exists to container /root/.aws. Enables USE_HOST_HOME.
 * USE_BITWARDEN=yes - installs Bitwarden cli and enables NODE_VERSION=18 if NODE_VERSION is not already configured.
@@ -153,7 +158,7 @@ These options control what packages / functionality are built into the container
 * USE_CDK=USE_AWS - installs aws cdk, terraform, cdk for terraform and enables NODE_VERSION=18 if NODE_VERSION is not already configured. Defaults to value of USE_AWS.
 * RUST_VERSION=<not set> - installs latest rust and cargo if set to stable or a specific version.
 * CARGO_EXTRA=<not set> - if set should be a quoted space separated list of cargo packages you want installed.
-* NODE_VERSION=18 - installs NVM and requested node version.
+* NODE_VERSION=20 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * USE_LOCALSTACK_PRO=yes - enables localstack pro keys / tokens.
 * USE_LOCALSTACK_PERSISTENCE=no - toggle persistent storage for LS defaults to persistence disabled.
@@ -478,13 +483,16 @@ Many times only CLEAN=yes is needed, however if the problem persist you can use 
 * CLEAN=yes - stops and removes existing stack and devnet, then does docker system prune before starting new dev container.
 * CLEAN_ONLY=yes - stops and removes existing stack and devnet, then does docker system prune and exits.
 
+If you continue to have issues you can try the following to blow out all docker cache:
+```bash
+docker system prune -af
+```
+
 ### Localstack won't let go of old state
 * All OS stop all GDC's and localstack containers and remove the following folders if they exist.
 * $HOST_PROJECT_PATH/ls_volume folder
 * /tmp/ls_volume*
 * /c/tmp/ls_volume*
-
-* start GDC and run  *make reset*
 
 # Contributing
 [Contributing is here](./docs/contributing.md)
