@@ -143,7 +143,14 @@ if [[ "$AWS_VERSION" = "latest" ]]; then
   # latest version
   export AWS_VERSION=$(curl -s https://raw.githubusercontent.com/aws/aws-cli/v2/awscli/__init__.py | grep __version__ | cut -f3 -d' ' | tr -d "'")
   if [[ -z "$AWS_VERSION" ]]; then # if failed to fetch use known good version
-    export AWS_VERSION=2.15.12
+    export AWS_VERSION=2.15.36
+  fi
+fi
+
+if [[ "$GOLANG_VERSION" = "latest" ]]; then
+  export GOLANG_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | tr -d 'go')
+  if [[ -z "$GOLANG_VERSION" ]]; then
+    export GOLANG_VERSION='1.22.2' # install this golang version as fallback if latest fails
   fi
 fi
 

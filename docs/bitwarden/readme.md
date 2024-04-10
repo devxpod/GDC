@@ -178,14 +178,8 @@ Create an empty folder name whatever you want, in this example I will use "rdspf
 In the rdspf folder create a file name **.env-gdc**  similar to the following:
 ```bash
 # BEGIN this chunk helps speed up the launching of a GDC dedicated to port forwarding.
-USE_PRECOMMIT="no"
 SSH_KEYSCAN_HOSTS=""
 PYTHON_VERSION=""
-PHP_VERSION=""
-USE_JAVA="no"
-USE_DOT_NET="no"
-GOLANG_VERSION=""
-PULUMI_VERSION=""
 GIT_NAME=""
 # END this chunk helps speed up the launching of a GDC dedicated to port forwarding.
 

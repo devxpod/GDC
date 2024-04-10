@@ -42,7 +42,6 @@ RUN mkdir -p /usr/local/share/.cache
 RUN mkdir -p /usr/local/data
 WORKDIR /usr/local/data
 
-#ARG DOCKER_VERSION
 # install docker
 RUN install -m 0755 -d /etc/apt/keyrings
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
