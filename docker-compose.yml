@@ -70,6 +70,7 @@ services:
       - USE_LOCALSTACK_PERSISTENCE # toggle persistent storage for LS defaults to persistence enabled.
       - USE_LOCALSTACK_HOST # forwards localstack ports to host if LS_VERSION is set
       - LOCALSTACK_HOSTNAME # contains hostname of container or host depending on mode
+      - LS_DNS_NAME_PATTERNS_TO_RESOLVE_UPSTREAM # used by localstack dns server to resolve upstream requests
       - LS_IMAGE # can override with custom image location. Still uses LS_VERSION to create final image location
       - LS_VERSION # starts up localstack with specified version >= 1.x.x.
       - LS_MAIN_CONTAINER_NAME # used by localstack
@@ -123,7 +124,7 @@ services:
       - PROXY_URL # http proxy to use. if USE_PROXY_HOST is enabled will be set to http://PROXY_CONTAINER_NAME:8080
       - PROXY_URL_SSL # https proxy to use. if USE_PROXY_HOST is enabled will be set to https://PROXY_CONTAINER_NAME:8080
       - PROXY_AUTO_EXPORT_ENV # auto export HTTP_PROXY and HTTPS_PROXY vars equal to PROXY_URL
-      - DEV_CONTAINER=1.10.17 # used to detect if running inside dev container
+      - DEV_CONTAINER=1.10.18 # used to detect if running inside dev container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allow container to interact with host docker
       - "${GDC_DIR}:/root/gdc-host" # mount gdc folder inside container to get access to compose files
