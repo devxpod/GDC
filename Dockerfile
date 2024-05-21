@@ -21,14 +21,14 @@ RUN \
 # install dev
 RUN \
     --mount=type=cache,target=/var/cache/apt \
-    apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
-    libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm libncurses5-dev liblzma-dev libpq-dev libcurl4-openssl-dev pkg-config
+    apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncurses-dev libssl-dev \
+    libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm liblzma-dev libpq-dev libcurl4-openssl-dev pkg-config
 
 # install editors and any extra packages user has requested
 ARG EXTRA_PACKAGES
 RUN \
     --mount=type=cache,target=/var/cache/apt \
-    apt-get install -fy --fix-missing --no-install-recommends libncurses5 joe nano vim $EXTRA_PACKAGES
+    apt-get install -fy --fix-missing --no-install-recommends joe nano vim $EXTRA_PACKAGES
 
 # update default editor
 RUN update-alternatives --install /usr/bin/editor editor /usr/bin/vim 80 && \
