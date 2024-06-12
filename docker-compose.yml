@@ -17,7 +17,8 @@ services:
         - TERRAFORM_VERSION # install this version of terraform. default is 'latest'
         - PHP_VERSION # 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1
         - USE_DOT_NET # install ubuntu:latest dotnet core packages
-        - GOLANG_VERSION # install this golang version. blank for none. latest is 1.18
+        - USE_KUBECTL # install kubectl:stable
+#        - GOLANG_VERSION # install this golang version. blank for none. latest is 1.18
         - PYTHON_VERSION # install this python version
         - PIP_EXTRA_REQUIREMENTS_TXT # install extra pip requirements if python is installed
         - USE_AWS # install latest aws cli, ssm plugin, and ecr helper

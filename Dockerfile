@@ -87,6 +87,16 @@ RUN /bin/bash -c 'if [ "${USE_DOT_NET}" = "yes" ] ; then \
   mv /root/.dotnet/* /usr/local/dotnet; \
 fi'
 
+# if kubectl is set then install kubectl
+ARG USE_KUBECTL
+RUN /bin/bash -c 'if [ "${USE_KUBECTL}" = "yes" ] ; then \
+  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"; \
+  install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl; \
+  chmod +x kubectl; \
+  mv ./kubectl ~/.local/bin/kubectl; \
+  kubectl version --client; \
+fi'
+
 ARG GOLANG_VERSION
 RUN /bin/bash -c 'if [ -n "${GOLANG_VERSION}" ] ; then \
     ARCH=`uname -m` && \
@@ -205,7 +215,9 @@ COPY /etc/bash_completion.d /etc/bash_completion.d
 COPY init.sh /init.sh
 COPY /root/bin/ /root/bin-extra
 COPY postStartCommand.sh /
-
+COPY /seek/requirements-seek.txt /seek/requirements-seek.txt
+COPY /seek/config /root/.aws/config
+COPY /seek/credentials /root/.aws/credentials
 
 RUN chmod a+rx -R /init.sh /postStartCommand.sh /root/bin-extra
 
@@ -267,6 +279,7 @@ ENV PYTHON_VERSION=$PYTHON_VERSION
 ENV PIP_EXTRA_REQUIREMENTS_TXT=$PIP_EXTRA_REQUIREMENTS_TXT
 ENV GOLANG_VERSION=$GOLANG_VERSION
 ENV USE_DOT_NET=$USE_DOT_NET
+ENV USE_KUBECTL=$USE_KUBECTL
 ENV USE_AWS=$USE_AWS
 ENV NODE_VERSION=$NODE_VERSION
 ENV RUST_VERSION=$RUST_VERSION
@@ -276,6 +289,7 @@ ENV PULUMI_VERSION=$PULUMI_VERSION
 ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
 
 ENV PATH="$PATH:/root/bin:/root/bin-extra:/root/bin-extra/docker:/root/gdc-host"
+
 
 ENTRYPOINT /init.sh
 

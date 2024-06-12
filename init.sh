@@ -31,6 +31,9 @@ if [ -n "$GDC_ENTRYPOINT" ]; then
   fi
 fi
 
+echo "Installing seek requirement..."
+pip install -r /seek/requirements-seek.txt --no-deps --quiet 
+echo "seek requirement completed..."
 
 echo -e "$bldwht""================================================================================ $txtrst"
 echo -e "$bldgrn""Connect to GDC shell via docker with:  docker exec -it $GDC_CONTAINER_NAME bash -l $txtrst  $CLIPBOARD_MSG"
@@ -48,4 +51,5 @@ fi
 echo -e "$bldwht""================================================================================ $txtrst"
 echo "sleeping forever...."
 tail -f /dev/null 2>&1
+
 
