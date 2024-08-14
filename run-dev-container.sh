@@ -33,53 +33,6 @@ if [ -r "$SCRIPT_DIR/.env-gdc-local" ]; then
   source "$SCRIPT_DIR/.env-gdc-local"
 fi
 
-if [[ "$USE_HOME_BIN" = "yes" || "$USE_AWS_HOME" = "yes" ]]; then
-  USE_HOST_HOME=yes
-fi
-
-export USE_HOST_HOME=${USE_HOST_HOME:=yes} # mount home directory from host
-
-if [ -n "$LS_VERSION" ]; then # if we use localstack, we should install aws cli
-  export USE_LOCALSTACK=yes
-  export USE_AWS=${USE_AWS:=yes} # install latest aws cli, ssm plugin, and ecr helper
-else
-  export USE_AWS=${USE_AWS:=no} # install latest aws cli, ssm plugin, and ecr helper
-fi
-
-if [ "$USE_AWS" = "yes" ]; then
-  if [ -z ${AWS_VERSION+x} ]; then
-    export AWS_VERSION=latest # install latest version of aws cli
-  fi
-fi
-
-export USE_CDK=${USE_CDK:=$USE_AWS}  # install latest aws cdk, terraform and cdk for terraform. requires node install
-
-# if bitwarden is enabled, ensure node is also enabled
-if [[ "$USE_BITWARDEN" = "yes" && -z "$NODE_VERSION" ]]; then
-  export NODE_VERSION=20 # install this version of node.
-fi
-
-# if cdk is enabled, ensure node is also enabled
-if [[ "$USE_CDK" = "yes" && -z "$NODE_VERSION" ]]; then
-  export NODE_VERSION=20 # install this version of node.
-fi
-
-if [[ -z ${PYTHON_VERSION+x} ]]; then
-  export PYTHON_VERSION=3.11 # latest aws lambda supported runtime
-fi
-
-export USE_PRECOMMIT=${USE_PRECOMMIT:=no} # use pre-commit hooks in git to format and lint files
-# pre-commit requires python and will enable it if needed
-if [[ -z ${PYTHON_VERSION+x} && "$USE_PRECOMMIT" = "yes" ]]; then
-  export PYTHON_VERSION=3.10.10 # install this python version
-fi
-
-if [ -n "$LOCALSTACK_API_KEY" ] || [ -n "$LOCALSTACK_AUTH_TOKEN" ]; then
-  export LS_IMAGE=${LS_IMAGE:="localstack/localstack-pro"} # use pro image if API key is provided
-else
-  export LS_IMAGE=${LS_IMAGE:="localstack/localstack"} # can override with custom image location. Still uses LS_VERSION to create final image location.
-fi
-
 
 # this will get mounted under /workspace in container
 if [ "$USE_WORKSPACE" = "yes" ]; then
@@ -139,11 +92,65 @@ if [ -r "./.env-gdc-local" ]; then
   source ./.env-gdc-local
 fi
 
+if [[ "$USE_HOME_BIN" = "yes" || "$USE_AWS_HOME" = "yes" ]]; then
+  USE_HOST_HOME=yes
+fi
+
+export USE_HOST_HOME=${USE_HOST_HOME:=yes} # mount home directory from host
+
+if [ -n "$LS_VERSION" ]; then # if we use localstack, we should install aws cli
+  export USE_LOCALSTACK=yes
+  export USE_AWS=${USE_AWS:=yes} # install latest aws cli, ssm plugin, and ecr helper
+else
+  export USE_AWS=${USE_AWS:=no} # install latest aws cli, ssm plugin, and ecr helper
+fi
+
+if [ "$USE_AWS" = "yes" ]; then
+  if [ -z ${AWS_VERSION+x} ]; then
+    export AWS_VERSION=latest # install latest version of aws cli
+  fi
+fi
+
+export USE_CDK=${USE_CDK:=$USE_AWS}  # install latest aws cdk, terraform and cdk for terraform. requires node install
+
+# if bitwarden is enabled, ensure node is also enabled
+if [[ "$USE_BITWARDEN" = "yes" && -z "$NODE_VERSION" ]]; then
+  export NODE_VERSION=20 # install this version of node.
+fi
+
+# if cdk is enabled, ensure node is also enabled
+if [[ "$USE_CDK" = "yes" && -z "$NODE_VERSION" ]]; then
+  export NODE_VERSION=20 # install this version of node.
+fi
+
+if [[ -z ${PYTHON_VERSION+x} ]]; then
+  export PYTHON_VERSION=3.11 # latest aws lambda supported runtime
+fi
+
+export USE_PRECOMMIT=${USE_PRECOMMIT:=no} # use pre-commit hooks in git to format and lint files
+# pre-commit requires python and will enable it if needed
+if [[ -z ${PYTHON_VERSION+x} && "$USE_PRECOMMIT" = "yes" ]]; then
+  export PYTHON_VERSION=3.10.10 # install this python version
+fi
+
+if [ -n "$LOCALSTACK_API_KEY" ] || [ -n "$LOCALSTACK_AUTH_TOKEN" ]; then
+  export LS_IMAGE=${LS_IMAGE:="localstack/localstack-pro"} # use pro image if API key is provided
+else
+  export LS_IMAGE=${LS_IMAGE:="localstack/localstack"} # can override with custom image location. Still uses LS_VERSION to create final image location.
+fi
+
 if [[ "$AWS_VERSION" = "latest" ]]; then
   # latest version
   export AWS_VERSION=$(curl -s https://raw.githubusercontent.com/aws/aws-cli/v2/awscli/__init__.py | grep __version__ | cut -f3 -d' ' | tr -d "'")
   if [[ -z "$AWS_VERSION" ]]; then # if failed to fetch use known good version
-    export AWS_VERSION=2.15.12
+    export AWS_VERSION=2.15.36
+  fi
+fi
+
+if [[ "$GOLANG_VERSION" = "latest" ]]; then
+  export GOLANG_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n 1 | tr -d 'go')
+  if [[ -z "$GOLANG_VERSION" ]]; then
+    export GOLANG_VERSION='1.22.2' # install this golang version as fallback if latest fails
   fi
 fi
 

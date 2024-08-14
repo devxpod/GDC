@@ -15,20 +15,20 @@ RUN \
     --mount=type=cache,target=/var/cache/apt \
     apt-get install -fy --fix-missing --no-install-recommends locales apt-transport-https \
     software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff file bash-completion \
-    inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat socat ca-certificates gnupg2 git \
+    inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat-traditional socat ca-certificates gnupg2 git \
     postgresql-client mysql-client fzf
 
 # install dev
 RUN \
     --mount=type=cache,target=/var/cache/apt \
-    apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncursesw5-dev libssl-dev \
-    libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm libncurses5-dev liblzma-dev libpq-dev libcurl4-openssl-dev pkg-config
+    apt-get install -fy --fix-missing --no-install-recommends build-essential make libffi-dev libreadline-dev libncurses-dev libssl-dev \
+    libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev llvm liblzma-dev libpq-dev libcurl4-openssl-dev pkg-config
 
 # install editors and any extra packages user has requested
 ARG EXTRA_PACKAGES
 RUN \
     --mount=type=cache,target=/var/cache/apt \
-    apt-get install -fy --fix-missing --no-install-recommends libncurses5 joe nano vim $EXTRA_PACKAGES
+    apt-get install -fy --fix-missing --no-install-recommends joe nano vim $EXTRA_PACKAGES
 
 # update default editor
 RUN update-alternatives --install /usr/bin/editor editor /usr/bin/vim 80 && \
@@ -42,7 +42,6 @@ RUN mkdir -p /usr/local/share/.cache
 RUN mkdir -p /usr/local/data
 WORKDIR /usr/local/data
 
-#ARG DOCKER_VERSION
 # install docker
 RUN install -m 0755 -d /etc/apt/keyrings
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg

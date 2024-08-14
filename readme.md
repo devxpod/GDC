@@ -157,6 +157,7 @@ These options control what packages / functionality are built into the container
 * PERSIST_BITWARDEN_SESSION=no - persist bitwarden session to /root/persisted volume and autoload it in subsequent logins. Reduces need to enter master password, but is less secure.
 * USE_CDK=USE_AWS - installs aws cdk, terraform, cdk for terraform and enables NODE_VERSION=18 if NODE_VERSION is not already configured. Defaults to value of USE_AWS.
 * RUST_VERSION=<not set> - installs latest rust and cargo if set to stable or a specific version.
+* GOLANG_VERSION=<not set> - installs specified version of golang. Specify latest to fetch current version.
 * CARGO_EXTRA=<not set> - if set should be a quoted space separated list of cargo packages you want installed.
 * NODE_VERSION=20 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
@@ -173,6 +174,7 @@ These options control what packages / functionality are built into the container
 * USE_LOCALSTACK_DNS=no - assigns static ip to LS container and sets GDC to use its dns.
 * LOCALSTACK_STATIC_IP=<not set> - sets a static ip for LS container if set. Will be auto set if not specified and USE_LOCALSTACK_DNS=yes.
 * LOCALSTACK_HOST_DNS_PORT=53 - when LocalStack is running in host mode forward this port from host to localstack. Set to blank string to disable localstack DNS forward.
+* LS_DNS_NAME_PATTERNS_TO_RESOLVE_UPSTREAM=<not set> - space separated list of regex patterns to resolve upstream. 
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.

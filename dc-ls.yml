@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   localstack:
@@ -29,6 +28,7 @@ services:
       - OPENSEARCH_ENDPOINT_STRATEGY=port
       - PROVIDER_OVERRIDE_CLOUDWATCH=v2
       - DYNAMODB_REMOVE_EXPIRED_ITEMS=1
+      - DNS_NAME_PATTERNS_TO_RESOLVE_UPSTREAM=${LS_DNS_NAME_PATTERNS_TO_RESOLVE_UPSTREAM}
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "${LOCALSTACK_VOLUME_DIR:-/tmp/ls_volume}:/var/lib/localstack"

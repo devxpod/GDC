@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
   dev:
@@ -20,8 +19,6 @@ services:
         - USE_BITWARDEN # enable bitwarden workflow helpers. will enable NODE_VERSION=18 if not set
         - USE_CDK # install aws cdk, terraform and cdk for terraform
         - USE_JAVA # install ubuntu:latest openjdk packages
-#        - DOCKER_VERSION # install docker version inside container
-#        - DOCKER_COMPOSE_VERSION # install docker-compose version inside container
         - EXTRA_PACKAGES # any extra Ubuntu packages you want installed into the base container
         - AWS_VERSION # install AWS CLI version
     environment:
