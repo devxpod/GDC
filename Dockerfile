@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:24.04
 # only effects build time and and makes it so we dont have to specify it every apt install
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
