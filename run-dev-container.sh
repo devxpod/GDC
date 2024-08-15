@@ -48,8 +48,8 @@ fi
 HOST_PROJECT_FOLDER_NAME="$(basename "$HOST_PROJECT_PATH")"
 export HOST_PROJECT_FOLDER_NAME
 
-if [ ! -d "./tmp" ]; then
-  mkdir ./tmp
+if [ ! -d "$GDC_DIR/tmp" ]; then
+  mkdir "$GDC_DIR/tmp"
 fi
 rm -rf "$GDC_DIR/tmp/$HOST_PROJECT_FOLDER_NAME-*"
 cp "$GDC_DIR/noop" "$GDC_DIR/tmp/$HOST_PROJECT_FOLDER_NAME-noop"
