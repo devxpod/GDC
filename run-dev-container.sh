@@ -130,7 +130,7 @@ fi
 export USE_PRECOMMIT=${USE_PRECOMMIT:=no} # use pre-commit hooks in git to format and lint files
 # pre-commit requires python and will enable it if needed
 if [[ -z ${PYTHON_VERSION+x} && "$USE_PRECOMMIT" = "yes" ]]; then
-  export PYTHON_VERSION=3.10.10 # install this python version
+  export PYTHON_VERSION=3.11 # install this python version
 fi
 
 if [ -n "$LOCALSTACK_API_KEY" ] || [ -n "$LOCALSTACK_AUTH_TOKEN" ]; then

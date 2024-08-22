@@ -14,7 +14,7 @@ RUN \
 RUN \
     --mount=type=cache,target=/var/cache/apt \
     apt-get install -fy --fix-missing --no-install-recommends locales apt-transport-https \
-    software-properties-common dselect zip unzip xz-utils procps less dos2unix jq groff file bash-completion \
+    software-properties-common dselect zip unzip xz-utils zstd procps less dos2unix jq groff file bash-completion \
     inetutils-ping net-tools dnsutils ssh curl wget telnet-ssl netcat-traditional socat ca-certificates gnupg2 git \
     postgresql-client mysql-client fzf
 
@@ -111,6 +111,7 @@ RUN  /bin/bash -c 'if [ -n "${RUST_VERSION}" ]; then \
 fi'
 
 # intstall python if requested
+# install pyenv for backwards compatibility. uv is far better
 RUN mkdir -p /build-tmp
 COPY /root/bin/requirements.txt /build-tmp/requirements.txt
 ARG PYTHON_VERSION
@@ -119,14 +120,37 @@ ARG HOST_PROJECT_FOLDER_NAME
 COPY tmp/$HOST_PROJECT_FOLDER_NAME-* /build-tmp/
 RUN /bin/bash -c 'if [ -n "${PYTHON_VERSION}" ] ; then \
     apt-get install -fy python3-dev python3-openssl && \
+    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    source /root/.cargo/env && \
     export PYENV_ROOT=/usr/local/pyenv && \
     curl https://pyenv.run | bash && \
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH" && \
-    eval "$(pyenv init -)" && \
-    eval "$(pyenv virtualenv-init -)" && \
-    pyenv install -v $PYTHON_VERSION && \
-    pyenv global $PYTHON_VERSION && \
-    python -m pip install --upgrade pip && \
+    export PATH="$PYENV_ROOT/bin:$PATH" && \
+    ARCH=`uname -m` && \
+    if [ "$ARCH" = "x86_64" ]; then \
+      echo "python x86_64" && \
+      export PY_ARCH="$ARCH"; \
+    else \
+      echo "python assuming ARM" && \
+      export PY_ARCH="aarch64"; \
+    fi; \
+    echo "Checking for matching binary releases" && \
+    curl -sL -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/indygreg/python-build-standalone/releases/latest \
+      | jq -r ".assets[].browser_download_url" \
+      | grep -v "sha256" \
+      | grep "$PY_ARCH-unknown-linux-gnu-install_only.tar.gz" \
+      | grep "cpython-${PYTHON_VERSION}" > /tmp/download_url.txt; \
+    grep "python-build-standalone" /tmp/download_url.txt; \
+    if [ $? -eq 0 ]; then \
+      echo "Prebuilt python found. Installing" && \
+      curl -sL $( cat /tmp/download_url.txt ) | tar -xzv -C /usr/local --strip-components=1 python || exit 1; \
+    else \
+      echo "Binary version not found, using pyenv for install. Consider using only 2 parts in your PYTHON_VERSION example: 3.11 instead of 3.11.5" && \
+      eval "$(pyenv init -)"; \
+      eval "$(pyenv virtualenv-init -)" && \
+      pyenv install -v $PYTHON_VERSION && \
+      pyenv global $PYTHON_VERSION && \
+      python -m pip install --upgrade pip; \
+    fi; \
     pip install -r /build-tmp/requirements.txt && \
     if [ -n "${PIP_EXTRA_REQUIREMENTS_TXT}" ]; then \
         pip install -r "/build-tmp/${HOST_PROJECT_FOLDER_NAME}-pip-extra-requirements.txt" || exit 1; \
