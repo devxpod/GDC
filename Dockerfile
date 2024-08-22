@@ -131,10 +131,10 @@ RUN /bin/bash -c 'if [ -n "${PYTHON_VERSION}" ] ; then \
       export PY_ARCH="$ARCH"; \
     else \
       echo "python assuming ARM" && \
-      export PY_ARCH="aarch64-apple-darwin"; \
+      export PY_ARCH="aarch64"; \
     fi; \
     echo "Checking for matching binary releases" && \
-    curl -L -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/indygreg/python-build-standalone/releases/latest \
+    curl -sL -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/indygreg/python-build-standalone/releases/latest \
       | jq -r ".assets[].browser_download_url" \
       | grep -v "sha256" \
       | grep "$PY_ARCH-unknown-linux-gnu-install_only.tar.gz" \
