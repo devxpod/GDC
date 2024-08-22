@@ -1,5 +1,9 @@
 virtualenv
 pipenv
+pipx
+black
+pylint
+pyright
 pre-commit
 boto3
 click
@@ -23,6 +27,6 @@ textual-dev
 asyncio
 humanize
 argparse
-clipboard
+pyperclip
 rich
 typing_extensions

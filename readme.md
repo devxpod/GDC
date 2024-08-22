@@ -147,7 +147,7 @@ These options control what packages / functionality are built into the container
 * PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2.
 * USE_DOT_NET=no - installs .NET SDK v6.x.
 * USE_JAVA=no - installs headless openjdk v11.x.
-* PYTHON_VERSION=3.11 - installs Python v3.11, which is highest aws lambda supported python runtime
+* PYTHON_VERSION=3.11 - installs Python v3.11, which is highest aws lambda supported python runtime that runs on Amazon linux 2
 * PIP_EXTRA_REQUIREMENTS_TXT=<not set> - if set should be a name of a requirements pip file to be installed if python is installed.
 * USE_PRECOMMIT=no - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
 * USE_AWS=no - installs AWS CLI version specified by AWS_VERSION, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
@@ -257,6 +257,17 @@ Example:
 ```bash
 export ROOT_PW=iAmGroot
 ```
+
+# Python
+
+## Python version installation
+The GDC will attempt to use a binary package for python if its available for the version specified in the env var PYTHON_VERSION  
+To help ensure there is a binary match its best to only specify the major and minor version of python you need for example PYTHON_VERSION=3.11 instead of 3.11.5  
+If a binary match for the version requested cant be found the exact version will be compiled and installed. This takes significantly longer that if a binary match is found.
+
+## Extra python packages
+* GDC auto installs a set of packages such as uv, pyenv, black, pylint, pyright. The full list can be found the GDC repo  under [root/bin/requirements.txt](root/bin/requirements.txt)
+* if you specify a file from your repo using PIP_EXTRA_REQUIREMENTS_TXT env var, those will be installed as well.
 
 # Special folders
 * **/var/run/docker.sock** - mounted from host to allow docker to be used and controlled from within container.
