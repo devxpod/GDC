@@ -195,7 +195,7 @@ if [ "$USE_BITWARDEN" = "yes" ]; then
       echo -e $bldylw"No existing bitwarden session found$txtrst. Please run '$bldgrn""unlock or unlock_quiet$txtrst'"
     fi
   else
-    alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases"'
+    alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases;history -d \$(history 1)"'
     alias unlock_quiet='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "load_aliases"'
   fi
 

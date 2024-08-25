@@ -39,7 +39,7 @@ Add the following to your .bashrc or .zshrc file your home directory.
 export AWS_PROFILE=YOUR-identity
 alias load_aliases="eval \`bw get item bw_bash_rc | jq -r '.notes'\`";
 alias bw_reload="bw sync; load_aliases";
-alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases"'
+alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases;history -d \$(history 1)"'
 echo "unlock"
 ```
 Replace **YOUR-identity** with your aws identity for example: `export AWS_PROFILE=paul.robello-identity`
@@ -136,7 +136,7 @@ company / org then eval them all from the notes you create.
 ### Alias Descriptions:
 #### Core
 * unlock - unlocks your vault, syncs it with cloud, and calls load_aliases.
-* * if you are using the dev container and PERSIST_BITWARDEN_SESSION=yes then it will also write your session key to /root/persisted/.bw_session and this file will be sourced by any other shells you open to reduce need to unlock vault.
+* if you are using the dev container and PERSIST_BITWARDEN_SESSION=yes then it will also write your session key to /root/persisted/.bw_session and this file will be sourced by any other shells you open to reduce need to unlock vault.
 * load_aliases - loads the secure note with name bw_bash_rc into your environment.
 * bw_reload - syncs vault with cloud and calls load_aliases.
 

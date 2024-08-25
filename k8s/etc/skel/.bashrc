@@ -168,7 +168,7 @@ if [ "$USE_BITWARDEN" = "yes" ]; then
       . "$HOME/persisted/.bw_session"
     fi
   else
-    alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases"'
+    alias unlock='export BW_SESSION="$(bw unlock --raw)"; bw sync; load_aliases; echo "export BW_SESSION=$BW_SESSION;load_aliases;history -d \$(history 1)"'
   fi
 
   if [ "$USE_AWS" = "yes" ]; then
