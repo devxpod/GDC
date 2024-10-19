@@ -234,6 +234,10 @@ if [ "$USE_LOCALSTACK" = "yes" ]; then
   if [ -n "$LOCALSTACK_STATIC_IP" ]; then
     echo "Localstack static ip: $LOCALSTACK_STATIC_IP"
   fi
+  if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
+    export LOCALSTACK_HOST=localhost.localstack.cloud:4566
+    alias awsl="aws --no-sign-request --endpoint-url https://$LOCALSTACK_HOST"
+  fi
 fi
 
 if [ -n "$GDC_DNS_PRI_IP" ]; then

@@ -291,6 +291,10 @@ else
 fi
 export LOCALSTACK_HOSTNAME=$(echo "$LOCALSTACK_HOST" | cut -d: -f1)
 
+if [ "$USE_LOCALSTACK_DNS" = "yes" ]; then
+  export LOCALSTACK_HOST=localhost.localstack.cloud:4566
+fi
+
 export DEVNET_NAME=${DEVNET_NAME:="devnet_$COMPOSE_PROJECT_NAME"}
 if [ -z "$DEVNET_NAME" ]; then
   echo "Env variable DEVNET_NAME is not set !"
