@@ -121,7 +121,7 @@ COPY tmp/$HOST_PROJECT_FOLDER_NAME-* /build-tmp/
 RUN /bin/bash -c 'if [ -n "${PYTHON_VERSION}" ] ; then \
     apt-get install -fy python3-dev python3-openssl && \
     curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    source /root/.cargo/env && \
+    source "$HOME/.local/bin/env" && \
     export PYENV_ROOT=/usr/local/pyenv && \
     curl https://pyenv.run | bash && \
     export PATH="$PYENV_ROOT/bin:$PATH" && \
