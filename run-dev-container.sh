@@ -96,7 +96,13 @@ if [[ "$USE_HOME_BIN" = "yes" || "$USE_AWS_HOME" = "yes" ]]; then
   USE_HOST_HOME=yes
 fi
 
-export USE_HOST_HOME=${USE_HOST_HOME:=yes} # mount home directory from host
+if [[ "$USE_HOST_HOME" = "yes" && "$USE_AWS_SYMLINK" = "yes" && "$USE_HOST_HOME_RW" != "yes" ]]; then
+  echo "If USE_AWS_SYMLINK=yes you must set USE_HOST_HOME_RW=yes"
+  exit 1
+fi
+
+export USE_HOST_HOME=${USE_HOST_HOME:=yes} # mount home directory from host readonly
+export USE_HOST_HOME_RW=${USE_HOST_HOME_RW:=no} # mount home directory from host read write
 
 if [ -n "$LS_VERSION" ]; then # if we use localstack, we should install aws cli
   export USE_LOCALSTACK=yes
@@ -443,7 +449,11 @@ fi
 # enable mounting and copying data from host users home dir
 if [ "$USE_HOST_HOME" = "yes" ]; then
   echo "Adding compose layer dc-host-home-dir.yml"
-  COMPOSE_FILES="$COMPOSE_FILES -f dc-host-home-dir.yml"
+  if [ "$USE_HOST_HOME_RW" = "yes" ]; then
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-host-home-dir-rw.yml"
+  else
+    COMPOSE_FILES="$COMPOSE_FILES -f dc-host-home-dir.yml"
+  fi
 fi
 
 # this will forward port and start ssh server

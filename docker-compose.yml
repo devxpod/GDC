@@ -42,7 +42,8 @@ services:
       - HOST_PROJECT_PATH # helps with volume mounts if you run containers from within dev container
       - HOST_PROJECT_FOLDER_NAME # dirname $HOST_PROJECT_PATH
       - HOST_OS=${OS:-} # used to remap paths in windows format to linux format
-      - USE_HOST_HOME # mount home directory from host
+      - USE_HOST_HOME # mount home directory from host readonly
+      - USE_HOST_HOME_RW # mount home directory from host read write
       - USE_HOME_BIN # copy bin folder from host home directory if it exists and USE_HOST_HOME=yes to container home directory
       - USE_PRECOMMIT # use pre-commit hooks in git to format and lint files
       - EDITOR # sets default editor in container. usually set to same as VISUAL
@@ -80,6 +81,7 @@ services:
       - PERSIST_BITWARDEN_SESSION # persist unlocked vault creds between container sessions
       - USE_CDK # install cdk if set to yes
       - USE_AWS_HOME # copy .aws folder from host home if exists and USE_HOST_HOME=yes
+      - USE_AWS_SYMLINK # use symlink to home .aws if exists and USE_HOST_HOME=yes and USE_AWS_HOME=yes
       - AWS_IDENTITY_ACCOUNT # used by AWS assume-role.sh script
       - GIT_EMAIL # required for GIT if you don't have a .gitconfig in your home directory
       - GIT_NAME # required for GIT if you don't have a .gitconfig in your home directory

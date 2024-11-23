@@ -9,8 +9,12 @@ fi
 if [ "$USE_AWS" = "yes" ]; then
     if [[ "$USE_HOST_HOME" = "yes" && -r ~/home-host/.aws ]]; then
         echo "Using host .aws folder"
-        cp -a ~/home-host/.aws ~
-        dos2unix ~/.aws/*
+        if [ "$USE_AWS_SYMLINK" = "yes" ]; then
+          ln -s ~/home-host/.aws ~/.aws
+        else
+          cp -a ~/home-host/.aws ~
+          dos2unix ~/.aws/*
+        fi
     elif [ -r ~/shared/.aws ]; then
         echo "Using container ~/shared/.aws folder"
         ln -s ~/shared/.aws ~/.aws

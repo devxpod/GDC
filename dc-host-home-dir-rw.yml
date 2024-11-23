@@ -1,0 +1,5 @@
+
+services:
+  dev:
+    volumes:
+      - ~:/root/home-host # read write home dir mounted inside container
