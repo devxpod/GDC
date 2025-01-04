@@ -121,22 +121,22 @@ export USE_CDK=${USE_CDK:=$USE_AWS}  # install latest aws cdk, terraform and cdk
 
 # if bitwarden is enabled, ensure node is also enabled
 if [[ "$USE_BITWARDEN" = "yes" && -z "$NODE_VERSION" ]]; then
-  export NODE_VERSION=20 # install this version of node.
+  export NODE_VERSION=22 # install this version of node.
 fi
 
 # if cdk is enabled, ensure node is also enabled
 if [[ "$USE_CDK" = "yes" && -z "$NODE_VERSION" ]]; then
-  export NODE_VERSION=20 # install this version of node.
+  export NODE_VERSION=22 # install this version of node.
 fi
 
 if [[ -z ${PYTHON_VERSION+x} ]]; then
-  export PYTHON_VERSION=3.11 # latest aws lambda supported runtime
+  export PYTHON_VERSION=3.12 # latest aws lambda supported runtime
 fi
 
 export USE_PRECOMMIT=${USE_PRECOMMIT:=no} # use pre-commit hooks in git to format and lint files
 # pre-commit requires python and will enable it if needed
 if [[ -z ${PYTHON_VERSION+x} && "$USE_PRECOMMIT" = "yes" ]]; then
-  export PYTHON_VERSION=3.11 # install this python version
+  export PYTHON_VERSION=3.12 # install this python version
 fi
 
 if [ -n "$LOCALSTACK_API_KEY" ] || [ -n "$LOCALSTACK_AUTH_TOKEN" ]; then

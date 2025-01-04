@@ -149,7 +149,7 @@ These options control what packages / functionality are built into the container
 * PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2.
 * USE_DOT_NET=no - installs .NET SDK v6.x.
 * USE_JAVA=no - installs headless openjdk v11.x.
-* PYTHON_VERSION=3.11 - installs Python v3.11, which is highest aws lambda supported python runtime that runs on Amazon linux 2
+* PYTHON_VERSION=3.11 - installs Python v3.12, which is highest aws lambda supported python runtime that runs on Amazon linux 2
 * PIP_EXTRA_REQUIREMENTS_TXT=<not set> - if set should be a name of a requirements pip file to be installed if python is installed.
 * USE_PRECOMMIT=no - installs git pre-commit hooks in repo if not already installed. Enables Python if not already enabled.
 * USE_AWS=no - installs AWS CLI version specified by AWS_VERSION, SSM Plugin and EKS IAM auth helper as well as aws helper scripts and aliases.
@@ -162,7 +162,7 @@ These options control what packages / functionality are built into the container
 * RUST_VERSION=<not set> - installs latest rust and cargo if set to stable or a specific version.
 * GOLANG_VERSION=<not set> - installs specified version of golang. Specify latest to fetch current version.
 * CARGO_EXTRA=<not set> - if set should be a quoted space separated list of cargo packages you want installed.
-* NODE_VERSION=20 - installs NVM and requested node version.
+* NODE_VERSION=22 - installs NVM and requested node version.
 * USE_LOCALSTACK=yes - enables some localstack helpers.
 * USE_LOCALSTACK_PRO=yes - enables localstack pro keys / tokens.
 * USE_LOCALSTACK_PERSISTENCE=no - toggle persistent storage for LS defaults to persistence disabled.
@@ -177,7 +177,8 @@ These options control what packages / functionality are built into the container
 * USE_LOCALSTACK_DNS=no - assigns static ip to LS container and sets GDC to use its dns.
 * LOCALSTACK_STATIC_IP=<not set> - sets a static ip for LS container if set. Will be auto set if not specified and USE_LOCALSTACK_DNS=yes.
 * LOCALSTACK_HOST_DNS_PORT=53 - when LocalStack is running in host mode forward this port from host to localstack. Set to blank string to disable localstack DNS forward.
-* LS_DNS_NAME_PATTERNS_TO_RESOLVE_UPSTREAM=<not set> - space separated list of regex patterns to resolve upstream. 
+* LS_DNS_NAME_PATTERNS_TO_RESOLVE_UPSTREAM=<not set> - space separated list of regex patterns to resolve upstream.
+* LS_LOG=<not set> - set logging level for localstack. can be set to trace then exported with `curl -s localhost:4566/_localstack/diagnose | gzip -cf > diagnose.json.gz`.
 * USE_AUTH0=no - starts an auth0 mock authentication server. Can be accessed via name auth0_mock inside containers. [Auth0 Mock docs](./docs/auth0/readme.md).
 * USE_AUTH0_HOST=yes - starts an auth0 mock authentication server with host port forward.
 * AUTH0_HOST_PORT=3001 - sets host port for auth0 mock server to listen on if USE_AUTH0_HOST=yes.
