@@ -138,12 +138,23 @@ if [ -n "$PHP_VERSION" ]; then
 fi
 
 if [ "$USE_DOT_NET" = "yes" ]; then
-  export DOTNET_ROOT=/usr/local/dotnet
-  export PATH=${PATH}:${DOTNET_ROOT}
   if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
     echo ".NET version $(dotnet --list-sdks)"
   fi
 fi
+
+if [ "$USE_AZURE" = "yes" ]; then
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "azure cli version $(az --version)"
+  fi
+fi
+
+if [ "$USE_POWERSHELL" = "yes" ]; then
+  if [ "$SHOW_VERSIONS_ON_LOGIN" = "yes" ]; then
+    echo "powershell version $(pwsh --version)"
+  fi
+fi
+
 
 if [ -n "$GOLANG_VERSION" ]; then
   export GOPATH=/go

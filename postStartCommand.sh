@@ -66,6 +66,7 @@ if [ -n "$PULUMI_VERSION" ]; then
     pulumi plugin install resource docker
     pulumi plugin install resource command
     pulumi plugin install resource aws
+    pulumi plugin install resource azure-native
     pulumi plugin install resource postgresql
     pulumi plugin install resource mysql
 fi

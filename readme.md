@@ -147,7 +147,9 @@ These options control what packages / functionality are built into the container
 * PULUMI_VERSION=<not set> - a version or "latest" must be specified for Pulumi to be installed.
 * TERRAFORM_VERSION=<not set> - set to latest or specify version. Versions are here. https://releases.hashicorp.com/terraform
 * PHP_VERSION=<not set> - installs any of the following PHP versions 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2.
-* USE_DOT_NET=no - installs .NET SDK v6.x.
+* USE_DOT_NET=no - installs .NET SDK 9.0.
+* USE_POWERSHELL=no - install powershell 7.5.0
+* USE_AZURE=no - install latest Azure cli
 * USE_JAVA=no - installs headless openjdk v11.x.
 * PYTHON_VERSION=3.11 - installs Python v3.12, which is highest aws lambda supported python runtime that runs on Amazon linux 2
 * PIP_EXTRA_REQUIREMENTS_TXT=<not set> - if set should be a name of a requirements pip file to be installed if python is installed.

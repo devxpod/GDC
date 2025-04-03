@@ -19,6 +19,9 @@ services:
         - USE_BITWARDEN # enable bitwarden workflow helpers. will enable NODE_VERSION=18 if not set
         - USE_CDK # install aws cdk, terraform and cdk for terraform
         - USE_JAVA # install ubuntu:latest openjdk packages
+        - USE_DOT_NET # install .NET SDK 9.0
+        - USE_POWERSHELL # install latest stable powershell
+        - USE_AZURE # install latest Azure cli
         - EXTRA_PACKAGES # any extra Ubuntu packages you want installed into the base container
         - AWS_VERSION # install AWS CLI version
     environment:

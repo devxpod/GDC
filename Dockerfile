@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.10
 # only effects build time and and makes it so we dont have to specify it every apt install
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
@@ -78,13 +78,28 @@ RUN /bin/bash -c 'if [ "${USE_JAVA}" = "yes" ] ; then \
     apt-get install -fy default-jdk-headless; \
 fi'
 
+ARG USE_POWERSHELL
+RUN /bin/bash -c 'if [ "${USE_POWERSHELL}" = "yes" ] ; then \
+    ARCH=`uname -m` && \
+    if [ "$ARCH" = "x86_64" ]; then \
+    curl -L -o /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/powershell-7.5.0-linux-x64.tar.gz; \
+    else \
+    curl -L -o /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/powershell-7.5.0-linux-arm64.tar.gz; \
+    fi; \
+    mkdir -p /opt/microsoft/powershell/7; \
+    tar zxf /tmp/powershell.tar.gz -C /opt/microsoft/powershell/7; \
+    chmod +x /opt/microsoft/powershell/7/pwsh; \
+    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh; \
+fi'
+
 ARG USE_DOT_NET
 RUN /bin/bash -c 'if [ "${USE_DOT_NET}" = "yes" ] ; then \
-  wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh; \
-  chmod +x ./dotnet-install.sh; \
-  ./dotnet-install.sh; \
-  mkdir /usr/local/dotnet; \
-  mv /root/.dotnet/* /usr/local/dotnet; \
+  apt-get install -y dotnet-sdk-9.0; \
+fi'
+
+ARG USE_AZURE
+RUN /bin/bash -c 'if [ "${USE_AZURE}" = "yes" ] ; then \
+  curl -sL https://aka.ms/InstallAzureCLIDeb | bash ; \
 fi'
 
 ARG GOLANG_VERSION
@@ -291,6 +306,8 @@ ENV PYTHON_VERSION=$PYTHON_VERSION
 ENV PIP_EXTRA_REQUIREMENTS_TXT=$PIP_EXTRA_REQUIREMENTS_TXT
 ENV GOLANG_VERSION=$GOLANG_VERSION
 ENV USE_DOT_NET=$USE_DOT_NET
+ENV USE_POWERSHELL=$USE_POWERSHELL
+ENV USE_AZURE=$USE_AZURE
 ENV USE_AWS=$USE_AWS
 ENV NODE_VERSION=$NODE_VERSION
 ENV RUST_VERSION=$RUST_VERSION
@@ -302,4 +319,3 @@ ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
 ENV PATH="$PATH:/root/bin:/root/bin-extra:/root/bin-extra/docker:/root/gdc-host"
 
 ENTRYPOINT /init.sh
-
