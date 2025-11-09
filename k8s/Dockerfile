@@ -1,4 +1,4 @@
-FROM amd64/ubuntu:latest
+FROM amd64/ubuntu:24.04
 # only effects build time and and makes it so we dont have to specify it every apt install
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
@@ -91,7 +91,7 @@ WORKDIR /usr/local/data
 # Install websocat
 RUN  /bin/bash -c 'set -ex && \
     echo "websocat x86_64" && \
-    curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.x86_64-unknown-linux-musl" -o /usr/local/bin/websocat;\
+    curl -L "https://github.com/vi/websocat/releases/download/v1.14.0/websocat.x86_64-unknown-linux-musl" -o /usr/local/bin/websocat;\
     chmod +x /usr/local/bin/websocat;'
 
 # Install AWS CLI and SSM plugin
@@ -101,7 +101,7 @@ RUN  /bin/bash -c 'if [ "${USE_AWS}" = "yes" ] ; then \
     echo "aws x86_64" && \
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_VERSION}.zip" -o "awscliv2.zip" && \
     curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb" && \
-    curl -o /usr/local/bin/aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator; \
+    curl -L -o /usr/local/bin/aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.7.8/aws-iam-authenticator_0.7.8_linux_amd64; \
     chmod +x /usr/local/bin/aws-iam-authenticator && \
     unzip -q "awscliv2.zip" && ./aws/install && rm awscliv2.zip && \
     dpkg -i session-manager-plugin.deb && rm ./session-manager-plugin.deb; \

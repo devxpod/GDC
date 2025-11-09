@@ -1,4 +1,4 @@
-FROM ubuntu:24.10
+FROM ubuntu:24.04
 # only effects build time and and makes it so we dont have to specify it every apt install
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
@@ -59,10 +59,10 @@ RUN  /bin/bash -c 'set -ex && \
     PLATFORM=`uname -s | tr '[:upper:]' '[:lower:]'` && \
     if [ "$ARCH" = "x86_64" ]; then \
        echo "websocat x86_64" && \
-       curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.x86_64-unknown-linux-musl" -o /usr/local/bin/websocat;\
+       curl -L "https://github.com/vi/websocat/releases/download/v1.14.0/websocat.x86_64-unknown-linux-musl" -o /usr/local/bin/websocat;\
     else \
        echo "websocat assuming ARM" && \
-       curl -L "https://github.com/vi/websocat/releases/download/v1.10.0/websocat.arm-unknown-linux-musleabi" -o /usr/local/bin/websocat;\
+       curl -L "https://github.com/vi/websocat/releases/download/v1.14.0/websocat.arm-unknown-linux-musleabi" -o /usr/local/bin/websocat;\
     fi; \
     chmod +x /usr/local/bin/websocat;'
 
@@ -82,9 +82,9 @@ ARG USE_POWERSHELL
 RUN /bin/bash -c 'if [ "${USE_POWERSHELL}" = "yes" ] ; then \
     ARCH=`uname -m` && \
     if [ "$ARCH" = "x86_64" ]; then \
-    curl -L -o /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/powershell-7.5.0-linux-x64.tar.gz; \
+    curl -L -o /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/powershell-7.5.4-linux-x64.tar.gz; \
     else \
-    curl -L -o /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.5.0/powershell-7.5.0-linux-arm64.tar.gz; \
+    curl -L -o /tmp/powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/powershell-7.5.4-linux-arm64.tar.gz; \
     fi; \
     mkdir -p /opt/microsoft/powershell/7; \
     tar zxf /tmp/powershell.tar.gz -C /opt/microsoft/powershell/7; \
@@ -94,7 +94,7 @@ fi'
 
 ARG USE_DOT_NET
 RUN /bin/bash -c 'if [ "${USE_DOT_NET}" = "yes" ] ; then \
-  apt-get install -y dotnet-sdk-9.0; \
+  apt-get install -y dotnet-sdk-10.0; \
 fi'
 
 ARG USE_AZURE
@@ -183,12 +183,12 @@ RUN  /bin/bash -c 'if [ "${USE_AWS}" = "yes" ] ; then \
        echo "aws x86_64" && \
        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_VERSION}.zip" -o "awscliv2.zip" && \
        curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb" && \
-       curl -o /usr/local/bin/aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator; \
+       curl -L -o /usr/local/bin/aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.7.8/aws-iam-authenticator_0.7.8_linux_amd64; \
     else \
        echo "aws assuming ARM" && \
        curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-${AWS_VERSION}.zip" -o "awscliv2.zip" && \
        curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_arm64/session-manager-plugin.deb" -o "session-manager-plugin.deb" && \
-       curl -o /usr/local/bin/aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/arm64/aws-iam-authenticator; \
+       curl -L -o /usr/local/bin/aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.7.8/aws-iam-authenticator_0.7.8_linux_arm64; \
     fi; \
     chmod +x /usr/local/bin/aws-iam-authenticator && \
     unzip -q "awscliv2.zip" && ./aws/install && rm awscliv2.zip && \
